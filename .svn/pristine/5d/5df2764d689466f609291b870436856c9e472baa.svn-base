@@ -1,0 +1,63 @@
+package com.mindfiresolutions.resourcemanager.utility;
+
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
+
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+/**
+ * Created by Shivangi Singh on 4/2/2017
+ */
+
+public class InternetConnections {
+    private static final String TAG = InternetConnections.class.getSimpleName();
+
+    public static boolean checkInternetConnection(Context context) {
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+        LoggerUtility.makeLog(TAG, "network connection checked");
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
+
+    //TODO make async task here. //DONE
+    private static class ActiveInternetConnection extends AsyncTask<Context, Boolean, Boolean>{
+
+        @Override
+        protected Boolean doInBackground(Context... params) {
+            if (checkInternetConnection(params[0])) {
+                try {
+                    HttpURLConnection urlc = (HttpURLConnection) (new URL("http://www.google.com").openConnection());
+                    urlc.setRequestProperty("User-Agent", "Test");
+                    urlc.setRequestProperty("Connection", "close");
+                    urlc.setConnectTimeout(1500);
+                    urlc.connect();
+                    return (urlc.getResponseCode() == 200);
+                } catch (IOException e) {
+                    LoggerUtility.makeLog(TAG, "Error checking internet connection"+e);
+                }
+            } else {
+                LoggerUtility.makeLog(TAG, "No network available!");
+            }
+            return false;
+
+        }
+        @Override
+        protected void onPostExecute(Boolean result ){
+            super.onPostExecute(result);
+        }
+    }
+    public static boolean hasActiveInternetConnection(Context context) {
+        try {
+            return new ActiveInternetConnection().execute(context).get();
+        } catch (Exception interrupted) {
+            LoggerUtility.makeLog(TAG, interrupted.getStackTrace().toString());
+            return false;
+        }
+    }
+}

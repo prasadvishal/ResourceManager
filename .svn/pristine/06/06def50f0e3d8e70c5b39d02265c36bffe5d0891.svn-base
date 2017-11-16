@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_add_new_hardware_resource"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.mindfiresolutions.resourcemanager.admin.AddNewHardwareResourceActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:orientation="horizontal">
+
+        <Spinner
+            android:id="@+id/add_new_hardware_hardware_type_spinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_weight="2" />
+
+        <CheckBox
+            android:id="@+id/add_new_hardware_shared_resource_chkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:buttonTint="@color/themeBlue"
+            android:text="@string/shared_resource"
+            android:textColor="@color/themeBlue" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:orientation="horizontal">
+
+        <Spinner
+            android:id="@+id/add_new_hardware_hardware_brand_spinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_weight="1" />
+
+        <Spinner
+            android:id="@+id/add_new_hardware_hardware_status_spinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <EditText
+        style="@style/BorderedTextFields"
+        android:layout_height="@dimen/resource_desc_height"
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:gravity="center"
+        android:hint="@string/optional_desc"
+        android:inputType="text"
+        android:id="@+id/new_hardware_rqst_desc" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:orientation="horizontal">
+
+        <EditText
+            style="@style/BorderedTextFields"
+            android:id="@+id/add_new_hardware_mac_id"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:hint="@string/enter_mcid"
+            android:inputType="text" />
+
+        <EditText
+            style="@style/BorderedTextFields"
+            android:id="@+id/add_new_hardware_srvctag"
+            android:layout_marginLeft="@dimen/subheading"
+            android:layout_marginStart="@dimen/subheading"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:hint="@string/enter_srvc_tag"
+            android:inputType="text" />
+
+    </LinearLayout>
+
+    <TextView
+        style="@style/BorderedTextFields"
+        android:id="@+id/add_new_hardware_order_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="@string/pick_ordr_date" />
+
+    <TextView
+        style="@style/BorderedTextFields"
+        android:id="@+id/add_new_hardware_rcvd_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="@string/pick_rcvd_date" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:orientation="horizontal">
+
+        <EditText
+            style="@style/UserFields"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:hint="@string/prompt_created_date"
+            android:inputType="text" />
+
+        <EditText
+            style="@style/UserFields"
+            android:id="@+id/add_new_hardware_curnt_date"
+            android:layout_width="0dp"
+            android:layout_marginLeft="@dimen/subheading"
+            android:layout_marginStart="@dimen/subheading"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:hint="@string/date_format"
+            android:inputType="text" />
+
+    </LinearLayout>
+    <Button
+        style="@style/UserFields"
+        android:id="@+id/add_new_hardware_add_hardware_button"
+        android:background="@drawable/button_layout"
+        android:text="@string/add_hardware"
+        android:layout_marginTop="@dimen/activity_vertical_margin"/>
+
+</LinearLayout>

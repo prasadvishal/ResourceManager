@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@color/blue"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/textfields_padding">
+
+                    <TextView
+                        style="@style/UserFields"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="@string/created_by" />
+
+                    <TextView
+                        style="@style/UserFields"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:text="@string/prompt_created_date"
+                        android:textAlignment="textEnd" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/textfields_padding">
+
+                    <TextView
+                        android:id="@+id/hardware_details_created_admin_name"
+                        style="@style/UserFields"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="TextView" />
+
+                    <TextView
+                        android:id="@+id/hardware_details_created_date"
+                        style="@style/UserFields"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:text="TextView"
+                        android:textAlignment="textEnd" />
+                </LinearLayout>
+
+            </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/themeBlue"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="16dp"
+                app:srcCompat="@drawable/hardware"
+                android:id="@+id/hardware_details_image"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_weight="1"
+                    android:gravity=""
+                    android:text="@string/description"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_weight="1"
+                    android:gravity=""
+                    android:text="@string/description"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_weight="1"
+                    android:gravity=""
+                    android:text="@string/description"
+                    android:textColor="@color/black" />
+</LinearLayout>
+
+        </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:text="@string/mcid"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/hardware_details_mac_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/subheading"
+                        android:layout_marginStart="@dimen/subheading"
+                        android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+                        android:layout_weight="1"
+                        android:hint="Active/Expired"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="@dimen/imageview_height"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+                        android:layout_weight="1"
+                        android:text="@string/service_tag"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/content_textsize"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/hardware_details_service_tag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/subheading"
+                        android:layout_marginStart="@dimen/subheading"
+                        android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+                        android:layout_weight="1"
+                        android:textColor="@color/black"
+                        android:hint="@string/service_tag"
+                        android:textSize="@dimen/content_textsize" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="16dp">
+
+                    <TextView
+                        android:layout_width="@dimen/imageview_height"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+                        android:layout_weight="1"
+                        android:text="@string/order_date"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/content_textsize"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/hardware_details_ordered_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/subheading"
+                        android:layout_marginStart="@dimen/subheading"
+                        android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+                        android:layout_weight="1"
+                        android:textColor="@color/black"
+                        android:hint="@string/order_date"
+                        android:textSize="@dimen/content_textsize" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+                        android:layout_weight="1"
+                        android:text="@string/received_date"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/content_textsize"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/hardware_details_recieved_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/subheading"
+                        android:layout_marginStart="@dimen/subheading"
+                        android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+                        android:layout_weight="1"
+                        android:textColor="@color/black"
+                        android:hint="@string/received_date"
+                        android:textSize="@dimen/content_textsize" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="16dp">
+
+                    <TextView
+                        android:layout_width="@dimen/imageview_height"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+                        android:layout_weight="1"
+                        android:text="@string/status"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/content_textsize"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/hardware_details_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/subheading"
+                        android:layout_marginStart="@dimen/subheading"
+                        android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+                        android:layout_weight="1"
+                        android:hint="@string/status"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/content_textsize" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+                        android:layout_weight="1"
+                        android:text="@string/modified_date"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/hardware_details_modified_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/subheading"
+                        android:layout_marginStart="@dimen/subheading"
+                        android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+                        android:layout_weight="1"
+                        android:hint="@string/modified_date"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="@dimen/imageview_height"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+                        android:layout_weight="1"
+                        android:text="@string/modified_by"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/content_textsize"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/hardware_details_modified_by"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/subheading"
+                        android:layout_marginStart="@dimen/subheading"
+                        android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+                        android:layout_weight="1"
+                        android:textColor="@color/black"
+                        android:hint="@string/modified_by"
+                        android:textSize="@dimen/content_textsize" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+                        android:layout_weight="1"
+                        android:text="@string/is_sharable"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/content_textsize"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/hardware_details_is_sharable"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/subheading"
+                        android:layout_marginStart="@dimen/subheading"
+                        android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+                        android:layout_weight="1"
+                        android:textColor="@color/black"
+                        android:hint="1"
+                        android:textSize="@dimen/content_textsize" />
+                </LinearLayout>
+
+            </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/hardware_detail_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_vertical_margin"
+                android:background="@color/textRed"
+                android:text="@string/delete"
+                android:textAllCaps="false"
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+            <Button
+                android:id="@+id/hardware_detail_assign"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_vertical_margin"
+                android:background="@color/green"
+                android:text="@string/assign"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:layout_weight="1"
+                android:textStyle="bold" />
+            </LinearLayout>
+            <Button
+                android:id="@+id/hardware_detail_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_vertical_margin"
+                android:background="@color/themeBlue"
+                android:text="@string/edit"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

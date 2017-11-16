@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/border"
+    android:padding="@dimen/textfields_padding">
+
+    <TextView
+        android:id="@+id/add_new_software_dialog_txtView_brand"
+        style="@style/HeaderFields"
+        android:text="@string/brand"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="@string/hint_brand"
+        android:ems="10"
+        android:id="@+id/add_new_software_dialog_edttxt_brand" />
+    <TextView
+        android:id="@+id/add_new_software_dialog_txtView_desc"
+        style="@style/HeaderFields"
+        android:text="@string/description"
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/add_new_software_dialog_edttxt_desc"
+        android:hint="@string/hint_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:ems="10" />
+
+    <Button
+        android:text="@string/add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:background="@drawable/button_layout"
+        android:id="@+id/add_new_software_add_button" />
+
+
+</LinearLayout>

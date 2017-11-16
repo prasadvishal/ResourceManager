@@ -1,0 +1,266 @@
+package com.mindfiresolutions.resourcemanager.admin;
+
+/**
+ * Created by: Shivangi on 27th March
+ * Last Modified on: 5/10/2017
+ */
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.TextView;
+
+import com.mindfiresolutions.resourcemanager.R;
+import com.mindfiresolutions.resourcemanager.model.HardwareDetailsByIdGetter;
+import com.mindfiresolutions.resourcemanager.model.HardwareDetailsByIdResponse;
+import com.mindfiresolutions.resourcemanager.model.HardwareIdSetter;
+import com.mindfiresolutions.resourcemanager.model.IdSetter;
+import com.mindfiresolutions.resourcemanager.model.ResponseGetterBase;
+import com.mindfiresolutions.resourcemanager.utility.ApiCallHandler;
+import com.mindfiresolutions.resourcemanager.utility.CheckForExpiry;
+import com.mindfiresolutions.resourcemanager.utility.InternetConnections;
+import com.mindfiresolutions.resourcemanager.utility.LoggerUtility;
+
+import retrofit2.Call;
+
+import static com.mindfiresolutions.resourcemanager.utility.APIurls.LOGIN_REQUEST_HEADER_VALUE;
+import static com.mindfiresolutions.resourcemanager.utility.HttpCodes.OK;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.HARDWARE_DETAILS;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.HARDWARE_ID;
+
+
+public class HardwareDetailsActivity extends AppCompatActivity implements View.OnClickListener,
+        ApiCallHandler.Listener {
+
+    private static final String TAG = HardwareDetailsActivity.class.getSimpleName();
+    private HardwareDetailsByIdGetter mHardwareDetailsByIdGetter;
+    private static int sHardwareId;
+    private static final String KEY_DELETE = "DeleteKey";
+    private static final String KEY_HW_SUMMARY = "HardwareSummary";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_hardware_details);
+        Intent i = getIntent();
+        sHardwareId = i.getExtras().getInt(HARDWARE_ID);
+
+        if (InternetConnections.hasActiveInternetConnection(getApplicationContext())) {
+            LoggerUtility.LogGenerator(TAG, "INTERNET connection available ");
+            getHardwareSummary();
+        } else {
+            LoggerUtility.ToastGeneratorShort(getApplicationContext(), getString(R.string.no_internet));
+        }
+
+        findViewById(R.id.hardware_detail_btn_delete).setOnClickListener(this);
+        findViewById(R.id.hardware_detail_btn_edit).setOnClickListener(this);
+        findViewById(R.id.hardware_detail_btn_assign).setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case (R.id.hardware_detail_btn_delete):
+                deleteHardware(sHardwareId);
+                break;
+
+            case (R.id.hardware_detail_btn_edit):
+                editHardware();
+                break;
+
+            case (R.id.hardware_detail_btn_assign):
+                Intent i = new Intent(this, AssignHardware.class);
+                i.putExtra(HARDWARE_ID, sHardwareId);
+                startActivity(i);
+                overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+                break;
+
+            default:LoggerUtility.LogGenerator(TAG,"No matching choices");
+        }
+    }
+
+    void editHardware() {
+        Intent i = new Intent(this, AddNewHardwareResourceActivity.class);
+        i.putExtra(HARDWARE_DETAILS, getHardwareDetailsByIdGetter());
+        if (i.hasExtra(HARDWARE_DETAILS)) {
+            startActivity(i);
+            overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+        } else
+            LoggerUtility.ToastGeneratorShort(getApplicationContext(), getString(R.string.unable_to_connect));
+    }
+
+    HardwareDetailsByIdGetter getHardwareDetailsByIdGetter() {
+        return mHardwareDetailsByIdGetter;
+    }
+
+    void setHardwareDetailsByIdGetter(HardwareDetailsByIdGetter mHardwareDetailsByIdGetter) {
+        this.mHardwareDetailsByIdGetter = mHardwareDetailsByIdGetter;
+    }
+
+    void deleteHardware(int sHardwareId) {
+        final String token = CheckForExpiry.checkForToken(this);
+        ApiCallHandler apiCallHandler = ApiCallHandler.getInstance();
+
+//        String token = SharedPref.getSharedPreferences(this, TOKEN);
+//        LoggerUtility.LogGenerator(TAG, "inside delete");
+//        final ProgressDialog progressDialog = new ProgressDialog(HardwareDetailsActivity.this);
+//        progressDialog.setMessage(getString(R.string.loading));
+//        progressDialog.setCancelable(false);
+//        progressDialog.setCanceledOnTouchOutside(false);
+//        CallAPIInterface callAPIInterface = ServiceGenerator.createService(CallAPIInterface.class);
+//        LoggerUtility.LogGenerator(TAG, "Retrofit object created in updateUserProfile");
+        IdSetter hardwareDetailIdSetter = new IdSetter();
+        hardwareDetailIdSetter.setId(sHardwareId);
+        Call<ResponseGetterBase> call = apiCallHandler.getInterface().deleteHardware(LOGIN_REQUEST_HEADER_VALUE, token, hardwareDetailIdSetter);
+        apiCallHandler.getResponse(call, KEY_DELETE, this, this);
+//        Call<ResponseGetterBase> call = callAPIInterface.deleteHardware(LOGIN_REQUEST_HEADER_VALUE, token, hardwareDetailIdSetter); // TODO Handle SoftwareCount it after mapping is done
+//        LoggerUtility.LogGenerator(TAG, "response in call object in UpdateUserProfile");
+//
+//        call.enqueue(new Callback<ResponseGetterBase>() {
+//                         @Override
+//                         public void onResponse(Call<ResponseGetterBase> call, Response<ResponseGetterBase> response) {
+//                             //response's body
+//                             progressDialog.dismiss();
+//                             LoggerUtility.LogGenerator(TAG, "Response body");
+//                             try {
+//                                 LoggerUtility.ToastGeneratorShort(getApplicationContext(), response.body().getMessage());
+//
+//                             } catch (Exception e) {
+//                                 LoggerUtility.ToastGeneratorShort(getApplicationContext(), getString(R.string.error_requesting_api));
+//                             }
+//                         }
+//
+//                         @Override
+//                         public void onFailure(Call<ResponseGetterBase> call, Throwable t) {
+//                             progressDialog.dismiss();
+//                             LoggerUtility.LogGenerator(TAG, "Error requesting API");
+//                         }
+//                     }
+//        );
+    }
+
+
+    void getHardwareSummary() {
+        final String token = CheckForExpiry.checkForToken(this);
+        ApiCallHandler apiCallHandler = ApiCallHandler.getInstance();
+
+//        String token = SharedPref.getSharedPreferences(this, TOKEN);
+//        final ProgressDialog progressDialog = new ProgressDialog(HardwareDetailsActivity.this);
+//        progressDialog.setMessage(getString(R.string.loading));
+//        progressDialog.setCancelable(false);
+//        progressDialog.setCanceledOnTouchOutside(false);
+//        CallAPIInterface callAPIInterface = ServiceGenerator.createService(CallAPIInterface.class);
+//        LoggerUtility.LogGenerator(TAG, "Retrofit object created in updateUserProfile");
+        HardwareIdSetter hardwareDetailIdSetter = new HardwareIdSetter();
+        hardwareDetailIdSetter.setHardwareId(sHardwareId);
+        Call<HardwareDetailsByIdResponse> call = apiCallHandler.getInterface().getHardwareDetailById(LOGIN_REQUEST_HEADER_VALUE, token, hardwareDetailIdSetter);
+        apiCallHandler.getResponse(call, KEY_HW_SUMMARY, this, this);
+//        Call<HardwareDetailsByIdResponse> call = callAPIInterface.getHardwareDetailById(LOGIN_REQUEST_HEADER_VALUE, token, hardwareDetailIdSetter);
+//        LoggerUtility.LogGenerator(TAG, "response in call object in UpdateUserProfile");
+//        call.enqueue(new Callback<HardwareDetailsByIdResponse>() {
+//                         @Override
+//                         public void onResponse(Call<HardwareDetailsByIdResponse> call, Response<HardwareDetailsByIdResponse> response) {
+//                             //response's body
+//                             LoggerUtility.LogGenerator(TAG, "Response body");
+//                             try {
+//                                 progressDialog.dismiss();
+//                                 if (response.body().getResponse().getCode() == OK) {
+//                                     LoggerUtility.LogGenerator(TAG, response.body().getHardwareDetails()[0].toString() + "  " + response.body().getHardwareDetails()[0].getMACID());
+//                                     setHardwareDetails(response.body().getHardwareDetails()[0]);
+//                                     setHardwareDetailsByIdGetter(response.body().getHardwareDetails()[0]);
+//                                 } else {
+//                                     LoggerUtility.ToastGeneratorShort(getApplicationContext(), response.body().getResponse().getMessage());
+//                                 }
+//                             } catch (Exception e) {
+//                                 LoggerUtility.makeLongToast(getApplicationContext(), getString(R.string.error_requesting_api));
+//                             }
+//                         }
+//
+//                         @Override
+//                         public void onFailure(Call<HardwareDetailsByIdResponse> call, Throwable t) {
+//                             progressDialog.dismiss();
+//                             LoggerUtility.LogGenerator(TAG, "Error requesting API");
+//                         }
+//                     }
+//        );
+    }
+
+    void setHardwareDetails(HardwareDetailsByIdGetter mHardwareDetailsByIdGetter) {
+        TextView macId = (TextView) findViewById(R.id.hardware_details_txt_mac_id);
+        macId.setText(mHardwareDetailsByIdGetter.getMACID());
+
+        TextView serviceTag = (TextView) findViewById(R.id.hardware_details_txt_service_tag);
+        serviceTag.setText(mHardwareDetailsByIdGetter.getServiceTag());
+
+        TextView orderedDate = (TextView) findViewById(R.id.hardware_details_txt_ordered_date);
+        orderedDate.setText(mHardwareDetailsByIdGetter.getOrderDate());
+
+        TextView recievedDate = (TextView) findViewById(R.id.hardware_details_txt_recieved_date);
+        recievedDate.setText(mHardwareDetailsByIdGetter.getReceivedDate());
+
+        TextView modifiedDate = (TextView) findViewById(R.id.hardware_details_txt_modified_date);
+        modifiedDate.setText(mHardwareDetailsByIdGetter.getModifiedDate());
+
+        TextView modifiedBy = (TextView) findViewById(R.id.hardware_details_txt_modified_by);
+        modifiedBy.setText(mHardwareDetailsByIdGetter.getModifiedBy());
+
+        TextView status = (TextView) findViewById(R.id.hardware_details_txt_status);
+        status.setText(mHardwareDetailsByIdGetter.getStatus());
+
+        TextView sharable = (TextView) findViewById(R.id.hardware_details_txt_is_sharable);
+        sharable.setText(mHardwareDetailsByIdGetter.getIsSharable().toString());
+
+        TextView createdBy = (TextView) findViewById(R.id.hardware_details_txt_created_admin_name);
+        createdBy.setText(mHardwareDetailsByIdGetter.getCreatedBy());
+
+        TextView creationDate = (TextView) findViewById(R.id.hardware_details_txt_created_date);
+        creationDate.setText(mHardwareDetailsByIdGetter.getCreationDate());
+    }
+
+    @Override
+    public void onSuccessResult(Object result, String KEY) {
+        switch (KEY) {
+            case (KEY_DELETE):
+                callBackDelete(result);
+                break;
+            case (KEY_HW_SUMMARY):
+                callBackHwSummary(result);
+                break;
+            default:
+                LoggerUtility.LogGenerator(TAG, "no choices matched");
+        }
+
+    }
+
+    private void callBackDelete(Object result) {
+        ResponseGetterBase response = (ResponseGetterBase) result;
+        LoggerUtility.LogGenerator(TAG, "Response body");
+        try {
+            LoggerUtility.ToastGeneratorShort(getApplicationContext(), response.getMessage());
+
+        } catch (Exception e) {
+            LoggerUtility.ToastGeneratorShort(getApplicationContext(), getString(R.string.error_requesting_api));
+        }
+    }
+
+    private void callBackHwSummary(Object result) {
+        HardwareDetailsByIdResponse response = (HardwareDetailsByIdResponse)result;
+
+        try {
+
+            if (response.getResponse().getCode() == OK) {
+                LoggerUtility.LogGenerator(TAG, response.getHardwareDetails()[0].toString() + "  " + response.getHardwareDetails()[0].getMACID());
+                setHardwareDetails(response.getHardwareDetails()[0]);
+                setHardwareDetailsByIdGetter(response.getHardwareDetails()[0]);
+            } else {
+                LoggerUtility.ToastGeneratorShort(getApplicationContext(), response.getResponse().getMessage());
+            }
+        } catch (Exception e) {
+            LoggerUtility.makeLongToast(getApplicationContext(), getString(R.string.error_requesting_api));
+
+
+        }
+    }
+}
+

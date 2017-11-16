@@ -1,0 +1,65 @@
+package com.mindfiresolutions.resourcemanager;
+
+import android.content.Context;
+import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
+
+/**
+ * Created by Shivangi Singh on 3/9/2017.
+ */
+
+class LoggerUtility {
+
+    private static LoggerUtility mLoggerObj = new LoggerUtility();
+
+    private LoggerUtility() {
+    }
+
+    static LoggerUtility getLoggerUtility() {
+
+        return mLoggerObj;
+    }
+
+
+    void makeShortToast(Context context, String msg) {
+        Toast toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+    void makeLongToast(Context context, String msg) {
+        Toast toast = Toast.makeText(context, msg, Toast.LENGTH_LONG);
+        toast.show();
+    }
+
+    void makeLog(Context context, String msg) {
+
+        Log.e(context.getClass().toString(), msg);
+    }
+
+    void makeLog(String tag, String msg) {
+        Log.e(tag, msg);
+    }
+
+
+    String getTextFromView(EditText view){
+        return(view.getText().toString().trim());
+        // method to return trimmed text from a edittext view
+
+    }
+
+
+//    void makeManifestPermission(Context context, String permission)
+//    {
+//        String manifestPermission = "Manifest.permission."+"permission";
+//        if(ContextCompat.checkSelfPermission(context,manifestPermission )!= PackageManager.PERMISSION_GRANTED){
+//
+//            if(ActivityCompat.shouldShowRequestPermissionRationale(context,manifestPermission))
+//        }
+//
+//
+//    }
+
+
+}

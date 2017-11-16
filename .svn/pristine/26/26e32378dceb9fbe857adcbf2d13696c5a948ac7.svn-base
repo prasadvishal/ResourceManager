@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="@dimen/zero"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="@dimen/four">
+
+                    <TextView
+                        android:id="@+id/resource_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/four"
+                        android:hint="@string/resource"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/resource_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/four"
+                        android:hint="@string/type"
+                        android:textStyle="italic" />
+
+                    <TextView
+                        android:id="@+id/requested_to"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/four"
+                        android:hint="@string/admin"
+                        android:textColor="@color/green"
+                        android:textColorHint="@color/green" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="@dimen/zero"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/content_textsize"
+                        android:gravity="center"
+                        android:padding="@dimen/four"
+                        android:text="@string/request_date"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="@dimen/four"
+                        android:text="@string/issue_by"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/green" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="@dimen/zero"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/date_request_from"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/content_textsize"
+                        android:gravity="center"
+                        android:hint="@string/date_format"
+                        android:padding="@dimen/four" />
+
+                    <TextView
+                        android:id="@+id/date_request_till"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:hint="@string/date_format"
+                        android:padding="@dimen/four"
+                        android:textColor="@color/green"
+                        android:textColorHint="@color/green" />
+                </LinearLayout>
+            </LinearLayout>
+
+</LinearLayout>

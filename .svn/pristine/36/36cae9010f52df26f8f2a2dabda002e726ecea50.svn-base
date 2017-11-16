@@ -1,0 +1,66 @@
+package com.mindfiresolutions.resourcemanager.model;
+
+import com.google.gson.annotations.SerializedName;
+
+/**
+ * Created by Vishal Prasad on 5/10/2017.
+ */
+
+public class AdminHomePageSummaryCountResponse {
+    @SerializedName("Response")
+
+    private ResponseGetterBase response;
+    @SerializedName("HardwareCount")
+
+    private HardwareCount hardwareCount;
+    @SerializedName("SoftwareCount")
+
+    private SoftwareCount softwareCount;
+    @SerializedName("PendingRequestsCount")
+
+    private PendingRequestsCount pendingRequestsCount;
+    @SerializedName("SharedResourcesCount")
+
+    private SharedResourcesCount sharedResourcesCount;
+
+    public ResponseGetterBase getResponse() {
+        return response;
+    }
+
+    public void setResponse(ResponseGetterBase response) {
+        this.response = response;
+    }
+
+    public HardwareCount getHardwareCount() {
+        return hardwareCount;
+    }
+
+    public void setHardwareCount(HardwareCount hardwareCount) {
+        this.hardwareCount = hardwareCount;
+    }
+
+    public SoftwareCount getSoftwareCount() {
+        return softwareCount;
+    }
+
+    public void setSoftwareCount(SoftwareCount softwareCount) {
+        this.softwareCount = softwareCount;
+    }
+
+    public PendingRequestsCount getPendingRequestsCount() {
+        return pendingRequestsCount;
+    }
+
+    public void setPendingRequestsCount(PendingRequestsCount pendingRequestsCount) {
+        this.pendingRequestsCount = pendingRequestsCount;
+    }
+
+    public SharedResourcesCount getSharedResourcesCount() {
+        return sharedResourcesCount;
+    }
+
+    public void setSharedResourcesCount(SharedResourcesCount sharedResourcesCount) {
+        this.sharedResourcesCount = sharedResourcesCount;
+    }
+
+}

@@ -1,0 +1,85 @@
+package com.mindfiresolutions.resourcemanager.admin;
+
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.TextView;
+
+import com.mindfiresolutions.resourcemanager.R;
+import com.mindfiresolutions.resourcemanager.model.SoftwareDetails;
+import com.mindfiresolutions.resourcemanager.model.SoftwareDetailsResponse;
+import com.mindfiresolutions.resourcemanager.utility.CallAPIInterface;
+import com.mindfiresolutions.resourcemanager.utility.LoggerUtility;
+import com.mindfiresolutions.resourcemanager.utility.ServiceGenerator;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.mindfiresolutions.resourcemanager.utility.APIurls.LOGIN_REQUEST_HEADER_VALUE;
+import static com.mindfiresolutions.resourcemanager.utility.HttpCodes.OK;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.SOFTWARE_COUNT;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.SOFTWARE_ID;
+
+public class SoftwareDetailsActivity extends AppCompatActivity {
+    TextView softwareDsc = (TextView) findViewById(R.id.software_details_software_desc);
+    TextView softwareCreatedBy = (TextView) findViewById(R.id.software_details_created_admin_name);
+    TextView softwareCreatedDate = (TextView) findViewById(R.id.software_details_created_date);
+    TextView softwareName = (TextView) findViewById(R.id.software_details_software_name);
+    TextView softwareVersion = (TextView) findViewById(R.id.software_details_product_version);
+    TextView softwareLicenseStatus = (TextView) findViewById(R.id.software_details_license_status);
+    TextView softwareModifiedBy = (TextView) findViewById(R.id.software_details_modified_by);
+    TextView softwareModifiedDate = (TextView) findViewById(R.id.software_details_modified_date);
+    TextView softwareNumberOfLicense = (TextView) findViewById(R.id.software_details_no_license);
+
+    private static final String TAG = SoftwareDetailsActivity.class.getSimpleName();
+
+
+    @Override
+    protected void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
+        setContentView(R.layout.software_details);
+        Bundle extras = getIntent().getExtras();
+        String softwareID = extras.getString(SOFTWARE_ID);
+        int software_count = extras.getInt(SOFTWARE_COUNT);
+        fillSoftwareDetails(softwareID);
+        softwareNumberOfLicense.setText(software_count);
+    }
+
+    void fillSoftwareDetails(String softwareID) {
+        CallAPIInterface callAPIInterface = ServiceGenerator.createService(CallAPIInterface.class);
+        LoggerUtility.makeLog(TAG, "Retrofit object created in updateUserProfile");
+        Call<SoftwareDetailsResponse> call = callAPIInterface.getSoftwareDetailById(LOGIN_REQUEST_HEADER_VALUE, softwareID);
+        LoggerUtility.makeLog(TAG, "response in call object in UpdateUserProfile");
+
+        call.enqueue(new Callback<SoftwareDetailsResponse>() {
+                         @Override
+                         public void onResponse(Call<SoftwareDetailsResponse> call, Response<SoftwareDetailsResponse> response) {
+                             //response's body
+                             LoggerUtility.makeLog(TAG, "Response body");
+                             if (response.body().getResponse().getCode() == OK) {
+                                 setFields(response.body().getSoftwareDetails());
+                             }
+                         }
+
+                         @Override
+                         public void onFailure(Call<SoftwareDetailsResponse> call, Throwable t) {
+                             LoggerUtility.makeLog(TAG, "Error requesting API");
+                         }
+                     }
+        );
+    }
+
+    void setFields(SoftwareDetails softwareDetails) {
+        softwareDsc.setText(softwareDetails.getDescription());
+        softwareCreatedBy.setText(softwareDetails.getCreatedBy());
+        softwareCreatedDate.setText(softwareDetails.getCreationDate());
+        softwareName.setText(softwareDetails.getSoftwareName());
+        softwareLicenseStatus.setText(softwareDetails.getLicenseType());
+        softwareModifiedDate.setText(softwareDetails.getModifiedDate());
+        softwareModifiedBy.setText(softwareDetails.getModifiedBy());
+        softwareVersion.setText(softwareDetails.getVersion());
+
+
+    }
+}
+

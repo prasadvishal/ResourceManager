@@ -1,0 +1,21 @@
+package com.mindfiresolutions.resourcemanager.utility;
+
+/**
+ * Created by Shivangi Singh on 3/30/2017.
+ */
+
+public interface APIurls {
+    String LOGIN_REQUEST_HEADER_VALUE = "application/json";
+    String BASE_URL = "http://192.168.11.71:5001/Api/";
+    String VIEW_PROFILE_REQUEST_URL = "Accounts/ViewUserProfile?";
+    String LOGIN_REQUEST_DETAIL_URL = "Accounts/UserLogIn";
+    String SIGNUP_REQUEST_DETAIL_URL = "Accounts/UserRegistration";
+    String LOGIN_REQUEST_HEADER_KEY = "Content-Type";
+    String CHANGE_PASSWORD_DETAIL_URL = "Accounts/ChangeUserPassword";
+    String UPDATE_PROFILE_REQUEST_URL = " Accounts//UpdateUser";
+    String USERNAME= "userName";
+    String FORGOT_PASSWORD_REQUEST_URL = "Accounts/RetrieveUserPassword";
+    String GET_ALL_RESOURCE_SUMMARY_URL = "Summary/Summary";
+    String HARDWARE_COUNT_SUMMARY_URL = "HardwareSummary/ViewHardwareCountSummary";
+    String HARDWARE_SUMMARY_URL = "HardwareSummary/ViewHardwareSummary";
+}

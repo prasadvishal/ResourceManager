@@ -1,0 +1,52 @@
+package com.mindfiresolutions.resourcemanager;
+
+/**
+ * Created by Shivangi Singh on 3/10/2017.
+ * <p>
+ * modified on 15th march
+ */
+
+class Resources {
+
+    private String mResourceName, mResourceDate, mResourceLabel;
+    LoggerUtility mLoggerUtility = LoggerUtility.getLoggerUtility();
+    private final String TAG = "RESOURCES CLASS";
+
+//        protected Resources() {
+//        }
+
+    Resources(String resourceName, String resourceDate, String resourceLabel) {
+        mResourceName = resourceName;
+        mResourceLabel = resourceLabel;
+        mResourceDate = resourceDate;
+        mLoggerUtility.makeLog(TAG, "inside Resources constructor");
+    }
+
+    String getResourceName() {
+        return mResourceName;
+    }
+
+    public void setResourceName(String resourceName) {
+        mResourceName = resourceName;
+    }
+
+    String getResourceLabel() {
+        mLoggerUtility.makeLog(TAG, mResourceLabel);
+        return mResourceLabel;
+    }
+
+    protected void setResourceLabel(String resourceLabel) {
+        mResourceLabel = resourceLabel;
+    }
+
+    String getResourceDate() {
+        return mResourceDate;
+    }
+
+    public void setResourceDate(String resourceDate) {
+        mResourceDate = resourceDate;
+
+    }
+}
+//enter the getter setter methods here
+

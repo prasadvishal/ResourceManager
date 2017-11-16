@@ -1,0 +1,112 @@
+package com.mindfiresolutions.resourcemanager.model;
+
+import com.google.gson.annotations.SerializedName;
+
+/**
+ * Created by Shivangi Singh on 4/11/2017
+ */
+
+public class SoftwareDetails {
+
+    @SerializedName("ID")
+    private Integer iD;
+    @SerializedName("CreatedBy")
+    private String createdBy;
+    @SerializedName("CreationDate")
+    private String creationDate;
+    @SerializedName("Description")
+    private String description;
+    @SerializedName("LicenseType")
+    private Integer licenseType;
+    //TODO make it corresponding type afterwards
+    @SerializedName("ModifiedBy")
+    private String modifiedBy;
+    @SerializedName("ModifiedDate")
+    private String modifiedDate;
+    @SerializedName("SoftwareBrand")
+    private Integer softwareBrand;
+    @SerializedName("SoftwareName")
+    private String softwareName;
+    @SerializedName("Version")
+    private String version;
+
+    public Integer getID() {
+        return iD;
+    }
+
+    public void setID(Integer iD) {
+        this.iD = iD;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public String getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(String creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Integer getLicenseType() {
+        return licenseType;
+    }
+
+    public void setLicenseType(Integer licenseType) {
+        this.licenseType = licenseType;
+    }
+
+    public String getModifiedBy() {
+        return modifiedBy;
+    }
+
+    public void setModifiedBy(String modifiedBy) {
+        this.modifiedBy = modifiedBy;
+    }
+
+    public String getModifiedDate() {
+        return modifiedDate;
+    }
+
+    public void setModifiedDate(String modifiedDate) {
+        this.modifiedDate = modifiedDate;
+    }
+
+    public Integer getSoftwareBrand() {
+        return softwareBrand;
+    }
+
+    public void setSoftwareBrand(Integer softwareBrand) {
+        this.softwareBrand = softwareBrand;
+    }
+
+    public String getSoftwareName() {
+        return softwareName;
+    }
+
+    public void setSoftwareName(String softwareName) {
+        this.softwareName = softwareName;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+}

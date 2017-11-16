@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:text="@string/propmt_software_name"
+                android:textColor="@color/blue" />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/add_new_software_edt_name"
+                    style="@style/BorderedTextFields"
+                    android:layout_width="match_parent"
+                    android:hint="@string/enter_software_name"
+                    android:inputType="textPersonName"
+                    android:textAlignment="center" />
+            </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/add_new_software_txt_brand"
+                android:layout_width="@dimen/zero"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_weight="1"
+                android:text="@string/brand"
+                android:textColor="@color/blue" />
+
+            <LinearLayout
+                android:layout_width="@dimen/zero"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_weight="2"
+                android:background="@drawable/border"
+                android:padding="@dimen/smaller_padding">
+
+                <Spinner
+                    android:id="@+id/add_new_software_spnr_brand"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/small_padding"
+                    android:hint="@string/tap_to_select_brand" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin">
+
+            <TextView
+                android:layout_width="@dimen/zero"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_weight="1"
+                android:text="@string/prompt_software_version"
+                android:textColor="@color/blue" />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="@dimen/zero"
+                android:layout_height="wrap_content"
+                android:layout_weight="2">
+
+                <EditText
+                    android:id="@+id/add_new_software_edt_add_version"
+                    style="@style/BorderedTextFields"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:hint="@string/enter_software_version"
+                    android:inputType="textPersonName"
+                    android:textAlignment="center" />
+            </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/add_new_software_txt_licence"
+                    android:layout_width="@dimen/zero"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_weight="1"
+                    android:text="@string/licence_type"
+                    android:textColor="@color/blue" />
+
+                <LinearLayout
+                    android:layout_width="@dimen/zero"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_weight="2"
+                    android:background="@drawable/border"
+                    android:padding="@dimen/smaller_padding">
+
+                    <Spinner
+                        android:id="@+id/add_new_software_spnr_licence"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/small_padding"
+                        android:hint="@string/hint_licence_type" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="@dimen/zero"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_weight="1"
+                    android:text="@string/count"
+                    android:textColor="@color/blue" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="@dimen/zero"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2">
+
+                    <EditText
+                        android:id="@+id/add_new_software_edt_count"
+                        style="@style/BorderedTextFields"
+                        android:layout_width="match_parent"
+                        android:ems="10"
+                        android:hint="@string/enter_licence_count"
+                        android:inputType="textPersonName"
+                        android:textAlignment="center" />
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin">
+
+            <TextView
+                android:layout_width="@dimen/zero"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_weight="1"
+                android:text="@string/licence_key"
+                android:textColor="@color/blue" />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="@dimen/zero"
+                android:layout_height="wrap_content"
+                android:layout_weight="2">
+
+                <EditText
+                    android:id="@+id/add_new_software_edt_licence_key"
+                    style="@style/BorderedTextFields"
+                    android:layout_width="match_parent"
+                    android:ems="10"
+                    android:hint="@string/enter_licence_key"
+                    android:inputType="textPersonName"
+                    android:textAlignment="center" />
+            </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="@dimen/zero"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_weight="1"
+                android:text="@string/purchased_date"
+                android:textColor="@color/blue" />
+
+            <TextView
+                android:id="@+id/add_new_software_txt_purchase_date"
+                style="@style/BorderedTextFields"
+                android:layout_width="@dimen/zero"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_weight="2"
+                android:background="@drawable/border"
+                android:gravity="center"
+                android:padding="@dimen/textfields_padding"
+                android:text="@string/purchased_date" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="@dimen/zero"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_weight="1"
+                android:text="@string/valid_upto"
+                android:textColor="@color/blue" />
+
+
+            <TextView
+                android:id="@+id/add_new_software_txt_valid_upt"
+                style="@style/BorderedTextFields"
+                android:layout_width="@dimen/zero"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_weight="2"
+                android:background="@drawable/border"
+                android:gravity="center"
+                android:text="@string/valid_upto" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin">
+
+            <TextView
+                android:layout_width="@dimen/zero"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_weight="1"
+                android:text="@string/purchased_by"
+                android:textColor="@color/blue" />
+
+            <LinearLayout
+                android:layout_width="@dimen/zero"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:background="@drawable/border"
+                android:padding="@dimen/smaller_padding">
+
+                <Spinner
+                    android:id="@+id/add_new_software_spnr_admin_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/tap_to_select" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:background="@drawable/border"
+            android:padding="@dimen/textfields_padding">
+
+            <EditText
+                android:id="@+id/add_new_software_edt_rqst_desc"
+                style="@style/BorderedTextFields"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/resource_desc_height"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:gravity="center"
+                android:hint="@string/optional_desc"
+                android:inputType="text" />
+        </android.support.design.widget.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/UserFields"
+                android:layout_width="0dp"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/added_on"
+                android:textColor="@color/blue" />
+
+            <TextView
+                android:id="@+id/add_new_software_txt_curnt_date"
+                style="@style/UserFields"
+                android:layout_width="0dp"
+                android:layout_marginStart="@dimen/subheading"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:hint="@string/date_format"
+                android:textColor="@color/blue" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/add_new_software_btn_add_software"
+            style="@style/UserFields"
+            android:layout_marginTop="@dimen/heading"
+            android:background="@drawable/styled_blue_button_layout"
+            android:text="@string/add_software" />
+    </LinearLayout>
+</ScrollView>

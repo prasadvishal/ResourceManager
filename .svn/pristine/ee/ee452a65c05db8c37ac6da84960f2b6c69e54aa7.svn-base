@@ -1,0 +1,88 @@
+package com.mindfiresolutions.resourcemanager;
+
+/**
+ * Created by Shivangi Singh on 3/16/2017.
+ * modified on 3/17/2017
+ */
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+
+
+public class EditUserProfile extends AppCompatActivity {
+
+    private EditText mEditUserPassword, mConfEditUserPassword;
+   // private View mFocusView = null;
+
+    private final LoggerUtility loggerUtility = LoggerUtility.getLoggerUtility();
+    private ImageView mUserImg;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.edit_profile);
+
+        //variables initialized
+        mEditUserPassword = (EditText)findViewById(R.id.edit_password);
+        mConfEditUserPassword = (EditText)findViewById(R.id.conf_edit_password);
+
+        mEditUserPassword.setLongClickable(false);
+        mConfEditUserPassword.setLongClickable(false);
+
+        Button saveEditUser = (Button)findViewById(R.id.edit_save);
+        mUserImg = (ImageView) findViewById(R.id.user_img);
+
+        saveEditUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean isError= false;
+              //  loggerUtility.requestFocusIfInvalid(R.id.edit_password);
+
+                //check if password field is empty then set error as true
+                if (mEditUserPassword.getText().toString().isEmpty()) {
+
+                    mEditUserPassword.setError(getString(R.string.error_field_required));
+                     mEditUserPassword.requestFocus();
+                    isError = true;
+
+                }
+                //check if confirm password is empty then set error as true
+                if (mConfEditUserPassword.getText().toString().isEmpty()) {
+
+                    mConfEditUserPassword.setError(getString(R.string.error_field_required));
+                    mConfEditUserPassword.requestFocus();
+                    isError=true;
+                }
+                //check if passwords do not match then set error as true
+                if(!mEditUserPassword.getText().toString().equals( mConfEditUserPassword.getText().toString()))
+                {
+                    mConfEditUserPassword.setError(getString(R.string.error_cnfrm_password_mismatch));
+                    mEditUserPassword.requestFocus();
+                   mConfEditUserPassword.requestFocus();
+                    isError=true;
+                }
+                //if all okay then change password
+                if(!isError){
+                    loggerUtility.makeShortToast(getApplicationContext(),getString(R.string.password_changed_successfully));
+                }
+
+            }
+        });
+        mUserImg.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view){
+
+            }
+
+        });
+
+
+    }
+
+
+    }

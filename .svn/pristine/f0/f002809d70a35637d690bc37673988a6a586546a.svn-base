@@ -1,0 +1,288 @@
+package com.mindfiresolutions.resourcemanager.admin;
+
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+
+import com.mindfiresolutions.resourcemanager.R;
+import com.mindfiresolutions.resourcemanager.model.AllHardwareRequestSummary;
+import com.mindfiresolutions.resourcemanager.model.UserRequest;
+import com.mindfiresolutions.resourcemanager.resource.MultiColorListViewAdapter;
+import com.mindfiresolutions.resourcemanager.utility.CallAPIInterface;
+import com.mindfiresolutions.resourcemanager.utility.LoggerUtility;
+import com.mindfiresolutions.resourcemanager.utility.ServiceGenerator;
+import com.mindfiresolutions.resourcemanager.utility.SharedPref;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.mindfiresolutions.resourcemanager.utility.APIurls.LOGIN_REQUEST_HEADER_VALUE;
+import static com.mindfiresolutions.resourcemanager.utility.HttpCodes.OK;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.ADMIN_NAME;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.DESCRIPTION;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.REQUESTED_BY;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.REQUESTED_ON;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.REQUESTED_TILL;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.REQUEST_ID;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.RESOURCE_NAME;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.RESOURCE_TYPE;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.USER_ID;
+import static com.mindfiresolutions.resourcemanager.utility.UserPreferences.TOKEN;
+
+
+public class PendingRequestDetailsActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, SearchView.OnQueryTextListener {
+    private static final String TAG = PendingRequestDetailsActivity.class.getSimpleName();
+    ArrayList<HashMap<String, String>> mRequestList;
+    ArrayList<HashMap<String, String>> mRequestSearchList;
+    ListView mListView;
+    SearchView mSearchView;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_pending_request_summary);
+        ActionBar ab = getSupportActionBar();
+        // check for Actionbar if present then set tittle
+        if (ab != null && ab.isShowing()) {
+            ab.setTitle(getString(R.string.app_name));
+            ab.setSubtitle(getString(R.string.add_new_hardware_resource));
+        }
+        initViews();
+        fillList();
+
+    }
+
+    private void initViews() {
+
+        mListView = (ListView) findViewById(R.id.pending_request_list_view);
+        mListView.setOnItemClickListener(this);
+        mRequestList = new ArrayList<>();
+        mRequestSearchList = new ArrayList<>();
+        mSearchView = (SearchView) findViewById(R.id.pd_rqst_search_view);
+        mSearchView.setOnQueryTextListener(this);
+
+    }
+
+    private void fillList() {
+        final ProgressDialog progressDialog = new ProgressDialog(PendingRequestDetailsActivity.this);
+        progressDialog.setMessage(getString(R.string.loading));
+        progressDialog.show();
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        final String token = SharedPref.getSharedPreferences(this, TOKEN);
+        CallAPIInterface callAPIInterface = ServiceGenerator.createService(CallAPIInterface.class);
+        LoggerUtility.makeLog(TAG, "Retrofit object created");
+        Call<AllHardwareRequestSummary> callHardware = callAPIInterface.getHardwareResourceRequestSummary(LOGIN_REQUEST_HEADER_VALUE, token);
+        LoggerUtility.makeLog(TAG, "response in call object");
+        callHardware.enqueue(new Callback<AllHardwareRequestSummary>() {
+                                 @Override
+                                 public void onResponse(Call<AllHardwareRequestSummary> call, Response<AllHardwareRequestSummary> response) {
+                                     //response's body
+                                     LoggerUtility.makeLog(TAG, "Response body");
+                                     List<UserRequest> userRequestsList;
+                                     try {
+                                         if (response.body().getResponse().getCode() == OK) {
+                                         //    LoggerUtility.makeShortToast(getApplicationContext(), response.body().getResponse().getMessage());
+                                             userRequestsList = response.body().getUserRequests();
+                                             for (int i = 0; i < userRequestsList.size(); i++) {
+                                                 HashMap<String, String> requestListHashMap = new HashMap<String, String>();
+                                                 requestListHashMap.put(RESOURCE_NAME, response.body().getUserRequests().get(i).getTitle());
+                                                 requestListHashMap.put(RESOURCE_TYPE, response.body().getUserRequests().get(i).getRequestedDevice());
+                                                 requestListHashMap.put(ADMIN_NAME, response.body().getUserRequests().get(i).getAssignedTo());
+                                                 requestListHashMap.put(REQUESTED_ON, response.body().getUserRequests().get(i).getFromDate().substring(0, 10));
+                                                 requestListHashMap.put(REQUESTED_TILL, response.body().getUserRequests().get(i).getToDate().substring(0, 10));
+                                                 requestListHashMap.put(DESCRIPTION, response.body().getUserRequests().get(i).getDescription());
+                                                 requestListHashMap.put(REQUESTED_BY, response.body().getUserRequests().get(i).getRequestedBy());
+                                                 requestListHashMap.put(USER_ID, response.body().getUserRequests().get(i).getUserID().toString());
+                                                 requestListHashMap.put(REQUEST_ID, response.body().getUserRequests().get(i).getID().toString());
+                                                 LoggerUtility.makeLog(TAG, i + "th element: " + response.body().getUserRequests().get(i).getTitle());
+                                                // LoggerUtility.makeLog(TAG, ""+mRequestList.get(i).get(REQUEST_ID));
+                                                 mRequestList.add(requestListHashMap);
+                                             }
+                                             ListAdapter adapter = new MultiColorListViewAdapter(PendingRequestDetailsActivity.this, mRequestList, R.layout.list_item_pending_request,
+                                                     new String[]{RESOURCE_NAME, RESOURCE_TYPE, ADMIN_NAME, REQUESTED_ON, REQUESTED_TILL}, new int[]{R.id.resource_name,
+                                                     R.id.resource_type, R.id.requested_to, R.id.date_request_from, R.id.date_request_till});
+                                             mListView.setAdapter(adapter);
+                                             progressDialog.dismiss();
+                                         }
+                                     } catch (Exception e) {
+                                         LoggerUtility.makeLongToast(getApplicationContext(), getString(R.string.error_requesting_api));
+                                     }
+                                 }
+
+                                 @Override
+                                 public void onFailure(Call<AllHardwareRequestSummary> call, Throwable t) {
+                                     LoggerUtility.makeLog(TAG, "Error requesting API");
+                                     progressDialog.dismiss();
+                                     LoggerUtility.makeLongToast(getApplicationContext(), getString(R.string.server_error));
+
+                                 }
+                             }
+        );
+        Call<AllHardwareRequestSummary> callSoftware = callAPIInterface.getSoftwareResourceRequestSummary(LOGIN_REQUEST_HEADER_VALUE, token);
+        LoggerUtility.makeLog(TAG, "response in call object");
+        callSoftware.enqueue(new Callback<AllHardwareRequestSummary>() {
+                                 @Override
+                                 public void onResponse(Call<AllHardwareRequestSummary> call, Response<AllHardwareRequestSummary> response) {
+                                     //response's body
+                                     LoggerUtility.makeLog(TAG, "Response body");
+                                     progressDialog.dismiss();
+                                     List<UserRequest> userRequestsList;
+                                     try {
+                                         if (response.body().getResponse().getCode() == OK) {
+                                         //    LoggerUtility.makeShortToast(getApplicationContext(), response.body().getResponse().getMessage());
+                                             userRequestsList = response.body().getUserRequests();
+                                             LoggerUtility.makeLog(TAG, "response size of getUserRequests " + userRequestsList.size());
+                                             for (int i = 0; i < userRequestsList.size(); i++) {
+                                                 HashMap<String, String> requestListHashMap = new HashMap<String, String>();
+                                                 requestListHashMap.put(RESOURCE_NAME, response.body().getUserRequests().get(i).getTitle());
+                                                 requestListHashMap.put(RESOURCE_TYPE, response.body().getUserRequests().get(i).getRequestedDevice());
+                                                 requestListHashMap.put(ADMIN_NAME, response.body().getUserRequests().get(i).getAssignedTo());
+                                                 requestListHashMap.put(REQUESTED_ON, response.body().getUserRequests().get(i).getFromDate().substring(0, 10));
+                                                 requestListHashMap.put(REQUESTED_TILL, response.body().getUserRequests().get(i).getToDate().substring(0, 10));
+                                                 requestListHashMap.put(DESCRIPTION, response.body().getUserRequests().get(i).getDescription());
+                                                 requestListHashMap.put(REQUESTED_BY, response.body().getUserRequests().get(i).getRequestedBy());
+                                                 requestListHashMap.put(REQUEST_ID, response.body().getUserRequests().get(i).getID().toString());
+                                                 requestListHashMap.put(USER_ID, response.body().getUserRequests().get(i).getUserID().toString());
+
+                                                 //LoggerUtility.makeLog(TAG, ""+mRequestList.get(i).get(REQUEST_ID));
+                                                 mRequestList.add(requestListHashMap);
+                                             }
+                                             ListAdapter adapter = new SimpleAdapter(PendingRequestDetailsActivity.this, mRequestList, R.layout.list_item_pending_request,
+                                                     new String[]{RESOURCE_NAME, RESOURCE_TYPE, ADMIN_NAME, REQUESTED_ON, REQUESTED_TILL}, new int[]{R.id.resource_name,
+                                                     R.id.resource_type, R.id.requested_to, R.id.date_request_from, R.id.date_request_till});
+                                             mListView.setAdapter(adapter);
+                                         }
+                                     } catch (Exception e) {
+                                         LoggerUtility.makeLongToast(getApplicationContext(), getString(R.string.error_requesting_api));
+                                     }
+                                 }
+
+                                 @Override
+                                 public void onFailure(Call<AllHardwareRequestSummary> call, Throwable t) {
+                                     LoggerUtility.makeLog(TAG, "Error requesting API");
+                                     progressDialog.dismiss();
+                                     LoggerUtility.makeLongToast(getApplicationContext(), getString(R.string.server_error));
+
+                                 }
+                             }
+        );
+        Call<AllHardwareRequestSummary> callShared = callAPIInterface.getSharedResourceRequestSummary(LOGIN_REQUEST_HEADER_VALUE, token);
+        LoggerUtility.makeLog(TAG, "response in call object");
+        callShared.enqueue(new Callback<AllHardwareRequestSummary>() {
+                               @Override
+                               public void onResponse(Call<AllHardwareRequestSummary> call, Response<AllHardwareRequestSummary> response) {
+                                   //response's body
+                                   LoggerUtility.makeLog(TAG, "Response body");
+                                   progressDialog.dismiss();
+                                   List<UserRequest> userRequestsList;
+                                   try {
+                                       if (response.body().getResponse().getCode() == OK) {
+                                         //  LoggerUtility.makeShortToast(getApplicationContext(), response.body().getResponse().getMessage());
+                                           userRequestsList = response.body().getUserRequests();
+                                           for (int i = 0; i < userRequestsList.size(); i++) {
+                                               HashMap<String, String> requestListHashMap = new HashMap<String, String>();
+                                               requestListHashMap.put(RESOURCE_NAME, response.body().getUserRequests().get(i).getTitle());
+                                               requestListHashMap.put(RESOURCE_TYPE, response.body().getUserRequests().get(i).getRequestedDevice());
+                                               requestListHashMap.put(ADMIN_NAME, response.body().getUserRequests().get(i).getAssignedTo());
+                                               requestListHashMap.put(REQUESTED_ON, response.body().getUserRequests().get(i).getFromDate().substring(0, 10));
+                                               requestListHashMap.put(REQUESTED_TILL, response.body().getUserRequests().get(i).getToDate().substring(0, 10));
+                                               requestListHashMap.put(DESCRIPTION, response.body().getUserRequests().get(i).getDescription());
+                                               requestListHashMap.put(REQUESTED_BY, response.body().getUserRequests().get(i).getRequestedBy());
+                                               requestListHashMap.put(USER_ID, response.body().getUserRequests().get(i).getUserID().toString());
+                                               requestListHashMap.put(REQUEST_ID, response.body().getUserRequests().get(i).getID().toString());
+                                            //   LoggerUtility.makeLog(TAG, ""+mRequestList.get(i).get(REQUEST_ID));
+                                               mRequestList.add(requestListHashMap);
+                                           }
+                                           setListAdapter(mRequestList);
+
+                                       }
+                                   } catch (Exception e) {
+                                       LoggerUtility.makeLongToast(getApplicationContext(), getString(R.string.error_requesting_api));
+                                   }
+                               }
+
+                               @Override
+                               public void onFailure(Call<AllHardwareRequestSummary> call, Throwable t) {
+                                   LoggerUtility.makeLog(TAG, "Error requesting API");
+                                   progressDialog.dismiss();
+                                   LoggerUtility.makeLongToast(getApplicationContext(), getString(R.string.server_error));
+
+                               }
+                           }
+        );
+
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent i = new Intent(this, PendingRequestDetailId.class);
+        i.putExtra(RESOURCE_NAME, mRequestList.get(position).get(RESOURCE_NAME));
+        i.putExtra(DESCRIPTION, mRequestList.get(position).get(DESCRIPTION));
+        i.putExtra(ADMIN_NAME, mRequestList.get(position).get(ADMIN_NAME));
+        i.putExtra(REQUESTED_ON, mRequestList.get(position).get(REQUESTED_ON));
+        i.putExtra(REQUESTED_TILL, mRequestList.get(position).get(REQUESTED_TILL));
+        i.putExtra(REQUESTED_BY, mRequestList.get(position).get(REQUESTED_BY));
+        i.putExtra(USER_ID, mRequestList.get(position).get(USER_ID));
+        i.putExtra(REQUEST_ID, mRequestList.get(position).get(REQUEST_ID));
+        startActivity(i);
+        // LoggerUtility.makeShortToast(PendingRequestDetailsActivity.this,mRequestList.get(position).get(RESOURCE_NAME));
+        LoggerUtility.makeLog(TAG, "inside on item selected");
+        LoggerUtility.makeLog(TAG, mRequestList.get(position).get(RESOURCE_NAME));
+        LoggerUtility.makeLog(TAG, mRequestList.get(position).get(ADMIN_NAME));
+        LoggerUtility.makeLog(TAG, ""+mRequestList.get(position).get(USER_ID));
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        filter(newText);
+        return true;
+    }
+
+    private void filter(String newText) {
+        newText = newText.toLowerCase(Locale.getDefault());
+        LoggerUtility.makeLog(TAG, "inside filter method");
+        mRequestSearchList.clear();
+        if (newText.length() == 0) {
+            mRequestSearchList.addAll(mRequestList);
+        } else {
+            for (HashMap<String, String> hardware : mRequestList) {
+                String resName = (hardware == null) ? null : hardware.get(RESOURCE_NAME);
+                String assinedTo = (hardware == null) ? null : hardware.get(ADMIN_NAME);
+                if ((resName != null && resName.toLowerCase(Locale.getDefault()).contains(newText)) ||
+                        (assinedTo != null && assinedTo.toLowerCase(Locale.getDefault()).contains(newText))) {
+                    mRequestSearchList.add(hardware);
+                }
+            }
+
+        }
+        setListAdapter(mRequestSearchList);
+    }
+
+    private void setListAdapter(ArrayList<HashMap<String, String>> mRequestSearchList) {
+        ListAdapter adapter = new SimpleAdapter(PendingRequestDetailsActivity.this, mRequestSearchList, R.layout.list_item_pending_request,
+                new String[]{RESOURCE_NAME, RESOURCE_TYPE, ADMIN_NAME, REQUESTED_ON, REQUESTED_TILL}, new int[]{R.id.resource_name,
+                R.id.resource_type, R.id.requested_to, R.id.date_request_from, R.id.date_request_till});
+        mListView.setAdapter(adapter);
+    }
+}

@@ -1,0 +1,158 @@
+package com.mindfiresolutions.resourcemanager.admin;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+import android.widget.TextView;
+
+import com.mindfiresolutions.resourcemanager.R;
+import com.mindfiresolutions.resourcemanager.model.AssignHardwareSetter;
+import com.mindfiresolutions.resourcemanager.model.ResponseGetterBase;
+import com.mindfiresolutions.resourcemanager.model.UserList;
+import com.mindfiresolutions.resourcemanager.model.ViewAllUsersResponse;
+import com.mindfiresolutions.resourcemanager.utility.ApiCallHandler;
+import com.mindfiresolutions.resourcemanager.utility.CheckForExpiry;
+import com.mindfiresolutions.resourcemanager.utility.LoggerUtility;
+import com.mindfiresolutions.resourcemanager.utility.SharedPref;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import retrofit2.Call;
+
+import static com.mindfiresolutions.resourcemanager.utility.APIurls.LOGIN_REQUEST_HEADER_VALUE;
+import static com.mindfiresolutions.resourcemanager.utility.ApiCallHandler.KEY_ASSIGN_RESOURCE;
+import static com.mindfiresolutions.resourcemanager.utility.ApiCallHandler.KEY_GET_USER;
+import static com.mindfiresolutions.resourcemanager.utility.HttpCodes.OK;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.FULLNAME;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.HARDWARE_ID;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.USER_ID;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.USER_NAME;
+import static com.mindfiresolutions.resourcemanager.utility.SharedPref.USERID;
+
+/**
+ * This activity is used to assign Hardware to employees. This activity is not to be invoked when
+ * user requests for a resource.
+ * Created by Shivangi Singh on 5/10/2017.
+ * Modified on 29th May
+ */
+public class AssignHardwareActivity extends AppCompatActivity implements AdapterView.OnItemClickListener,
+        AdapterView.OnClickListener, ApiCallHandler.Listener {
+
+    private AssignHardwareSetter mAssignHardwareSetter;
+    private List<HashMap<String, String>> mAlUserList = new ArrayList<>();
+    private EditText mEdtDescriptionRequest;
+    private TextView mTxtUserNameAssigningTo;
+    private ListView mLvListView;
+    private static String TAG = AssignHardwareActivity.class.getSimpleName();
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_assign_pending_resource);
+
+        //get Intent and set Hardware id and admin id.
+        Intent i = getIntent();
+        int hardwareId = i.getExtras().getInt(HARDWARE_ID);
+        mAssignHardwareSetter = new AssignHardwareSetter();
+        mAssignHardwareSetter.setHardwareID(hardwareId);
+        mAssignHardwareSetter.setAssignedBy(Integer.parseInt(SharedPref.getInstance(this).getSharedPreferences(USERID)));
+
+        //initialize views and set on click listener to it.
+        mEdtDescriptionRequest = (EditText) findViewById(R.id.assign_resource_edt_description);
+        mLvListView = (ListView) findViewById(R.id.assign_resource_lv_listView);
+        mLvListView.setOnItemClickListener(this);
+        mTxtUserNameAssigningTo = (TextView) findViewById(R.id.assign_resource_txt_assigning_to);
+        findViewById(R.id.assign_resource_btn_assign).setOnClickListener(this);
+
+        getUserList();
+    }
+
+    //This function calls a list of user to be filled in mLvListView
+    private void getUserList() {
+        final String token = CheckForExpiry.checkForToken(this);
+        ApiCallHandler apiCallHandler = ApiCallHandler.getInstance();
+        Call<ViewAllUsersResponse> call = apiCallHandler.getInterface().getAllUsers(LOGIN_REQUEST_HEADER_VALUE, token);
+        apiCallHandler.getResponse(call, KEY_GET_USER, this, this);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        mTxtUserNameAssigningTo.setText(mAlUserList.get(position).get(FULLNAME));
+        mAssignHardwareSetter.setUserID(Integer.parseInt(mAlUserList.get(position).get(USER_ID)));
+    }
+
+    @Override
+    public void onClick(View v) {
+        mAssignHardwareSetter.setDescription(mEdtDescriptionRequest.getText().toString());
+        final String token = CheckForExpiry.checkForToken(this);
+        ApiCallHandler apiCallHandler = ApiCallHandler.getInstance();
+        Call<ResponseGetterBase> call = apiCallHandler.getInterface().getAssignHardware(LOGIN_REQUEST_HEADER_VALUE,
+                token, mAssignHardwareSetter);
+        apiCallHandler.getResponse(call, KEY_ASSIGN_RESOURCE, this, this);
+    }
+
+    @Override
+    public void onSuccessResult(Object result, String KEY) {
+        switch (KEY) {
+            case (KEY_GET_USER):
+                callBackGetUser(result);
+                break;
+
+            case (KEY_ASSIGN_RESOURCE):
+                callBackAssignResource(result);
+                break;
+
+            default:
+                LoggerUtility.log(TAG, "No case matched");
+        }
+    }
+
+    //handle positive callback to get list of users
+    private void callBackGetUser(Object result) {
+        ViewAllUsersResponse response = (ViewAllUsersResponse) result;
+        List<UserList> viewAllUsers;
+        try {
+            if (response.getResponse().getCode() == OK) {
+                LoggerUtility.toastShort(getApplicationContext(), response.getResponse().getMessage());
+                viewAllUsers = response.getViewAllUsers();
+
+                for (int i = 0; i < viewAllUsers.size(); i++) {
+                    HashMap<String, String> userListHashMap = new HashMap<>();
+                    String fullName = response.getViewAllUsers().get(i).getFirstName() + " " + response.getViewAllUsers().get(i).getLastName();
+                    userListHashMap.put(FULLNAME, fullName);
+                    userListHashMap.put(USER_ID, response.getViewAllUsers().get(i).getID().toString());
+                    userListHashMap.put(USER_NAME, response.getViewAllUsers().get(i).getUserName());
+                    mAlUserList.add(userListHashMap);
+                }
+                LoggerUtility.log(TAG, "data loaded in hashmap");
+                ListAdapter adapter = new SimpleAdapter(AssignHardwareActivity.this, mAlUserList, R.layout.list_item_available_hardware_by_type,
+                        new String[]{FULLNAME, USER_NAME}, new int[]{R.id.item_available_hw_txt_resource_name, R.id.item_available_hw_txt_resource_brand});
+                mLvListView.setAdapter(adapter);
+                LoggerUtility.log(TAG, "after array adapter");
+            }
+        } catch (NullPointerException e) {
+            LoggerUtility.toastLong(getApplicationContext(), getString(R.string.bad_api));
+        }
+    }
+
+    //get positive callBack here and assign hardware resource
+    private void callBackAssignResource(Object result) {
+        ResponseGetterBase response = (ResponseGetterBase) result;
+        LoggerUtility.log(TAG, "Response body");
+        try {
+            if (response.getCode() == OK) {
+                LoggerUtility.toastShort(this, response.getMessage());
+            }
+        } catch (NullPointerException e) {
+            LoggerUtility.toastLong(this, getString(R.string.bad_api));
+        }
+    }
+}

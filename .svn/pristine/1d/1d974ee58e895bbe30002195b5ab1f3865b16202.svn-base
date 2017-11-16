@@ -1,0 +1,61 @@
+package com.mindfiresolutions.resourcemanager.model;
+
+import com.google.gson.annotations.SerializedName;
+
+/**
+ * Created by Shivangi Singh on 5/10/2017.
+ */
+
+public class AssignHardwareSetter {
+        @SerializedName("UserID")
+        private Integer userID;
+        @SerializedName("HardwareID")
+        private Integer hardwareID;
+        @SerializedName("AssignedDate")
+        private String assignedDate;
+        @SerializedName("AssignedBy")
+        private Integer assignedBy;
+        @SerializedName("Description")
+        private String description;
+
+        public Integer getUserID() {
+            return userID;
+        }
+
+        public void setUserID(Integer userID) {
+            this.userID = userID;
+        }
+
+        public Integer getHardwareID() {
+            return hardwareID;
+        }
+
+        public void setHardwareID(Integer hardwareID) {
+            this.hardwareID = hardwareID;
+        }
+
+        public String getAssignedDate() {
+            return assignedDate;
+        }
+
+        public void setAssignedDate(String assignedDate) {
+            this.assignedDate = assignedDate;
+        }
+
+        public Integer getAssignedBy() {
+            return assignedBy;
+        }
+
+        public void setAssignedBy(Integer assignedBy) {
+            this.assignedBy = assignedBy;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+    }

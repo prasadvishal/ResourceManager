@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="@dimen/zero"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:orientation="vertical"
+            android:padding="@dimen/four">
+
+            <TextView
+                android:id="@+id/resource_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/resource"
+                android:layout_marginTop="@dimen/four"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/resource_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/type"
+
+                android:layout_marginTop="@dimen/four"
+                android:textStyle="italic" />
+
+            <TextView
+                android:id="@+id/requested_by"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/green"
+                android:textColorHint="@color/green"
+                android:layout_marginTop="@dimen/four"
+                android:hint="@string/admin" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="0.5">
+        <TextView
+            android:id="@+id/date_request_from"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/content_textsize"
+            android:hint="@string/date_format"
+            android:padding="@dimen/four" />
+        <TextView
+            android:id="@+id/date_request_till"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:hint="@string/date_format"
+            android:textColor="@color/green"
+            android:textColorHint="@color/green"
+            android:padding="@dimen/four" />
+        </LinearLayout>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/one"
+        android:background="@color/themeBlue"></View>
+
+</LinearLayout>

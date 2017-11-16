@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="@dimen/zero"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:orientation="vertical"
+            android:padding="@dimen/four">
+
+            <TextView
+                android:id="@+id/hardware_type_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/empty"
+                android:textColorHint="@color/textRed"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/hardware_type_macid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/empty"
+                android:textColorHint="@color/textRed"
+                android:textStyle="italic" />
+
+            <TextView
+                android:id="@+id/added_by"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/empty"
+                android:textColorHint="@color/textRed" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="@dimen/zero"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/hardware_type_brand"
+                android:layout_width="@dimen/round_textview_height"
+                android:layout_height="@dimen/round_textview_height"
+                android:background="@drawable/product_version_textview"
+                android:gravity="center"
+                android:hint="@string/empty"
+                android:textSize="@dimen/rounded_tv_textsize"
+                android:padding="@dimen/four"
+                android:textColorHint="@color/textRed"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

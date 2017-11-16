@@ -1,0 +1,14 @@
+package com.mindfiresolutions.resourcemanager.utility;
+
+/**
+ * Created by Shivangi Singh on 4/5/2017.
+ */
+
+public interface KeyValueConstants {
+    String HARDWARE_NAME = "hardwareName";
+    String SOFTWARE_ID = "SoftwareId";
+    String SOFTWARE_COUNT = "SoftwareCount";
+    String SOFTWARE_DETAILS = "SoftwareDetails";
+    String HARDWARE_TYPE_ID = "Type";
+    String HARDWARE_TYPE_NAME = "HardwareType";
+}

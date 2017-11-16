@@ -1,0 +1,62 @@
+package com.mindfiresolutions.resourcemanager.model;
+
+import com.google.gson.annotations.SerializedName;
+
+/**
+ * pojo to get summary of the resources
+ * Created by Vishal Prasad on 5/10/2017.
+ */
+
+public class AdminHomeSummaryCountResponse {
+    @SerializedName("Response")
+    private ResponseGetterBase mResponse;
+    @SerializedName("HardwareCount")
+    private HardwareCount mHardwareCount;
+    @SerializedName("SoftwareCount")
+    private SoftwareCount mSoftwareCount;
+    @SerializedName("PendingRequestsCount")
+    private RequestsCount mRequestsCount;
+    @SerializedName("SharedResourcesCount")
+    private SharedResourcesCount mSharedResourcesCount;
+
+    public ResponseGetterBase getResponse() {
+        return mResponse;
+    }
+
+    public void setResponse(ResponseGetterBase mResponse) {
+        this.mResponse = mResponse;
+    }
+
+    public HardwareCount getHardwareCount() {
+        return mHardwareCount;
+    }
+
+    public void setHardwareCount(HardwareCount mHardwareCount) {
+        this.mHardwareCount = mHardwareCount;
+    }
+
+    public SoftwareCount getSoftwareCount() {
+        return mSoftwareCount;
+    }
+
+    public void setSoftwareCount(SoftwareCount mSoftwareCount) {
+        this.mSoftwareCount = mSoftwareCount;
+    }
+
+    public RequestsCount getRequestsCount() {
+        return mRequestsCount;
+    }
+
+    public void setRequestsCount(RequestsCount mRequestsCount) {
+        this.mRequestsCount = mRequestsCount;
+    }
+
+    public SharedResourcesCount getSharedResourcesCount() {
+        return mSharedResourcesCount;
+    }
+
+    public void setSharedResourcesCount(SharedResourcesCount mSharedResourcesCount) {
+        this.mSharedResourcesCount = mSharedResourcesCount;
+    }
+
+}

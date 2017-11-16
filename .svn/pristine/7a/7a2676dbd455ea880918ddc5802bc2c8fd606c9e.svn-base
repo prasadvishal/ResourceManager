@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_change_password"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:layout_margin="@dimen/activity_horizontal_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.mindfiresolutions.resourcemanager.CommonAdminUser.ChangePasswordActivity">
+
+    <EditText
+        android:inputType="textPassword"
+        android:layout_marginTop="@dimen/rqst_desc_height"
+        android:textColor="@color/themeBlue"
+        android:hint="@string/prompt_old_password"
+        android:padding="@dimen/activity_vertical_margin"
+        style="@style/UserFields"
+        android:id="@+id/ChgPwd_oldpswd" />
+
+    <EditText
+        android:inputType="textPassword"
+        style="@style/UserFields"
+        android:textColor="@color/themeBlue"
+        android:hint="@string/prompt_new_password"
+        android:layout_marginTop="@dimen/layout_padding"
+        android:id="@+id/ChgPwd_newpswd" />
+
+    <EditText
+        android:inputType="textPassword"
+        style="@style/UserFields"
+        android:textColor="@color/themeBlue"
+        android:hint="@string/prompt_cnfrmPswrd"
+        android:layout_marginTop="@dimen/layout_padding"
+        android:id="@+id/ChgPwd_cnfrmpswd" />
+
+    <Button
+        android:text="@string/save"
+        style="@style/UserFields"
+        android:textColor="@color/white"
+        android:background="@drawable/button_layout"
+        android:layout_marginTop="@dimen/layout_padding"
+        android:id="@+id/ChgPwd_Button" />
+</LinearLayout>

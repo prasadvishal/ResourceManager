@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/hardware_type_summary_search_layout"
+        android:padding="@dimen/four"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        android:background="@drawable/border"
+        android:visibility="gone"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/hw_summary_type_search_key"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:hint="@string/search"
+            android:inputType="text"
+            android:padding="@dimen/textfields_padding"
+            android:textSize="@dimen/content_textsize" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include
+            layout="@layout/cardview_layout"
+            android:id="@+id/admin_hardware"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@color/themeBlue"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/textfields_padding">
+
+            <TextView
+                style="@style/UserFields"
+                android:layout_weight="1"
+                android:gravity="start"
+                android:text="@string/created_by" />
+
+            <TextView
+                style="@style/UserFields"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:text="@string/prompt_created_date"
+                android:textAlignment="textEnd" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/textfields_padding">
+
+            <TextView
+                android:id="@+id/software_details_created_admin_name"
+                style="@style/UserFields"
+                android:layout_weight="1"
+                android:gravity="start"
+                android:text="TextView" />
+
+            <TextView
+                android:id="@+id/software_details_created_date"
+                style="@style/UserFields"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:text="TextView"
+                android:textAlignment="textEnd" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/software_details_software_name"
+        style="@style/UserFields"
+        android:layout_width="match_parent"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        android:text="Software Name"
+        android:textAlignment="center"
+        android:textColor="@color/themeBlue"
+        android:textSize="@dimen/heading"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/software_version"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:gravity="center"
+                android:text="@string/description"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/software_details_software_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:gravity="center"
+                android:hint="@string/optional_desc" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/software_details_product__version_image"
+                android:layout_width="@dimen/imageview_width"
+                android:layout_height="@dimen/imageview_width"
+                android:layout_margin="@dimen/software_version"
+                android:background="@drawable/product_version_textview"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/software_version"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/software_details_product_version"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/negative_margin"
+                android:text="@string/product_version"
+                android:textAlignment="center"
+                android:textSize="@dimen/content_textsize"
+                android:textStyle="italic" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+                android:layout_weight="1"
+                android:text="License Status"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/software_details_license_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/subheading"
+                android:layout_marginStart="@dimen/subheading"
+                android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+                android:layout_weight="1"
+                android:text="Active/Expired"
+                android:textColor="@color/black"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="@dimen/imageview_height"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+                android:layout_weight="1"
+                android:text="@string/modified_by"
+                android:textColor="@color/black"
+                android:textSize="@dimen/content_textsize"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/software_details_modified_by"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/subheading"
+                android:layout_marginStart="@dimen/subheading"
+                android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+                android:layout_weight="1"
+                android:textColor="@color/black"
+                android:textSize="@dimen/content_textsize" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="@dimen/imageview_height"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+                android:layout_weight="1"
+                android:text="@string/modified_date"
+                android:textColor="@color/black"
+                android:textSize="@dimen/content_textsize"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/software_details_modified_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/subheading"
+                android:layout_marginStart="@dimen/subheading"
+                android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+                android:layout_weight="1"
+                android:textColor="@color/black"
+                android:textSize="@dimen/content_textsize" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+                android:layout_weight="1"
+                android:text="No.of Licenses"
+                android:textColor="@color/black"
+                android:textSize="@dimen/content_textsize"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/software_details_no_license"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/subheading"
+                android:layout_marginStart="@dimen/subheading"
+                android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+                android:layout_weight="1"
+                android:text="04"
+                android:textColor="@color/black"
+                android:textSize="@dimen/content_textsize" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>

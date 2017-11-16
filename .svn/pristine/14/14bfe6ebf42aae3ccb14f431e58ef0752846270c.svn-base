@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/textfields_padding">
+
+    <TextView
+        android:text="@string/brand"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/heading1" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="@string/brand"
+        android:ems="10"
+        android:id="@+id/editText" />
+    <TextView
+        android:text="@string/description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/heading2" />
+
+    <EditText
+        android:hint="@string/description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/editText2" />
+
+
+
+
+</LinearLayout>

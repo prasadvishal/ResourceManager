@@ -1,0 +1,97 @@
+package com.mindfiresolutions.resourcemanager.admin;
+
+/**
+ *  Created by: Vishal on 27th March
+ *  Last Modified on: 03/27/2017
+ */
+
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.ExpandableListView;
+
+import com.mindfiresolutions.resourcemanager.R;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+public class AdminHomeActivity extends AppCompatActivity {
+
+        ExpandableListAdapter listAdapter;
+        ExpandableListView expListView;
+        List<String> listDataHeader;
+        HashMap<String, List<String>> listDataChild;
+
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.admin_home_activity);
+            android.support.v7.app.ActionBar ab = getSupportActionBar();
+            //check for Actionbar if present then set tittle
+            if (ab != null && ab.isShowing()) {
+                ab.setTitle("Resource Manager");
+                ab.setSubtitle("Summary");
+            }
+            // get the listview
+            expListView = (ExpandableListView) findViewById(R.id.lvExp);
+
+            // preparing list data
+            prepareListData();
+
+            listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
+            // setting list adapter
+            expListView.setAdapter(listAdapter);
+        }
+
+        /*
+         * Preparing the list data
+         */
+        private void prepareListData() {
+            listDataHeader = new ArrayList<String>();
+            listDataChild = new HashMap<String, List<String>>();
+
+            // Adding child data
+            listDataHeader.add("Hardware Resources");
+            listDataHeader.add("Software Resources");
+            listDataHeader.add("Shared Resources");
+            listDataHeader.add("Pending Requests");
+
+            // Adding child data
+            List<String> hardwareResources = new ArrayList<String>();
+            hardwareResources.add(String.format("%1$-30s", "Laptop")+String.format("%1$30s", "07"));
+            hardwareResources.add(String.format("%1$-30s", "Mouse")+String.format("%1$30s", "04"));
+            hardwareResources.add(String.format("%1$-30s", "Keyboard")+String.format("%1$30s", "06"));
+            hardwareResources.add(String.format("%1$-30s", "Moniter")+String.format("%1$30s", "04"));
+            hardwareResources.add(String.format("%1$-30s", "Mac Box")+String.format("%1$30s", "05"));
+            hardwareResources.add(String.format("%1$-30s", "Webcam")+String.format("%1$30s", "03"));
+            hardwareResources.add(String.format("%1$-30s", "Headphones")+String.format("%1$30s", "04"));
+
+            List<String> softwareResources = new ArrayList<String>();
+            softwareResources.add("Windows 7"+"\t\t\t\t"+"03");
+            softwareResources.add("Windows 8.1"+"\t\t\t\t"+"04");
+            softwareResources.add("Ubuntu"+"\t\t\t\t"+"02");
+            softwareResources.add("Redhat"+"\t\t\t\t"+"01");
+            softwareResources.add("Photoshop"+"\t\t\t\t"+"06");
+            softwareResources.add("Quickheal"+"\t\t\t\t"+"12");
+            softwareResources.add("MS Office"+"\t\t\t\t"+"05");
+            softwareResources.add("Visual Studio 10"+"\t\t\t\t"+"03");
+
+            List<String> sharedResources = new ArrayList<String>();
+            sharedResources.add("iPhone 5"+"\t\t\t\t"+"01");
+            sharedResources.add("iPhone 6"+"\t\t\t\t"+"02");
+            sharedResources.add("iPhone 6s"+"\t\t\t\t"+"02");
+            sharedResources.add("Moto G1"+"\t\t\t\t"+"03");
+            sharedResources.add("Lenovo Vibe k4 Note"+"\t\t\t\t"+"02");
+            sharedResources.add("iPhone Connector"+"\t\t\t\t"+"06");
+            sharedResources.add("Android usb connector"+"\t\t\t\t"+"08");
+            sharedResources.add("Android C-Type Connector"+"\t\t\t\t"+"02");
+
+            List<String> pendingRequests = new ArrayList<String>();
+            pendingRequests.add("Toatal Pending Requests:"+"\t\t\t\t"+"11");
+
+            listDataChild.put(listDataHeader.get(0), hardwareResources); // Header, Child data
+            listDataChild.put(listDataHeader.get(1), softwareResources);
+            listDataChild.put(listDataHeader.get(2), sharedResources);
+            listDataChild.put(listDataHeader.get(3), pendingRequests);
+        }
+    }

@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_add_new_hardware_resource"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.mindfiresolutions.resourcemanager.admin.AddNewHardwareResourceActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin">
+
+                    <TextView
+                        android:layout_width="@dimen/zero"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/type_requiredfield"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/content_textsize"
+                        android:layout_marginTop="@dimen/activity_vertical_margin"
+                        android:textColor="@color/themeBlue" />
+
+                        <Spinner
+                            android:id="@+id/add_new_hardware_hardware_type_spinner"
+                            android:layout_width="@dimen/zero"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/activity_vertical_margin"
+                            android:layout_weight="2"
+                            android:padding="@dimen/textfields_padding"
+                            android:hint="@string/tap_to_select_type" />
+
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="@dimen/zero"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_weight="1"
+                    android:text="@string/brand_requiredfield"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/content_textsize"
+                    android:textColor="@color/themeBlue" />
+
+                <LinearLayout
+                    android:layout_width="@dimen/zero"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:padding="@dimen/textfields_padding"
+                    android:background="@drawable/border">
+                <Spinner
+                    android:id="@+id/add_new_hardware_hardware_brand_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/tap_to_select_brand" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin">
+                <TextView
+                    android:layout_width="@dimen/zero"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:textColor="@color/themeBlue"
+                    android:text="@string/name_req_field"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/content_textsize"/>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="@dimen/zero"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2">
+
+                    <EditText
+                        android:id="@+id/add_new_hardware_model_name"
+                        style="@style/BorderedTextFields"
+                        android:layout_width="match_parent"
+                        android:gravity="center"
+                        android:hint="@string/enter_name"
+                        android:inputType="text" />
+                </android.support.design.widget.TextInputLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin">
+
+                <TextView
+                    android:layout_width="@dimen/zero"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_weight="1"
+                    android:text="@string/macid_required_field"
+                    android:textColor="@color/themeBlue" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="@dimen/zero"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2">
+
+                    <EditText
+                        android:id="@+id/add_new_hardware_mac_id"
+                        style="@style/BorderedTextFields"
+                        android:layout_width="match_parent"
+                        android:gravity="center"
+                        android:hint="@string/enter_mcid"
+                        android:inputType="text" />
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/subheading"
+                android:layout_weight="1">
+                <TextView
+                    android:layout_width="@dimen/zero"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:textColor="@color/themeBlue"
+                    android:text="@string/service_tag_required_field"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"/>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="@dimen/zero"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <EditText
+                        android:id="@+id/add_new_hardware_srvctag"
+                        style="@style/BorderedTextFields"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/enter_srvc_tag"
+                        android:inputType="text" />
+                </android.support.design.widget.TextInputLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="fill_parent"
+                    android:layout_marginBottom="@dimen/four"
+                    android:layout_marginEnd="@dimen/textfields_padding"
+                    android:layout_marginTop="@dimen/eight"
+
+                    android:background="@color/black" />
+
+                <ImageButton
+                    android:id="@+id/service_tag_scan_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/four"
+                    android:paddingTop="@dimen/four"
+                    android:src="@drawable/icon_camera_img" />
+            </LinearLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/new_hardware_rqst_desc"
+                    style="@style/BorderedTextFields"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/resource_desc_height"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:gravity="center"
+                    android:hint="@string/optional_desc"
+                    android:inputType="text" />
+            </android.support.design.widget.TextInputLayout>
+
+            <CheckBox
+                android:id="@+id/add_new_hardware_shared_resource_chkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:buttonTint="@color/themeBlue"
+                android:text="@string/shared"
+                android:textColor="@color/themeBlue" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="@dimen/zero"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/smaller_padding"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/activity_vertical_margin"
+                        android:gravity="center"
+                        android:text="@string/order_date_req_field"
+                        android:textColor="@color/themeBlue" />
+
+                    <TextView
+                        android:id="@+id/add_new_hardware_order_date"
+                        style="@style/BorderedTextFields"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/smaller_padding"
+                        android:background="@drawable/border"
+                        android:gravity="center"
+                        android:hint="@string/tap_to_pick_date" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="@dimen/zero"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/smaller_padding"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/activity_vertical_margin"
+                        android:gravity="center"
+                        android:text="@string/received_date_req_field"
+                        android:textColor="@color/themeBlue" />
+
+
+                    <TextView
+                        android:id="@+id/add_new_hardware_rcvd_date"
+                        style="@style/BorderedTextFields"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/activity_vertical_margin"
+                        android:layout_marginTop="@dimen/smaller_padding"
+                        android:background="@drawable/border"
+                        android:gravity="center"
+                        android:hint="@string/tap_to_pick_date" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/add_new_hardware_add_hardware_button"
+                style="@style/UserFields"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:background="@drawable/styled_blue_button_layout"
+                android:text="@string/add_hardware" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

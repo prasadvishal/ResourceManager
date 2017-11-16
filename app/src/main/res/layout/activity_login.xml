@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg2_blur">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="38dp"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/launcher_image_height"
+        android:id="@+id/tittleImage"
+        android:paddingStart="@dimen/launcher_image_padding"
+        android:paddingEnd="@dimen/launcher_padding_right"
+        android:src="@drawable/resource_manager_logo"
+        />
+    <LinearLayout
+        android:id="@+id/login_form"
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/activity_horizontal_margin_center"
+        android:layout_height="@dimen/zero"
+        android:orientation="vertical"
+        android:layout_weight="0.42">
+
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="@color/white">
+
+        <EditText
+            android:id="@+id/ed_username"
+            style="@style/UserFields"
+            android:cursorVisible="true"
+            android:padding="@dimen/launcher_padding_right"
+            android:hint="@string/username"
+            android:gravity="start"
+            android:paddingBottom="@dimen/four"
+            android:drawableStart="@drawable/username"
+            android:drawablePadding="@dimen/launcher_image_padding"
+            android:inputType="text" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:textColorHint="@color/white">
+        <EditText
+            android:id="@+id/ed_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/launcher_padding_right"
+            android:hint="@string/password"
+            android:cursorVisible="true"
+            android:drawableStart="@drawable/password"
+            android:drawablePadding="@dimen/launcher_image_padding"
+            android:paddingBottom="@dimen/four"
+            android:inputType="textPassword"
+            android:textColor="@color/white" />
+</android.support.design.widget.TextInputLayout>
+        <CheckBox
+            android:id="@+id/show_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/white"
+            android:text="@string/show_password"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/login"
+            style="?android:textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_padding"
+            android:background="@drawable/styled_blue_button_layout"
+            android:text="@string/action_login"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+            android:textStyle="bold" />
+
+
+    </LinearLayout>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    <Button
+        android:id="@+id/signup"
+        android:layout_width="@dimen/rqst_desc_height"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@null"
+        android:text="@string/sign_up"
+        android:textAllCaps="false"
+        android:textColor="@color/white" />
+    <Button
+        android:id="@+id/forgotPassword"
+        android:layout_width="@dimen/rqst_desc_height"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:layout_weight="1"
+        android:text="@string/forgotpassword"
+        android:textAllCaps="false"
+        android:textColor="@color/white" />
+</LinearLayout>
+
+</LinearLayout>
+</ScrollView>

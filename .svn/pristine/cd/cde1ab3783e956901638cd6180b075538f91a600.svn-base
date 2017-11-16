@@ -1,0 +1,111 @@
+package com.mindfiresolutions.resourcemanager.model;
+
+import com.google.gson.annotations.SerializedName;
+
+/**
+ * Created by Vishal Prasad on 4/11/2017.
+ */
+
+public class AddNewHardwareResourceSetter {
+    @SerializedName("MACID")
+    private String mACID;
+    @SerializedName("ServiceTag")
+    private String serviceTag;
+    @SerializedName("Type")
+    private Integer type;
+    @SerializedName("Brand")
+    private Integer brand;
+    @SerializedName("Model")
+    private String model;
+    @SerializedName("OrderDate")
+    private String orderDate;
+    @SerializedName("ReceivedDate")
+    private String receivedDate;
+    @SerializedName("Description")
+    private String description;
+    @SerializedName("CreatedBy")
+    private Integer createdBy;
+    @SerializedName("IsSharable")
+    private Boolean isSharable;
+
+    public String getMACID() {
+        return mACID;
+    }
+
+    public void setMACID(String mACID) {
+        this.mACID = mACID;
+    }
+
+    public String getServiceTag() {
+        return serviceTag;
+    }
+
+    public void setServiceTag(String serviceTag) {
+        this.serviceTag = serviceTag;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public Integer getBrand() {
+        return brand;
+    }
+
+    public void setBrand(Integer brand) {
+        this.brand = brand;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public String getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(String orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    public String getReceivedDate() {
+        return receivedDate;
+    }
+
+    public void setReceivedDate(String receivedDate) {
+        this.receivedDate = receivedDate;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Integer getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(Integer createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Boolean getIsSharable() {
+        return isSharable;
+    }
+
+    public void setIsSharable(Boolean isSharable) {
+        this.isSharable = isSharable;
+    }
+
+}

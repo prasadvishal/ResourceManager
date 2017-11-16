@@ -1,0 +1,53 @@
+package com.mindfiresolutions.resourcemanager.model;
+
+/**
+ * Created by Shivangi Singh on 4/4/2017.
+ */
+
+import com.google.gson.annotations.SerializedName;
+
+public class ViewSoftwareSummary {
+    @SerializedName("ID")
+    private int softwareID;
+    @SerializedName("SoftwareName")
+    private String softwareName;
+    @SerializedName("ValidCount")
+    private int validCount;
+    @SerializedName("ValidUpto")
+    private String validUpto;
+
+    public String getSoftwareName() {
+        return softwareName;
+    }
+
+    public void setSoftwareName(String softwareName) {
+        this.softwareName = softwareName;
+    }
+
+    public int getSoftwareID() {
+        return softwareID;
+    }
+
+    public void setSoftwareID(int softwareID) {
+        this.softwareID = softwareID;
+    }
+
+    public int getValidCount() {
+        return validCount;
+    }
+
+    public void setValidCount(Integer validCount) {
+        this.validCount = validCount;
+    }
+
+    public String getValidUpto() {
+        return validUpto;
+    }
+
+    public void setValidUpto(String validUpto) {
+        this.validUpto = validUpto;
+    }
+
+}
+
+

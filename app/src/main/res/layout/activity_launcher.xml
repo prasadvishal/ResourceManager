@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/launcher_image_padding"
+    android:background="@drawable/bg2_blur">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/launcher_image_height"
+        android:layout_marginTop="@dimen/imageview__margin"
+        android:id="@+id/tittleImage"
+        android:paddingLeft="@dimen/launcher_image_padding"
+        android:paddingStart="@dimen/launcher_image_padding"
+        android:paddingRight="@dimen/launcher_padding_right"
+        android:paddingEnd="@dimen/launcher_padding_right"
+        android:src="@drawable/resource_manager_logo"
+        />
+</LinearLayout>

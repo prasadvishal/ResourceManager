@@ -1,0 +1,36 @@
+package com.mindfiresolutions.resourcemanager.model;
+
+import com.google.gson.annotations.SerializedName;
+
+/**
+ * Created by Shivangi Singh on 4/5/2017.
+ */
+
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
+
+public class HardwareSummaryCountWithResponse {
+
+    @SerializedName("Response")
+    private ResponseGetterBase response;
+    @SerializedName("HardwareCountSummary")
+    private List<ViewHardwareSummary> hardwareCountSummary = null;
+
+    public ResponseGetterBase getResponse() {
+        return response;
+    }
+
+    public void setResponse(ResponseGetterBase response) {
+        this.response = response;
+    }
+
+    public List<ViewHardwareSummary> getHardwareCountSummary() {
+        return hardwareCountSummary;
+    }
+
+    public void setHardwareCountSummary(List<ViewHardwareSummary> hardwareCountSummary) {
+        this.hardwareCountSummary = hardwareCountSummary;
+    }
+
+}

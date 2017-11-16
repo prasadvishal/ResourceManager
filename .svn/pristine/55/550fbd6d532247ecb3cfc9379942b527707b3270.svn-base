@@ -1,0 +1,33 @@
+package com.mindfiresolutions.resourcemanager.model;
+
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
+
+/**
+ * Created by Vishal Prasad on 4/6/2017.
+ */
+
+public class HardwareBrandResponse {
+    @SerializedName("Response")
+    private ResponseGetterBase response;
+    @SerializedName("HardwareBrandSetter")
+    private List<HardwareBrandSetter> hardwareBrandSetter = null;
+
+    public ResponseGetterBase getResponse() {
+        return response;
+    }
+
+    public void setResponse(ResponseGetterBase response) {
+        this.response = response;
+    }
+
+    public List<HardwareBrandSetter> getHardwareBrandSetter() {
+        return hardwareBrandSetter;
+    }
+
+    public void setHardwareBrandSetter(List<HardwareBrandSetter> hardwareBrandSetterList) {
+        this.hardwareBrandSetter = hardwareBrandSetterList;
+    }
+
+}

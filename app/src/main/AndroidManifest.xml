@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.mindfiresolutions.resourcemanager">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/resource_manager_icon"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".launcherPackage.LauncherActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".launcherPackage.LoginActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:hardwareAccelerated="false"/>
+        <activity
+            android:name=".user.userHome.HomeActivity"
+            android:label="@string/title_activity_home"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".launcherPackage.SignUpActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".user.userResource.NewRequestActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".commonAdminUser.EditUserProfile"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".user.userResource.ResourceInfoActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".admin.AddHardwareActivity"
+            android:theme="@style/AppThemeSpinner" />
+        <activity
+            android:name=".admin.AddSoftwareActivity"
+            android:theme="@style/AppThemeSpinner" />
+        <activity
+            android:name=".admin.RequestSummaryActivity"
+            android:theme="@style/AppThemeSpinner" />
+        <activity android:name=".admin.HardwareTypeSummary"
+            android:theme="@style/AppTheme.ActionBar"
+            android:hardwareAccelerated="true"/>
+        <activity android:name=".admin.AdminHomeMainActivity" />
+        <activity android:name=".commonAdminUser.ChangePasswordActivity" />
+        <activity android:name=".launcherPackage.ForgotPasswordActivity" />
+        <activity android:name=".admin.SoftwareDetailsActivity" />
+        <activity android:name=".admin.HardwareDetailsActivity"
+            android:theme="@style/AppTheme.ActionBar"/>
+        <activity android:name=".admin.RequestDetailByIdActivity" />
+        <activity android:name=".admin.AssignPendingHardwareActivity" />
+        <activity android:name=".admin.AssignPendingSoftwareActivity" />
+        <activity android:name=".admin.HardwareSummaryActivity"
+            android:hardwareAccelerated="true"/>
+        <activity android:name=".admin.AdminHomeActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".admin.AssignHardwareActivity" />
+        <activity android:name=".user.userResource.UserRequestsActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".user.userResource.UserRequestDetailActivity" />
+        <activity android:name=".admin.SoftwareSummaryActivity" />
+
+        <receiver android:name=".utility.AlarmTokenCleanerReceiver" />
+
+        <activity android:name=".user.userResource.UserResourceDetailActivity" />
+        <activity android:name=".admin.SharedResourceSummaryActivity"/>
+    </application>
+
+</manifest>

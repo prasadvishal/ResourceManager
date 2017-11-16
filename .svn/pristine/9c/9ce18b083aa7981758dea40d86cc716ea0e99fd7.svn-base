@@ -1,0 +1,80 @@
+package com.mindfiresolutions.resourcemanager.admin;
+
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.TextView;
+
+import com.mindfiresolutions.resourcemanager.R;
+import com.mindfiresolutions.resourcemanager.model.HardwareSummaryList;
+import com.mindfiresolutions.resourcemanager.model.HardwareSummaryWithResponse;
+import com.mindfiresolutions.resourcemanager.utility.CallAPIInterface;
+import com.mindfiresolutions.resourcemanager.utility.LoggerUtility;
+import com.mindfiresolutions.resourcemanager.utility.ServiceGenerator;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.mindfiresolutions.resourcemanager.utility.APIurls.LOGIN_REQUEST_HEADER_VALUE;
+import static com.mindfiresolutions.resourcemanager.utility.HttpCodes.OK;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.HARDWARE_NAME;
+
+public class HardwareDetailsActivity extends AppCompatActivity {
+
+    private static final String TAG = HardwareDetailsActivity.class.getSimpleName();
+
+    @Override
+    protected void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
+        setContentView(R.layout.activity_hardware_details);
+        Bundle extras = getIntent().getExtras();
+        String hardwareType = extras.getString(HARDWARE_NAME);
+        getHardwareSummary(hardwareType);
+    }
+
+    void getHardwareSummary(final String hardwareType) {
+        final TextView countResource = (TextView) findViewById(R.id.count_resource);
+        final TextView assignedCount = (TextView) findViewById(R.id.assigned_count);
+        final TextView hardwareBrand = (TextView) findViewById(R.id.brand_name);
+        CallAPIInterface callAPIInterface = ServiceGenerator.createService(CallAPIInterface.class);
+        LoggerUtility.makeLog(TAG, "Retrofit object created in updateUserProfile");
+        Call<HardwareSummaryWithResponse> call = callAPIInterface.getHardwareSummary(LOGIN_REQUEST_HEADER_VALUE);
+        LoggerUtility.makeLog(TAG, "response in call object in UpdateUserProfile");
+
+        call.enqueue(new Callback<HardwareSummaryWithResponse>() {
+                         @Override
+                         public void onResponse(Call<HardwareSummaryWithResponse> call, Response<HardwareSummaryWithResponse> response) {
+                             //response's body
+                             LoggerUtility.makeLog(TAG, "Response body");
+                             try {
+                                 if (response.body().getResponse().getCode() == OK) {
+                                     int countAvailable = 0, countNotavailable = 0, totalCount;
+                                     List<HardwareSummaryList> hardwareSummaryList = response.body().getHardwareSummaryList();
+                                     for (int i = 0; i < hardwareSummaryList.size(); i++) {
+                                         if (hardwareSummaryList.get(i).getStatus() == 2) {
+                                             countAvailable++;
+                                         } else if (hardwareSummaryList.get(i).getStatus() == 1) {
+                                             countNotavailable++;
+                                         }
+                                     }
+                                     totalCount = countAvailable + countNotavailable;
+                                     countResource.setText(totalCount);
+                                     assignedCount.setText(countNotavailable);
+                                     hardwareBrand.setText(hardwareType);
+                                 }
+                             } catch (Exception e) {
+                                 LoggerUtility.makeLongToast(getApplicationContext(), getString(R.string.error_requesting_api));
+                             }
+                         }
+
+                         @Override
+                         public void onFailure(Call<HardwareSummaryWithResponse> call, Throwable t) {
+                             LoggerUtility.makeLog(TAG, "Error requesting API");
+                         }
+                     }
+        );
+    }
+}
+

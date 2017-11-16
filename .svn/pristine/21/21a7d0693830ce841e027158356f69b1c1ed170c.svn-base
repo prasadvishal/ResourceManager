@@ -1,0 +1,15 @@
+package com.mindfiresolutions.resourcemanager.user.userHome;
+
+/**
+ * Created by Shivangi Singh on 3/28/2017.
+ */
+
+public class User {
+    private String mUsername, mPassword;
+
+    public User(String userName, String passWord)
+    {
+        mUsername = userName;
+        mPassword = passWord;
+    }
+}

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/topLayout"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:background="@color/themeBlue"
+        android:orientation="vertical">
+        <!--set weightSum in order to ensure that layout is rendered correctly on each device-->
+
+
+        <TextView
+            android:id="@+id/username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:text="@string/username"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/bottomLayout"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:layout_below="@id/topLayout"
+        android:background="@drawable/background_registration"
+        android:orientation="vertical"
+        android:padding="30dp">
+
+        <TextView
+            android:id="@+id/employee_id"
+            android:layout_width="match_parent"
+            android:layout_height="41dp"
+            android:layout_marginTop="35dp"
+            android:gravity="center"
+            android:text="@string/prompt_employeeid"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/hint_gray" />
+
+        <TextView
+            android:id="@+id/email_id"
+            android:layout_width="match_parent"
+            android:layout_height="41dp"
+            android:gravity="center"
+            android:text="@string/prompt_email"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/hint_gray" />
+
+        <EditText
+            android:id="@+id/edit_contact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:hint="@string/prompt_mobile"
+            android:inputType="number"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textColorHint="@color/label_gray"
+            android:textSize="15sp" />
+
+        <EditText
+            android:id="@+id/edit_old_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:hint="@string/prompt_old_password"
+            android:inputType="textPassword"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textColorHint="@color/label_gray"
+            android:textSize="15sp" />
+
+        <EditText
+            android:id="@+id/edit_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:hint="@string/prompt_new_password"
+            android:inputType="textPassword"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textColorHint="@color/label_gray"
+            android:textSize="15sp" />
+
+        <EditText
+            android:id="@+id/conf_edit_password"
+            android:layout_width="match_parent"
+            android:layout_height="41dp"
+            android:gravity="center"
+            android:hint="@string/prompt_cnfrmPswrd"
+            android:inputType="textPassword"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textColorHint="@color/label_gray"
+            android:textSize="15sp" />
+
+        <Button
+            android:id="@+id/edit_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/button_layout"
+            android:text="@string/save"
+            android:textAllCaps="false"
+            android:textColor="@color/white" />
+
+
+    </LinearLayout>
+
+    <ImageView
+
+        android:id="@+id/user_img"
+        android:layout_width="@dimen/imageview_width"
+        android:layout_height="@dimen/imageview_height"
+        android:layout_below="@id/topLayout"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="-50dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/user_image"
+        android:src="@drawable/minions"
+        android:textAllCaps="false" />
+
+</RelativeLayout>

@@ -1,0 +1,162 @@
+package com.mindfiresolutions.resourcemanager.model;
+
+import com.google.gson.annotations.SerializedName;
+
+/**
+ *
+ * Created by Vishal Prasad on 5/14/2017.
+ */
+public class UserSoftwareRequest {
+    @SerializedName("RequestID")
+    private Integer requestID;
+    @SerializedName("UserID")
+    private Integer userID;
+    @SerializedName("RequestedBy")
+    private String requestedBy;
+    @SerializedName("Title")
+    private String title;
+    @SerializedName("FromDate")
+    private String fromDate;
+    @SerializedName("ToDate")
+    private String toDate;
+    @SerializedName("RequestStatus")
+    private String requestStatus;
+    @SerializedName("Description")
+    private String description;
+    @SerializedName("AssignedTo")
+    private String assignedTo;
+    @SerializedName("RequestedDeviceID")
+    private Integer requestedDeviceID;
+    @SerializedName("RequestedDevice")
+    private String requestedDevice;
+    @SerializedName("AssignedBy")
+    private Object assignedBy;
+    @SerializedName("AssignedOn")
+    private String assignedOn;
+    @SerializedName("Category")
+    private String category;
+    @SerializedName("CategoryID")
+    private Integer categoryID;
+
+    public Integer getRequestID() {
+        return requestID;
+    }
+
+    public void setRequestID(Integer requestID) {
+        this.requestID = requestID;
+    }
+
+    public Integer getUserID() {
+        return userID;
+    }
+
+    public void setUserID(Integer userID) {
+        this.userID = userID;
+    }
+
+    public String getRequestedBy() {
+        return requestedBy;
+    }
+
+    public void setRequestedBy(String requestedBy) {
+        this.requestedBy = requestedBy;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getFromDate() {
+        return fromDate;
+    }
+
+    public void setFromDate(String fromDate) {
+        this.fromDate = fromDate;
+    }
+
+    public String getToDate() {
+        return toDate;
+    }
+
+    public void setToDate(String toDate) {
+        this.toDate = toDate;
+    }
+
+    public String getRequestStatus() {
+        return requestStatus;
+    }
+
+    public void setRequestStatus(String requestStatus) {
+        this.requestStatus = requestStatus;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getAssignedTo() {
+        return assignedTo;
+    }
+
+    public void setAssignedTo(String assignedTo) {
+        this.assignedTo = assignedTo;
+    }
+
+    public Integer getRequestedDeviceID() {
+        return requestedDeviceID;
+    }
+
+    public void setRequestedDeviceID(Integer requestedDeviceID) {
+        this.requestedDeviceID = requestedDeviceID;
+    }
+
+    public String getRequestedDevice() {
+        return requestedDevice;
+    }
+
+    public void setRequestedDevice(String requestedDevice) {
+        this.requestedDevice = requestedDevice;
+    }
+
+    public Object getAssignedBy() {
+        return assignedBy;
+    }
+
+    public void setAssignedBy(Object assignedBy) {
+        this.assignedBy = assignedBy;
+    }
+
+    public String getAssignedOn() {
+        return assignedOn;
+    }
+
+    public void setAssignedOn(String assignedOn) {
+        this.assignedOn = assignedOn;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public Integer getCategoryID() {
+        return categoryID;
+    }
+
+    public void setCategoryID(Integer categoryID) {
+        this.categoryID = categoryID;
+    }
+
+}
+

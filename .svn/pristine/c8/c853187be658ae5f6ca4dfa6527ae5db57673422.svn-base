@@ -1,0 +1,329 @@
+package com.mindfiresolutions.resourcemanager.admin;
+
+/**
+ * Created by: Vishal on 27th March
+ * Last Modified on: 04/16/2017 by Shivangi
+ */
+
+import android.animation.Animator;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewAnimationUtils;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ExpandableListView;
+import android.widget.FrameLayout;
+import android.widget.TextView;
+
+import com.mindfiresolutions.resourcemanager.R;
+import com.mindfiresolutions.resourcemanager.model.AllResourceSummaryGetter;
+import com.mindfiresolutions.resourcemanager.model.ViewHardwareSummary;
+import com.mindfiresolutions.resourcemanager.model.ViewSharedResource;
+import com.mindfiresolutions.resourcemanager.model.ViewSoftwareSummary;
+import com.mindfiresolutions.resourcemanager.utility.CallAPIInterface;
+import com.mindfiresolutions.resourcemanager.utility.Drawer;
+import com.mindfiresolutions.resourcemanager.utility.InternetConnections;
+import com.mindfiresolutions.resourcemanager.utility.LoggerUtility;
+import com.mindfiresolutions.resourcemanager.utility.ServiceGenerator;
+import com.mindfiresolutions.resourcemanager.utility.SharedPref;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.mindfiresolutions.resourcemanager.utility.APIurls.LOGIN_REQUEST_HEADER_VALUE;
+import static com.mindfiresolutions.resourcemanager.utility.HttpCodes.OK;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.HARDWARE_TYPE_ID;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.HARDWARE_TYPE_NAME;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.SOFTWARE_COUNT;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.SOFTWARE_ID;
+import static com.mindfiresolutions.resourcemanager.utility.UserPreferences.NAMEKEY;
+import static com.mindfiresolutions.resourcemanager.utility.UserPreferences.TOKEN;
+
+public class AdminHomeMainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+
+    ExpandableListAdapter mListAdapter;
+    ExpandableListView mExpListView;
+    List<String> listDataHeader;
+    HashMap<String, List<String>> listDataChild;
+    private final static String TAG = AdminHomeMainActivity.class.getSimpleName();
+    private Drawer mDrawer = new Drawer();
+    List<ViewHardwareSummary> viewHardwareSummary;
+    List<ViewSoftwareSummary> viewSoftwareSummary;
+    List<ViewSharedResource> viewSharedResource;
+    List<String> hardwareResources = new ArrayList<>();
+    List<String> softwareResources = new ArrayList<>();
+    List<String> sharedResources = new ArrayList<>();
+    List<String> pendingRequests = new ArrayList<>();
+    Boolean mIsOpen = false;
+    View mShadowView;
+    Animation mFabOpen, mFabClose, mFabClockwise, mFabAntiClockwise;
+    private FloatingActionButton mFabMain, mFabHardware, mFabSoftware;
+    TextView mFabNewSoftwareTv;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_admin_main);
+        android.support.v7.app.ActionBar ab = getSupportActionBar();
+        // check for Actionbar if present then set tittle
+        //TODO check id this can be removed
+        if (ab != null && ab.isShowing()) {
+            ab.setTitle("Resource Manager");
+            ab.setSubtitle("Summary");
+        }
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        //override current layout
+        initView();
+        mFabAntiClockwise = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_anticlockwise);
+        mFabClockwise = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_clockwise);
+        mFabClose = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
+        mFabOpen = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
+        mFabMain.setVisibility(View.VISIBLE);
+        mFabMain.setOnClickListener(this);
+        mFabHardware.setOnClickListener(this);
+        mFabSoftware.setOnClickListener(this);
+        LoggerUtility.makeLog(TAG, "Toolbar has been created");
+        mDrawer.setDrawerToggle(findViewById(R.id.drawer_layout), toolbar, this, findViewById(R.id.nav_view));
+        LoggerUtility.makeLog(TAG, "after setDrawerToggle");
+        changeNavigationView(findViewById(R.id.nav_view));
+        // get the listview
+        LoggerUtility.makeLog(TAG, "outside mExpListView");
+        LoggerUtility.makeLog(TAG, "after mExpListView");
+        // preparing list data
+        listDataHeader = new ArrayList<>();
+        listDataChild = new HashMap<>();
+        listDataHeader.add(getString(R.string.hardware_resource));
+        listDataHeader.add(getString(R.string.software_resource));
+        listDataHeader.add(getString(R.string.shared_resource));
+        listDataHeader.add(getString(R.string.pending_requests));
+
+        if (InternetConnections.checkInternetConnection(getApplicationContext())) {
+            LoggerUtility.makeLog(TAG, "INTERNET connection available");
+            prepareListWithData();
+        } else {
+            LoggerUtility.makeShortToast(getApplicationContext(), getString(R.string.no_internet));
+        }
+        mListAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
+        // setting list adapter
+        mExpListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                // TODO Auto-generated method stub
+                int cPosition = (int) mListAdapter.getChildId(groupPosition, childPosition);
+                LoggerUtility.makeLog(TAG, "You Clicked: " + cPosition);
+                LoggerUtility.makeLog(TAG, "its Parent is: " + groupPosition);
+                Intent i;
+                switch (groupPosition) {
+                    case 0:
+                        LoggerUtility.makeShortToast(getApplicationContext(), viewHardwareSummary.get(cPosition).getHardwareType());
+                        LoggerUtility.makeLog(TAG, "Inside Switch case of Hardware");
+                        LoggerUtility.makeLog(TAG, "Intent COntents: Hardware Name: "+viewHardwareSummary.get(cPosition).getHardwareType()+" Id: "+viewHardwareSummary.get(cPosition).getTypeId());
+                        i = new Intent(getApplicationContext(), HardwareTypeSummary.class);
+                        i.putExtra(HARDWARE_TYPE_ID, viewHardwareSummary.get(cPosition).getTypeId());
+                        i.putExtra(HARDWARE_TYPE_NAME, viewHardwareSummary.get(cPosition).getHardwareType());
+                        startActivity(i);
+                        break;
+                    case 1:
+                        LoggerUtility.makeLog(TAG, "Inside Switch case of Software");
+                        LoggerUtility.makeShortToast(getApplicationContext(), viewSoftwareSummary.get(cPosition).getSoftwareName());
+                        i = new Intent(getApplicationContext(), SoftwareDetailsActivity.class);
+                        LoggerUtility.makeLog(TAG, "Intent created, ready to send data to software details");
+                        i.putExtra(SOFTWARE_ID, viewSoftwareSummary.get(cPosition).getSoftwareID());
+                        //i.putExtra(SOFTWARE_COUNT, viewSoftwareSummary.get(cPosition).getAvailableKeys());
+                        i.putExtra(SOFTWARE_COUNT, viewSoftwareSummary.get(cPosition).getValidCount());
+                        LoggerUtility.makeShortToast(getApplicationContext(),"" + viewSoftwareSummary.get(cPosition).getSoftwareID());
+                        i.putExtra(SOFTWARE_COUNT, viewSoftwareSummary.get(cPosition).getValidCount());
+                        LoggerUtility.makeLog(TAG, "Data sent: " + viewSoftwareSummary.get(cPosition).getSoftwareID() + " " + viewSoftwareSummary.get(cPosition).getValidCount() + " ");
+                        startActivity(i);
+                        break;
+                    case 2:
+                        LoggerUtility.makeShortToast(getApplicationContext(), viewSharedResource.get(cPosition).getHardwareType());
+                        LoggerUtility.makeLog(TAG, "Inside Switch case of Shared Resource");
+                        break;
+                    case 3:
+                        Intent intentPendingReq = new Intent(getApplicationContext(), PendingRequestDetailsActivity.class);
+                        startActivity(intentPendingReq);
+                }
+                return false;
+            }
+        });
+        mExpListView.setAdapter(mListAdapter);
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawer.onBackPressed(drawerLayout);
+        } else
+            super.onBackPressed();
+    }
+
+    void changeNavigationView(View view) {
+        NavigationView navigationView = (NavigationView) view;
+        navigationView.getMenu().clear();
+        navigationView.inflateMenu(R.menu.admin_home_drawer_menu);
+        //change header text to admin
+        View admin_view = navigationView.getHeaderView(0);
+        TextView admin_txt = (TextView) admin_view.findViewById(R.id.name_user);
+        //TODO complete admin name here
+        admin_txt.setText(SharedPref.getSharedPreferences(this,NAMEKEY)); //Done
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        return mDrawer.onNavigationItemSelectedAdmin(item, this, findViewById(R.id.drawer_layout));
+    }
+
+    void prepareListWithData() {
+        //TODO add progressbar //Done
+        final String token = SharedPref.getSharedPreferences(this,TOKEN);
+        //created by Shivangi
+        final ProgressDialog progressDialog = new ProgressDialog(AdminHomeMainActivity.this);
+        progressDialog.setMessage(getString(R.string.loading));
+        progressDialog.show();
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        CallAPIInterface callAPIInterface = ServiceGenerator.createService(CallAPIInterface.class);
+        LoggerUtility.makeLog(TAG, "Retrofit object created");
+        Call<AllResourceSummaryGetter> call = callAPIInterface.getResourceSummary(LOGIN_REQUEST_HEADER_VALUE, token);
+        LoggerUtility.makeLog(TAG, token);
+        LoggerUtility.makeLog(TAG, "response in call object");
+        call.enqueue(new Callback<AllResourceSummaryGetter>() {
+                         @Override
+                         public void onResponse(Call<AllResourceSummaryGetter> call, Response<AllResourceSummaryGetter> response) {
+                             //response's body
+                             LoggerUtility.makeLog(TAG, "Response body");
+                             try {
+                                 progressDialog.dismiss();
+                                 if (response.body().getResponse().getCode() == OK) {
+                                     LoggerUtility.makeLog(TAG, response.body().getResponse().getMessage());
+                                     viewHardwareSummary = response.body().getViewHardwareSummary();
+                                     viewSoftwareSummary = response.body().getViewSoftwareSummary();
+                                     viewSharedResource = response.body().getViewSharedResource();
+                                     //TODO make custom array adapter
+                                     //fill the list with the data recieved from server
+                                     //extract just the getHardwareType from the whole object
+                                     for (int i = 0; i < viewHardwareSummary.size(); i++) {
+                                         hardwareResources.add(i, viewHardwareSummary.get(i).getHardwareType());
+                                         LoggerUtility.makeLog(TAG, viewHardwareSummary.get(i).getHardwareType());
+                                     }
+                                     for (int i = 0; i < viewSoftwareSummary.size(); i++) {
+                                         softwareResources.add(i, viewSoftwareSummary.get(i).getSoftwareName());
+                                         LoggerUtility.makeLog(TAG, viewSoftwareSummary.get(i).getSoftwareName()+" "+viewSoftwareSummary.get(i).getSoftwareID());
+                                     }
+                                     for (int i = 0; i < viewSharedResource.size(); i++) {
+                                         sharedResources.add(i, viewSharedResource.get(i).getHardwareType());
+                                         LoggerUtility.makeLog(TAG, viewSharedResource.get(i).getHardwareType());
+                                     }
+                                     pendingRequests.add(0,"pending requests" + "\t\t\t" + response.body().getViewRequestsSummary());
+                                     listDataChild.put(listDataHeader.get(0), hardwareResources); // Header, Child data
+                                     listDataChild.put(listDataHeader.get(1), softwareResources);
+                                     listDataChild.put(listDataHeader.get(2), sharedResources);
+                                     listDataChild.put(listDataHeader.get(3), pendingRequests);
+                                     //TODO string
+                                 } else {
+                                     LoggerUtility.makeShortToast(getApplicationContext(), response.body().getResponse().getMessage());
+                                 }
+                             } catch (Exception e) {
+                                 LoggerUtility.makeLongToast(getApplicationContext(), getString(R.string.error_requesting_api));
+                             }
+                         }
+
+                         @Override
+                         public void onFailure(Call<AllResourceSummaryGetter> call, Throwable t) {
+                             progressDialog.dismiss();
+                             LoggerUtility.makeLog(TAG, "Error requesting API");
+                         }
+                     }
+        );
+    }
+
+    public void onClickListenerMainFab() {
+        if (mIsOpen) {
+            mShadowView.setVisibility(View.GONE);
+            mFabNewSoftwareTv.setVisibility(View.GONE);
+            mFabHardware.startAnimation(mFabClose);
+            mFabSoftware.startAnimation(mFabClose);
+            mFabNewSoftwareTv.startAnimation(mFabClose);
+            mFabMain.startAnimation(mFabAntiClockwise);
+            mFabHardware.setClickable(false);
+            mFabSoftware.setClickable(false);
+            mIsOpen = false;
+        } else {
+            int cx = mShadowView.getWidth()-40;
+            int cy = mShadowView.getHeight()-30;
+            float finalRadius = (float) Math.hypot(cx, cy);
+            Animator anim = ViewAnimationUtils.createCircularReveal(mShadowView, cx, cy, 0, finalRadius);
+            mShadowView.setVisibility(View.VISIBLE);
+            anim.start();
+            mFabHardware.startAnimation(mFabOpen);
+            mFabSoftware.startAnimation(mFabOpen);
+            mFabNewSoftwareTv.startAnimation(mFabOpen);
+            mFabMain.startAnimation(mFabClockwise);
+            LoggerUtility.makeLog(TAG, "set mFabHardware/software clickable true");
+            mFabHardware.setClickable(true);
+            mFabSoftware.setClickable(true);
+            mFabNewSoftwareTv.setClickable(true);
+            mFabHardware.setOnClickListener(this);
+            mFabSoftware.setOnClickListener(this);
+            LoggerUtility.makeLog(TAG, "isOpen is set");
+            mIsOpen = true;
+
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        LoggerUtility.makeLog(TAG, "inside onclick listener");
+        switch (view.getId()) {
+            case (R.id.fab_new_software):
+                LoggerUtility.makeLog(TAG, "inside on click listener, add new software");
+                Intent intentSoftware = new Intent(AdminHomeMainActivity.this, AddNewSoftwareResourceActivity.class);
+                startActivity(intentSoftware);
+                break;
+
+            case (R.id.fab_new_hardware):
+                Intent intentHardware = new Intent(AdminHomeMainActivity.this, HardwareDetailsActivity.class);
+                startActivity(intentHardware);
+                break;
+            case (R.id.fab):
+                onClickListenerMainFab();
+                break;
+        }
+    }
+    void initView(){
+        FrameLayout frameLayout = (FrameLayout) findViewById(R.id.content_frame_activity_layout);
+        getLayoutInflater().inflate(R.layout.admin_home_activity, frameLayout);
+        mShadowView = findViewById(R.id.shadowView);
+        mFabMain = (FloatingActionButton) findViewById(R.id.fab);
+        mFabHardware = (FloatingActionButton) findViewById(R.id.fab_new_hardware);
+        mFabSoftware = (FloatingActionButton) findViewById(R.id.fab_new_software);
+        mExpListView = (ExpandableListView) findViewById(R.id.lvExp);
+        mFabNewSoftwareTv = (TextView)findViewById(R.id.fab_add_sftwr_tv);
+    }
+
+    /**
+     * Created by Vishal Prasad on 4/17/2017.
+     */
+}
+
+

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/subheading"
+        android:background="@drawable/border"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/hw_summary_type_search_key"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:hint="@string/search"
+            android:inputType="text"
+            android:padding="@dimen/textfields_padding"
+            android:textSize="@dimen/content_textsize" />
+
+        <View
+            android:layout_width="@dimen/one"
+            android:layout_height="fill_parent"
+            android:layout_margin="@dimen/four"
+            android:background="@color/black" />
+
+        <ImageButton
+            android:id="@+id/service_tag_scan_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/four"
+            android:background="@drawable/scan_image_button_background"
+            android:src="@drawable/search_icon" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/hardware_type_name"
+        style="@style/HeaderFields"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/themeBlue"
+        android:hint="@string/type"
+        android:padding="@dimen/subheading" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ListView
+            android:id="@+id/hardware_type_listview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

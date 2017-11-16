@@ -1,0 +1,17 @@
+package com.mindfiresolutions.resourcemanager.model;
+
+/**
+ * Created by Vishal Prasad on 5/5/2017.
+ */
+
+public class HardwareIdSetter {
+    public int getId() {
+        return HardwareId;
+    }
+
+    public void setId(int id) {
+        HardwareId = id;
+    }
+
+    private int HardwareId;
+}

@@ -1,0 +1,22 @@
+package com.mindfiresolutions.resourcemanager.model;
+
+import com.google.gson.annotations.SerializedName;
+
+/**
+ * Created by Shivangi Singh on 3/31/2017.
+ */
+
+public class ContactSetter {
+    @SerializedName("Contact")
+    private String Contact;
+
+    public String getContact() {
+        return Contact;
+    }
+
+    public void setContact(String contact) {
+        Contact = contact;
+    }
+
+
+}

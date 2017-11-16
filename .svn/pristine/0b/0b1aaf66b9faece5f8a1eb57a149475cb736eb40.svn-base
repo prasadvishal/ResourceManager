@@ -1,0 +1,36 @@
+package com.mindfiresolutions.resourcemanager.model;
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
+
+import okhttp3.Response;
+
+/**
+ * Created by Vishal Prasad on 5/1/2017.
+ */
+
+public class HardwareDetailsByTypeSetter {
+    @SerializedName("Response")
+    private ResponseGetterBase response;
+    @SerializedName("HardwareDetails")
+    private List<HardwareDetails> hardwareDetails = null;
+
+    public ResponseGetterBase getResponse() {
+        return response;
+    }
+
+    public void setResponse(ResponseGetterBase response) {
+        this.response = response;
+    }
+
+    public List<HardwareDetails> getHardwareDetails() {
+        return hardwareDetails;
+    }
+
+    public void setHardwareDetails(List<HardwareDetails> hardwareDetails) {
+        this.hardwareDetails = hardwareDetails;
+    }
+
+}

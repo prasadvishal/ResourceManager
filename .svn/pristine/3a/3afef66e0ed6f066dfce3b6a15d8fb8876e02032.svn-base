@@ -1,0 +1,143 @@
+package com.mindfiresolutions.resourcemanager.utility;
+
+/**
+ * Created by Shivangi Singh on 4/2/2017
+ */
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
+import android.text.SpannableStringBuilder;
+import android.text.style.ImageSpan;
+import android.view.MenuItem;
+import android.view.View;
+
+import com.mindfiresolutions.resourcemanager.CommonAdminUser.ChangePasswordActivity;
+import com.mindfiresolutions.resourcemanager.CommonAdminUser.EditUserProfile;
+import com.mindfiresolutions.resourcemanager.R;
+import com.mindfiresolutions.resourcemanager.admin.AddNewHardwareResourceActivity;
+import com.mindfiresolutions.resourcemanager.admin.AddNewSoftwareResourceActivity;
+import com.mindfiresolutions.resourcemanager.launcherPackage.LoginActivity;
+import com.mindfiresolutions.resourcemanager.user.userResource.NewRequestActivity;
+
+public class Drawer {
+    private static final String TAG = Drawer.class.getSimpleName();
+
+    public Drawer() {
+    }
+
+    public void setFloatingAction(View v,final Context context) {
+        FloatingActionButton fab = (FloatingActionButton) v;
+        LoggerUtility.makeLog(TAG, "fab object created");
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LoggerUtility.makeLog(TAG, "inside fab");
+                SpannableStringBuilder builder = new SpannableStringBuilder();
+                builder.append("My message ").append(" ");
+                builder.setSpan(new ImageSpan(context, R.drawable.add_resource), builder.length() - 1, builder.length(), 0);
+                builder.append(" next message");
+                Snackbar.make(view, builder, Snackbar.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void setDrawerToggle(View drawerView, Toolbar toolbar, Context context, View navView) {
+        DrawerLayout drawer = (DrawerLayout) drawerView;
+        Activity activity = (Activity) context;
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(activity, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+        NavigationView navigationView = (NavigationView) navView;
+        navigationView.getMenu().clear();
+        navigationView.inflateMenu(R.menu.activity_home_drawer);
+        navigationView.getItemBackground();
+        //we can change whole menu
+        // navigationView.getMenu().findItem(R.id.nav_editProfile).setVisible(false);
+//        navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    public void onBackPressed(DrawerLayout drawerLayout) {
+
+            drawerLayout.closeDrawer(GravityCompat.START);
+
+    }
+
+    public boolean onNavigationItemSelectedUser(MenuItem item, Context context,View drawerView) {
+        //created by vishal
+        LoggerUtility.makeLog(TAG, "Drawer open functionality");
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+        if (id == R.id.nav_editProfile) {
+            Intent i = new Intent(context, EditUserProfile.class);
+            context.startActivity(i);
+        } else if (id == R.id.nav_logout) {
+            Intent i = new Intent(context, LoginActivity.class);
+            context.startActivity(i);
+            // Handle the logout action
+        } else if (id == R.id.nav_home) {
+            // Handle the remove resource action
+        } else if (id == R.id.nav_addResource_hardware) {
+            //handle the add resource action
+            Intent i = new Intent(context, NewRequestActivity.class);
+            context.startActivity(i);
+        }
+        else if (id == R.id.nav_addResource_software) {
+            //handle the add resource action
+            Intent i = new Intent(context, NewRequestActivity.class);
+            context.startActivity(i);
+        }else if (id == R.id.nav_chngPassword) {
+            Intent i = new Intent(context, ChangePasswordActivity.class);
+            context.startActivity(i);
+            //TODO validate newPassword and cnfrmPassword
+        }
+        LoggerUtility.makeLog(TAG, "drawer closed after option is selected");
+        DrawerLayout drawer = (DrawerLayout) drawerView;
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+        public boolean onNavigationItemSelectedAdmin(MenuItem item, Context context, View drawerView) {
+            Activity activity = (Activity) context;
+            LoggerUtility.makeLog(TAG, "Drawer open functionality");
+            // Handle navigation view item clicks here.
+            int id = item.getItemId();
+            if (id == R.id.nav_editProfile) {
+                Intent i = new Intent(context, EditUserProfile.class);
+                context.startActivity(i);
+            } else if (id == R.id.nav_logout) {
+                Intent i = new Intent(context, LoginActivity.class);
+                context.startActivity(i);
+                // Handle the logout action
+            } else if (id == R.id.nav_home) {
+                // Handle the remove resource action
+            } else if (id == R.id.nav_addResource_hardware) {
+                //handle the add resource action
+                Intent i = new Intent(context, AddNewHardwareResourceActivity.class);
+                context.startActivity(i);
+            } else if (id == R.id.nav_addResource_software) {
+                //handle the add resource action
+                Intent i = new Intent(context, AddNewSoftwareResourceActivity.class);
+                context.startActivity(i);
+            } else if (id == R.id.nav_chngPassword) {
+                Intent i = new Intent(context, ChangePasswordActivity.class);
+                context.startActivity(i);
+                //TODO validate newPassword and cnfrmPassword
+            }
+            LoggerUtility.makeLog(TAG, "drawer closed after option is selected");
+            DrawerLayout drawer = (DrawerLayout) drawerView;
+            drawer.closeDrawer(GravityCompat.START);
+            return true;
+        }
+
+    }
+
+        //gravity is standard constants and tools for placing an object in large container
+

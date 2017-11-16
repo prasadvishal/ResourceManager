@@ -1,0 +1,24 @@
+package com.mindfiresolutions.resourcemanager.admin;
+
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+
+import com.mindfiresolutions.resourcemanager.R;
+
+public class AddNewHardwareResourceActivity extends AppCompatActivity {
+    Spinner mHardwareTypeSpinner,mBrandSpinner,mHardwareStatus;
+    EditText mHardwareDescription,mMACid,mSrvcTag;
+    TextView mOrderDateCreated,mReceivedDate,mCurrentDate;
+    Button mAddHardwareButton;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_add_new_hardware_resource);
+
+    }
+}

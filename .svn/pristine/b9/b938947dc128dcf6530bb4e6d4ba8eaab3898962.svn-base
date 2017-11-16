@@ -1,0 +1,60 @@
+package com.mindfiresolutions.resourcemanager;
+
+import android.app.DatePickerDialog;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
+import android.view.View;
+import android.widget.DatePicker;
+import android.widget.EditText;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
+/**
+ * Created By: Vishal on: 3/16/2017
+ * Last modified on: 3/23/2017
+ */
+public class NewRequestActivity extends AppCompatActivity implements View.OnClickListener {
+    private EditText mIssueDate;
+    private SimpleDateFormat mDateFormatter;
+    private DatePickerDialog mDatePickerDialog;
+
+    @Override
+    public void onClick(View view) {
+        if (view == mIssueDate) {
+            mDatePickerDialog.show();
+        }
+    }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_new_request);
+        mDateFormatter = new SimpleDateFormat(getString(R.string.date_format), Locale.getDefault());
+        findViewsById();
+        android.support.v7.app.ActionBar ab = getSupportActionBar();
+        //check for Actionbar if present then set tittle
+        if (ab != null && ab.isShowing()) {
+            ab.setTitle("Resource Manager");
+            ab.setSubtitle("My New Request");
+        }
+        setDateTimeField();
+    }
+    private void findViewsById() {
+        mIssueDate = (EditText) findViewById(R.id.issue_date);
+        mIssueDate.setInputType(InputType.TYPE_NULL);
+        mIssueDate.requestFocus();
+    }
+    private void setDateTimeField() {           //function to set date in mIssueDate using the date picker
+        mIssueDate.setOnClickListener(this);
+        Calendar newCalendar = Calendar.getInstance();
+        mDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Calendar newDate = Calendar.getInstance();
+                newDate.set(year, monthOfYear, dayOfMonth);
+                mIssueDate.setText(mDateFormatter.format(newDate.getTime()));
+            }
+        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+    }
+}

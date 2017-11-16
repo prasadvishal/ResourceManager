@@ -1,0 +1,101 @@
+package com.mindfiresolutions.resourcemanager.model;
+
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.google.gson.annotations.SerializedName;
+
+/**
+ * Created by Shivangi Singh on 5/8/2017
+ */
+
+public class PendingRequestResponseSetter implements Parcelable {
+
+    @SerializedName("UserID")
+    private Integer userID;
+    @SerializedName("HardwareID")
+    private Integer hardwareID;
+    @SerializedName("RequestID")
+    private Integer requestID;
+    @SerializedName("AssignedBy")
+    private Integer assignedBy;
+    @SerializedName("Description")
+    private String description;
+
+    public Integer getUserID() {
+        return userID;
+    }
+
+    public void setUserID(Integer userID) {
+        this.userID = userID;
+    }
+
+    public Integer getHardwareID() {
+        return hardwareID;
+    }
+
+    public void setHardwareID(Integer hardwareID) {
+        this.hardwareID = hardwareID;
+    }
+
+    public Integer getRequestID() {
+        return requestID;
+    }
+
+    public void setRequestID(Integer requestID) {
+        this.requestID = requestID;
+    }
+
+    public Integer getAssignedBy() {
+        return assignedBy;
+    }
+
+    public void setAssignedBy(Integer assignedBy) {
+        this.assignedBy = assignedBy;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(userID);
+        dest.writeInt(hardwareID);
+        dest.writeInt(requestID);
+        dest.writeInt(assignedBy);
+        dest.writeString(description);
+    }
+
+    public static final Parcelable.Creator CREATOR
+            = new Parcelable.Creator() {
+
+        public PendingRequestResponseSetter createFromParcel(Parcel in) {
+            return new PendingRequestResponseSetter(in);
+        }
+
+        public PendingRequestResponseSetter[] newArray(int size) {
+            return new PendingRequestResponseSetter[size];
+        }
+    };
+
+    // "De-parcel object
+    public PendingRequestResponseSetter(Parcel in) {
+        userID = in.readInt();
+        hardwareID = in.readInt();
+        requestID = in.readInt();
+        assignedBy = in.readInt();
+        description = in.readString();
+    }
+
+    public PendingRequestResponseSetter(){}
+}

@@ -1,0 +1,92 @@
+package com.mindfiresolutions.resourcemanager.launcherPackage;
+
+import android.app.ProgressDialog;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.EditText;
+
+import com.mindfiresolutions.resourcemanager.R;
+import com.mindfiresolutions.resourcemanager.admin.AdminHomeActivity;
+import com.mindfiresolutions.resourcemanager.model.ForgotPasswordSetter;
+import com.mindfiresolutions.resourcemanager.model.ResponseGetterBase;
+import com.mindfiresolutions.resourcemanager.utility.CallAPIInterface;
+import com.mindfiresolutions.resourcemanager.utility.InternetConnections;
+import com.mindfiresolutions.resourcemanager.utility.LoggerUtility;
+import com.mindfiresolutions.resourcemanager.utility.ServiceGenerator;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.mindfiresolutions.resourcemanager.utility.APIurls.LOGIN_REQUEST_HEADER_VALUE;
+import static com.mindfiresolutions.resourcemanager.utility.HttpCodes.BAD_REQUEST;
+import static com.mindfiresolutions.resourcemanager.utility.HttpCodes.OK;
+
+public class ForgotPasswordActivity extends AppCompatActivity {
+
+    private final String TAG = ForgotPasswordActivity.class.getSimpleName();
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_forgot_password);
+        findViewById(R.id.forgot_password_continue).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //check for internet connection
+                if (InternetConnections.checkInternetConnection(getApplicationContext())) {
+                    LoggerUtility.makeLog(TAG, "INTERNET connection available");
+                    getUserNameForForgotPassword();
+                } else {
+                    LoggerUtility.makeShortToast(getApplicationContext(), getString(R.string.no_internet));
+                }
+            }
+        });
+    }
+
+    void getUserNameForForgotPassword() {
+        EditText userName = (EditText) findViewById(R.id.edt_username_forgot_pswd);
+        String usrName = userName.getText().toString();
+        final ProgressDialog progressDialog = new ProgressDialog(ForgotPasswordActivity.this);
+        progressDialog.setMessage(getString(R.string.loading));
+        ForgotPasswordSetter forgotPasswordSetter = new ForgotPasswordSetter();
+        forgotPasswordSetter.setUserName(usrName);
+        CallAPIInterface callAPIInterface = ServiceGenerator.createService(CallAPIInterface.class);
+        LoggerUtility.makeLog(TAG, "Retrofit object created");
+        Call<ResponseGetterBase> call = callAPIInterface.forgotPasswordRequest(LOGIN_REQUEST_HEADER_VALUE, forgotPasswordSetter);
+        LoggerUtility.makeLog(TAG, "response in call object");
+        call.enqueue(new Callback<ResponseGetterBase>() {
+
+            @Override
+            public void onResponse(Call<ResponseGetterBase> call, Response<ResponseGetterBase> response) {
+                //response's body
+                try {
+                    progressDialog.dismiss();
+                    LoggerUtility.makeLog(TAG, "Response body");
+                    if (response.body().getCode() == OK) {
+                        LoggerUtility.makeLog(TAG, "User name recieved and password send to registered id");
+                        LoggerUtility.makeShortToast(getApplicationContext(), getString(R.string.password_send_to_registered_id));
+                    }
+                    if (response.body().getCode() == BAD_REQUEST) {
+                        LoggerUtility.makeShortToast(getApplicationContext(), getString(R.string.invalid_user));
+                    } else {
+                        LoggerUtility.makeShortToast(getApplicationContext(), response.body().getMessage());
+                    }
+                } catch (Exception e) {
+                    LoggerUtility.makeLongToast(getApplicationContext(), getString(R.string.error_requesting_api));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseGetterBase> call, Throwable t) {
+                //even if no response, dismiss progress dialog
+                progressDialog.dismiss();
+                LoggerUtility.makeLog(TAG, "Error requesting API");
+                t.printStackTrace();
+
+            }
+        });
+    }
+
+}

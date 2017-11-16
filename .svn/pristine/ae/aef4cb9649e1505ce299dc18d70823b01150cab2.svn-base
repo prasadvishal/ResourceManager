@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="slide_anim_duration">200</integer>
+    <integer name="fab_open_duration">100</integer>
+    <integer name="fab_rotate_duration">300</integer>
+    <integer name="fab_rotate_degrees_start">0</integer>
+    <integer name="fab_rotate_degrees_end">45</integer>
+</resources>

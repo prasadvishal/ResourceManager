@@ -1,0 +1,165 @@
+package com.mindfiresolutions.resourcemanager.admin;
+
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+
+import com.mindfiresolutions.resourcemanager.R;
+import com.mindfiresolutions.resourcemanager.model.AvailableHardwareDetails;
+import com.mindfiresolutions.resourcemanager.model.AvailableHardwareDetailsByTypeIdResponse;
+import com.mindfiresolutions.resourcemanager.model.PendingRequestResponseSetter;
+import com.mindfiresolutions.resourcemanager.model.ResponseGetterBase;
+import com.mindfiresolutions.resourcemanager.model.TypeSetter;
+import com.mindfiresolutions.resourcemanager.utility.CallAPIInterface;
+import com.mindfiresolutions.resourcemanager.utility.LoggerUtility;
+import com.mindfiresolutions.resourcemanager.utility.ServiceGenerator;
+import com.mindfiresolutions.resourcemanager.utility.SharedPref;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.mindfiresolutions.resourcemanager.utility.APIurls.LOGIN_REQUEST_HEADER_VALUE;
+import static com.mindfiresolutions.resourcemanager.utility.HttpCodes.OK;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.BRAND;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.HARDWARE_PENDING_REQUEST_OBJECT;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.HARDWARE_TYPE_ID;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.MODEL;
+import static com.mindfiresolutions.resourcemanager.utility.UserPreferences.TOKEN;
+
+public class AssignPendingHardwareResourceActivity extends AppCompatActivity implements AdapterView.OnItemClickListener,AdapterView.OnClickListener {
+
+    private int mResTypeId;
+    private static String TAG = AssignPendingHardwareResourceActivity.class.getSimpleName();
+    private ArrayList<HashMap<String, String>> mAvailableList;
+    private ListView mListView;
+    private static String HARDWARE_ID = "HardwareID";
+    private EditText mDescriptionRequest;
+    private PendingRequestResponseSetter mPendingRequestResponseSetter;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_assign_pending_resource);
+        Intent i = getIntent();
+        mPendingRequestResponseSetter = i.getExtras().getParcelable(HARDWARE_PENDING_REQUEST_OBJECT);
+        mResTypeId = i.getExtras().getInt(HARDWARE_TYPE_ID);
+        getResourceList();
+        mAvailableList = new ArrayList<>();
+        mDescriptionRequest = (EditText)findViewById(R.id.assign_resource_description) ;
+        mListView = (ListView) findViewById(R.id.assign_resource_listView);
+        mListView.setOnItemClickListener(this);
+        findViewById(R.id.assign_resource_assign_button).setOnClickListener(this);
+    }
+
+    private void getResourceList() {
+        final ProgressDialog progressDialog = new ProgressDialog(AssignPendingHardwareResourceActivity.this);
+        progressDialog.setMessage(getString(R.string.loading));
+        progressDialog.show();
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        final String token = SharedPref.getSharedPreferences(this, TOKEN);
+        CallAPIInterface callAPIInterface = ServiceGenerator.createService(CallAPIInterface.class);
+        LoggerUtility.makeLog(TAG, "Retrofit object created");
+        TypeSetter typeSetter = new TypeSetter();
+        typeSetter.setTypeID(mResTypeId);
+        Call<AvailableHardwareDetailsByTypeIdResponse> callHardware = callAPIInterface.getAvailableHardwareResourceSummaryByTypeId(LOGIN_REQUEST_HEADER_VALUE, token, typeSetter);
+        LoggerUtility.makeLog(TAG, "response in call object");
+        callHardware.enqueue(new Callback<AvailableHardwareDetailsByTypeIdResponse>() {
+                                 @Override
+                                 public void onResponse(Call<AvailableHardwareDetailsByTypeIdResponse> call, Response<AvailableHardwareDetailsByTypeIdResponse> response) {
+                                     //response's body
+                                     LoggerUtility.makeLog(TAG, "Response body");
+                                     List<AvailableHardwareDetails> availableHardwareDetails;
+                                     try {
+                                         if (response.body().getResponse().getCode() == OK) {
+                                             LoggerUtility.makeShortToast(getApplicationContext(), response.body().getResponse().getMessage());
+                                             progressDialog.dismiss();
+                                             availableHardwareDetails = response.body().getAvailableHardwareDetails();
+                                             for (int i = 0; i < availableHardwareDetails.size(); i++) {
+                                                 HashMap<String, String> availableResourceHashMap = new HashMap<>();
+                                                 availableResourceHashMap.put(BRAND, response.body().getAvailableHardwareDetails().get(i).getBrand());
+                                                 LoggerUtility.makeLog(TAG, response.body().getAvailableHardwareDetails().get(i).getBrand());
+                                                 availableResourceHashMap.put(HARDWARE_ID,response.body().getAvailableHardwareDetails().get(i).getHardwareID().toString());
+                                                 availableResourceHashMap.put(MODEL, response.body().getAvailableHardwareDetails().get(i).getModel());
+                                                 mAvailableList.add(availableResourceHashMap);
+                                             }
+                                             LoggerUtility.makeLog(TAG, "data loaded in hashmap");
+                                             ListAdapter adapter = new SimpleAdapter(AssignPendingHardwareResourceActivity.this, mAvailableList, R.layout.list_item_available_hardware_by_type,
+                                                     new String[]{MODEL, BRAND}, new int[]{R.id.resource_name, R.id.resource_brand});
+                                             mListView.setAdapter(adapter);
+                                             LoggerUtility.makeLog(TAG, "after array adapter");
+                                         }
+                                     } catch (Exception e) {
+                                         LoggerUtility.makeLongToast(getApplicationContext(), getString(R.string.bad_api));
+                                     }
+                                 }
+
+                                 @Override
+                                 public void onFailure(Call<AvailableHardwareDetailsByTypeIdResponse> call, Throwable t) {
+                                     LoggerUtility.makeLog(TAG, "Error requesting API");
+                                     progressDialog.dismiss();
+                                     LoggerUtility.makeLongToast(getApplicationContext(), getString(R.string.server_error));
+
+                                 }
+                             }
+        );
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        view.setBackgroundColor(getResources().getColor(R.color.themeBlue));
+        LoggerUtility.makeLog(TAG, "hardwareID "+ mAvailableList.get(position).get(HARDWARE_ID));
+        mPendingRequestResponseSetter.setHardwareID(Integer.parseInt(mAvailableList.get(position).get(HARDWARE_ID)));
+    }
+
+    @Override
+    public void onClick(View v) {
+        mPendingRequestResponseSetter.setDescription(mDescriptionRequest.getText().toString());
+        final ProgressDialog progressDialog = new ProgressDialog(AssignPendingHardwareResourceActivity.this);
+        progressDialog.setMessage(getString(R.string.loading));
+        progressDialog.show();
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        final String token = SharedPref.getSharedPreferences(this, TOKEN);
+        CallAPIInterface callAPIInterface = ServiceGenerator.createService(CallAPIInterface.class);
+        LoggerUtility.makeLog(TAG, "Retrofit object created");
+        Call<ResponseGetterBase> callHardware = callAPIInterface.getAssignRequestedHardware(LOGIN_REQUEST_HEADER_VALUE, token, mPendingRequestResponseSetter);
+        LoggerUtility.makeLog(TAG, "response in call object");
+        callHardware.enqueue(new Callback<ResponseGetterBase>() {
+                                 @Override
+                                 public void onResponse(Call<ResponseGetterBase> call, Response<ResponseGetterBase> response) {
+                                     //response's body
+                                     progressDialog.dismiss();
+                                     LoggerUtility.makeLog(TAG, "Response body");
+                                     try {
+                                         if (response.body().getCode() == OK) {
+                                             LoggerUtility.makeShortToast(getApplicationContext(), response.body().getMessage());
+                                         }
+                                     } catch (Exception e) {
+                                         LoggerUtility.makeLongToast(getApplicationContext(), getString(R.string.bad_api));
+                                     }
+                                 }
+
+                                 @Override
+                                 public void onFailure(Call<ResponseGetterBase> call, Throwable t) {
+                                     LoggerUtility.makeLog(TAG, "Error requesting API");
+                                     progressDialog.dismiss();
+                                     LoggerUtility.makeLongToast(getApplicationContext(), getString(R.string.server_error));
+
+                                 }
+                             }
+        );
+    }
+}

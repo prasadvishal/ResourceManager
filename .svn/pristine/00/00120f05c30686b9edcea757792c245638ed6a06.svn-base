@@ -1,0 +1,209 @@
+package com.mindfiresolutions.resourcemanager.launcherPackage;
+
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.text.method.PasswordTransformationMethod;
+import android.view.View;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import com.mindfiresolutions.resourcemanager.R;
+import com.mindfiresolutions.resourcemanager.admin.AdminHomeActivity;
+import com.mindfiresolutions.resourcemanager.model.LoginSetter;
+import com.mindfiresolutions.resourcemanager.model.ResponseGetterWithToken;
+import com.mindfiresolutions.resourcemanager.user.userHome.HomeActivity;
+import com.mindfiresolutions.resourcemanager.utility.CallAPIInterface;
+import com.mindfiresolutions.resourcemanager.utility.InternetConnections;
+import com.mindfiresolutions.resourcemanager.utility.LoggerUtility;
+import com.mindfiresolutions.resourcemanager.utility.ServiceGenerator;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.mindfiresolutions.resourcemanager.utility.APIconstants.USER;
+import static com.mindfiresolutions.resourcemanager.utility.APIurls.LOGIN_REQUEST_HEADER_VALUE;
+import static com.mindfiresolutions.resourcemanager.utility.HttpCodes.BAD_REQUEST;
+import static com.mindfiresolutions.resourcemanager.utility.HttpCodes.NOT_FOUND;
+import static com.mindfiresolutions.resourcemanager.utility.HttpCodes.OK;
+import static com.mindfiresolutions.resourcemanager.utility.UserPreferences.NAMEKEY;
+import static com.mindfiresolutions.resourcemanager.utility.UserPreferences.PASSWORDKEY;
+import static com.mindfiresolutions.resourcemanager.utility.UserPreferences.TOKEN;
+import static com.mindfiresolutions.resourcemanager.utility.UserPreferences.USERPREFERENCES;
+
+
+/**
+ * Created By: Shivangi on: 3/8/2017
+ * Last modified on: 4/13/2017
+ */
+
+
+public class LoginActivity extends AppCompatActivity {
+
+    private EditText mUsernameEdit;
+    private EditText mPasswordEdit;
+    private CheckBox mShowPassword;
+
+    SharedPreferences mSharedPreferences;
+    private final String TAG = LoginActivity.class.getSimpleName();
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+
+        //initialize variables
+        mUsernameEdit = (EditText) findViewById(R.id.ed_username);
+        mPasswordEdit = (EditText) findViewById(R.id.ed_password);
+        mShowPassword = (CheckBox) findViewById(R.id.show_password);
+        LoggerUtility.makeLog(TAG, "Variables initialized");
+        //check to see if there is any entry in shared preferences
+        mSharedPreferences = getSharedPreferences(USERPREFERENCES, Context.MODE_PRIVATE);
+        if (mSharedPreferences.contains(NAMEKEY)) {
+            LoggerUtility.makeLog(TAG, "SharedPreferences contains Data");
+            mUsernameEdit.setText(mSharedPreferences.getString(NAMEKEY, ""));
+            mPasswordEdit.setText(mSharedPreferences.getString(PASSWORDKEY, ""));
+            LoggerUtility.makeLog(TAG, mSharedPreferences.getString(NAMEKEY, ""));
+            LoggerUtility.makeLog(TAG, "Shared Preference contains NameKey, writing username and password into fields from preference");
+        } else
+        //if no entry exists then go with normal flow
+        {
+            //change color on focus change
+            changeColorOnFocus(mUsernameEdit, (TextView) findViewById(R.id.tv_username));
+            changeColorOnFocus(mPasswordEdit, (TextView) findViewById(R.id.tv_password));
+        }
+        //if checkbox is set then show password else show ****
+        mShowPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mShowPassword.isChecked()) {
+                    mPasswordEdit.setTransformationMethod(null);
+                } else {
+                    mPasswordEdit.setTransformationMethod(new PasswordTransformationMethod());
+                }
+            }
+        });
+        //set long click on password as false
+        mPasswordEdit.setLongClickable(false);
+        findViewById(R.id.signup).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), SignUpActivity.class);
+                startActivity(i);
+            }
+        });
+
+        findViewById(R.id.login).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (LoggerUtility.getTextFromView(mUsernameEdit).length() == 0) {
+                    LoggerUtility.requestFocusIfError(mUsernameEdit, getString(R.string.error_field_required));
+                    return;
+                }
+                if (mPasswordEdit.length() == 0) {
+                    LoggerUtility.requestFocusIfError(mPasswordEdit, getString(R.string.error_field_required));
+                    return;
+                }
+                //TODO do the else part
+
+                if (InternetConnections.checkInternetConnection(getApplicationContext())) {
+                    LoggerUtility.makeLog(TAG, "INTERNET connection available");
+                    checkUserCredentialForLogging(mUsernameEdit.getText().toString(), mPasswordEdit.getText().toString());
+                } else {
+                    LoggerUtility.makeShortToast(getApplicationContext(), getString(R.string.no_internet));
+                }
+            }
+        });
+        LoggerUtility.makeLog(TAG, "outside login button");
+
+        findViewById(R.id.forgotPassword).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), ForgotPasswordActivity.class);
+                startActivity(i);
+
+            }
+        });
+    }
+
+    private void startHomeActivity() {
+        Intent i = new Intent(getApplicationContext(), HomeActivity.class);
+        startActivity(i);
+    }
+
+    void changeColorOnFocus(EditText editText, final TextView textView) {
+        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    textView.setTextColor(ContextCompat.getColor(LoginActivity.this, R.color.label_gray));
+                } else {
+                    textView.setTextColor(ContextCompat.getColor(LoginActivity.this, R.color.white));
+                }
+            }
+        });
+    }
+
+    void checkUserCredentialForLogging(final String userName, final String passWord) {
+        final SharedPreferences.Editor EDITOR = mSharedPreferences.edit();
+        //loginsetter contains username and password
+        LoginSetter loginSetter = new LoginSetter();
+        loginSetter.setUserName(userName);
+        loginSetter.setPassword(passWord);
+        //set progress dialog
+        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
+        progressDialog.setMessage(getString(R.string.loading));
+        progressDialog.show();
+        //call retrofit object here
+        CallAPIInterface callAPIInterface = ServiceGenerator.createService(CallAPIInterface.class);
+        LoggerUtility.makeLog(TAG, "Retrofit object created");
+        //response types is ResponseGetterWithToken and loginsetter is request object which will be converted to json by retrofit
+        Call<ResponseGetterWithToken> call = callAPIInterface.getResponse(LOGIN_REQUEST_HEADER_VALUE, loginSetter);
+        LoggerUtility.makeLog(TAG, "response in call object");
+        call.enqueue(new Callback<ResponseGetterWithToken>() {
+            @Override
+            public void onResponse(Call<ResponseGetterWithToken> call, Response<ResponseGetterWithToken> response) {
+                //close progress dialof first
+                progressDialog.dismiss();
+                LoggerUtility.makeLog(TAG, "Response body");
+                try {
+                    if (response.body().getCode() == OK) {
+                        EDITOR.putString(NAMEKEY, userName);
+                        EDITOR.putString(PASSWORDKEY, passWord);
+                        EDITOR.putString(TOKEN, "bearer "+response.body().getToken().getAccessToken());
+                        EDITOR.apply();
+                        if (response.body().getRole().equals(USER)) {
+                            startHomeActivity();
+                        } else {
+                            Intent i = new Intent(getApplicationContext(), AdminHomeActivity.class);
+                            startActivity(i);
+                        }
+                    }
+                    if (response.body().getCode() == NOT_FOUND) {
+                        LoggerUtility.makeShortToast(getApplicationContext(), getString(R.string.error_incorrect_password));
+                    }
+                    if (response.body().getCode() == BAD_REQUEST) {
+                        progressDialog.dismiss();
+                        LoggerUtility.makeShortToast(getApplicationContext(), getString(R.string.invalid_user));
+                    }
+                } catch (Exception e) {
+                    LoggerUtility.makeLongToast(getApplicationContext(), getString(R.string.error_requesting_api));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseGetterWithToken> call, Throwable t) {
+                LoggerUtility.makeLog(TAG, "Error requesting API");
+                t.printStackTrace();
+
+            }
+        });
+    }
+}
+

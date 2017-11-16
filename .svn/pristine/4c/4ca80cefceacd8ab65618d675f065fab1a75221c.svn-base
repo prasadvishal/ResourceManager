@@ -1,0 +1,217 @@
+package com.mindfiresolutions.resourcemanager.admin;
+
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.mindfiresolutions.resourcemanager.R;
+import com.mindfiresolutions.resourcemanager.model.HardwareDetails;
+import com.mindfiresolutions.resourcemanager.model.HardwareDetailsByTypeSetter;
+import com.mindfiresolutions.resourcemanager.model.TypeSetter;
+import com.mindfiresolutions.resourcemanager.resource.MultiColorListViewAdapter;
+import com.mindfiresolutions.resourcemanager.utility.CallAPIInterface;
+import com.mindfiresolutions.resourcemanager.utility.LoggerUtility;
+import com.mindfiresolutions.resourcemanager.utility.ServiceGenerator;
+import com.mindfiresolutions.resourcemanager.utility.SharedPref;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.mindfiresolutions.resourcemanager.utility.APIurls.LOGIN_REQUEST_HEADER_VALUE;
+import static com.mindfiresolutions.resourcemanager.utility.HttpCodes.OK;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.ADMIN_NAME;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.AVAILABILITY;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.DESCRIPTION;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.HARDWARE_BRAND;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.HARDWARE_ID;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.HARDWARE_NAME;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.HARDWARE_TYPE_ID;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.HARDWARE_TYPE_NAME;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.MAC_ID;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.REQUESTED_BY;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.REQUESTED_ON;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.REQUESTED_TILL;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.REQUEST_ID;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.RESOURCE_NAME;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.USER_ID;
+import static com.mindfiresolutions.resourcemanager.utility.UserPreferences.TOKEN;
+
+/**
+ * Created By: Vishal on 26th April
+ * Last Modified on 5th May 2017 April
+ **/
+
+public class HardwareTypeSummary extends AppCompatActivity implements AdapterView.OnItemClickListener {
+    private static final String TAG = HardwareTypeSummary.class.getSimpleName();
+    private int mHardwareTypeId;
+    String mHardwareTypeName;
+    EditText mSearchKey;
+    ArrayList<HashMap<String, String>> mHardwareSUmmaryByType;
+    ArrayList<HashMap<String, String>> mHardwareTypeSearchList;
+    TextView mHardwareType;
+    ListView mListView;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_hardware_type_summary);
+        //  Bundle extras = getIntent().getExtras();//TODO no bundles
+        Intent i = getIntent();
+
+        LoggerUtility.makeLog(TAG, "Intent executed Data received");
+        LoggerUtility.makeLog(TAG, "Type id: " + i.getExtras().getInt(HARDWARE_TYPE_ID) + " Type Name: " + i.getExtras().getString(HARDWARE_NAME));
+        mHardwareSUmmaryByType = new ArrayList<>();
+        mHardwareTypeSearchList = new ArrayList<>();
+        mHardwareTypeId = i.getExtras().getInt(HARDWARE_TYPE_ID);
+        mHardwareTypeName = i.getExtras().getString(HARDWARE_TYPE_NAME);
+        initViews();
+        mHardwareType.setText(mHardwareTypeName);
+        //initialize list of resources. Here resources are another class
+        makeViewHardwareSummaryByTypeAPICall(mHardwareTypeId);
+    }
+
+
+    private void makeViewHardwareSummaryByTypeAPICall(int hardwareTypeId) {
+
+        String token = SharedPref.getSharedPreferences(this, TOKEN);
+        final ProgressDialog progressDialog = new ProgressDialog(HardwareTypeSummary.this);
+        progressDialog.setMessage(getString(R.string.loading));
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+        CallAPIInterface callAPIInterface = ServiceGenerator.createService(CallAPIInterface.class);
+        LoggerUtility.makeLog(TAG, "Retrofit object created in updateUserProfile");
+        TypeSetter hardwareTypeSetter = new TypeSetter();
+        hardwareTypeSetter.setTypeID(mHardwareTypeId);
+        Call<HardwareDetailsByTypeSetter> call = callAPIInterface.getHardwareDetailByType(LOGIN_REQUEST_HEADER_VALUE, token, hardwareTypeSetter);
+        LoggerUtility.makeLog(TAG, "response in call object in UpdateUserProfile");
+        call.enqueue(new Callback<HardwareDetailsByTypeSetter>() {
+                         List<HardwareDetails> hardwareDetailsList;
+
+                         @Override
+                         public void onResponse(Call<HardwareDetailsByTypeSetter> call, Response<HardwareDetailsByTypeSetter> response) {
+                             //response's body
+                             LoggerUtility.makeLog(TAG, "Response body");
+//                             try{
+
+                             if (response.body().getResponse().getCode() == OK) {
+                                 hardwareDetailsList = (response.body().getHardwareDetails());
+                                 setHardwareDetails(response.body().getHardwareDetails());
+                                 for (int i = 0; i < hardwareDetailsList.size(); i++) {
+                                     HashMap<String, String> hardwareTypeHashMap = new HashMap<String, String>();
+                                     hardwareTypeHashMap.put(RESOURCE_NAME, response.body().getHardwareDetails().get(i).getModel());
+                                     hardwareTypeHashMap.put(MAC_ID, response.body().getHardwareDetails().get(i).getMACID());
+                                     hardwareTypeHashMap.put(ADMIN_NAME, response.body().getHardwareDetails().get(i).getAssignedTo());
+                                     hardwareTypeHashMap.put(HARDWARE_BRAND, response.body().getHardwareDetails().get(i).getBrand());
+                                     hardwareTypeHashMap.put(AVAILABILITY, response.body().getHardwareDetails().get(i).getAvailabilty());
+                                     hardwareTypeHashMap.put(HARDWARE_ID,response.body().getHardwareDetails().get(i).getHardwareID().toString());
+                                     mHardwareSUmmaryByType.add(hardwareTypeHashMap);
+                                 }
+                                 setListAdapter(mHardwareSUmmaryByType);
+                                 progressDialog.dismiss();
+                             } else {
+                                 LoggerUtility.makeShortToast(getApplicationContext(), response.body().getResponse().getMessage());
+                             }
+//                             } catch (Exception e) {
+//                                 LoggerUtility.makeLongToast(getApplicationContext(), getString(R.string.error_requesting_api));
+//                             }
+                         }
+
+                         @Override
+                         public void onFailure(Call<HardwareDetailsByTypeSetter> call, Throwable t) {
+                             progressDialog.dismiss();
+                             LoggerUtility.makeLog(TAG, "Error requesting API");
+                         }
+                     }
+        );
+    }
+
+    private void setListAdapter(ArrayList<HashMap<String, String>> mHardwareSUmmaryByType) {
+        ListAdapter adapter = new MultiColorListViewAdapter(HardwareTypeSummary.this, mHardwareSUmmaryByType, R.layout.list_item_hardware_type,
+                new String[]{RESOURCE_NAME, MAC_ID, ADMIN_NAME, HARDWARE_BRAND}, new int[]{R.id.hardware_type_name,
+                R.id.hardware_type_macid, R.id.added_by, R.id.hardware_type_brand});
+        mListView.setAdapter(adapter);
+    }
+
+    private void setfields(List<HardwareDetails> hardwareDetails) {
+    }
+
+    private void setHardwareDetails(List<HardwareDetails> hardwareDetails) {
+        //   mHardwareName.setText(hardwareDetails.get);
+    }
+
+    public void filter(String charText) {
+        String searchString = charText;
+        charText = charText.toLowerCase(Locale.getDefault());
+        LoggerUtility.makeLog(TAG, "inside filter method");
+        mHardwareTypeSearchList.clear();
+        if (charText.length() == 0) {
+            mHardwareTypeSearchList.addAll(mHardwareSUmmaryByType);
+        } else {
+            for (HashMap<String, String> hardware : mHardwareSUmmaryByType) {
+                String resName = (hardware == null) ? null : hardware.get(RESOURCE_NAME);
+                String brandName = (hardware == null) ? null : hardware.get(HARDWARE_BRAND);
+                String assinedTo = (hardware == null) ? null : hardware.get(ADMIN_NAME);
+                if ((resName != null && resName.toLowerCase(Locale.getDefault()).contains(charText))||
+                        (brandName != null && brandName.toLowerCase(Locale.getDefault()).contains(charText))||
+                                (assinedTo != null && assinedTo.toLowerCase(Locale.getDefault()).contains(charText))){
+                    mHardwareTypeSearchList.add(hardware);
+                }
+            }
+
+        }
+        setListAdapter(mHardwareTypeSearchList);
+
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent i = new Intent(this, HardwareDetailsActivity.class);
+        i.putExtra(HARDWARE_ID,Integer.parseInt(mHardwareTypeSearchList.get(position).get(HARDWARE_ID)));
+        LoggerUtility.makeLog(TAG,"Value sent:"+mHardwareTypeSearchList.get(position).get(HARDWARE_ID));
+        startActivity(i);
+        // LoggerUtility.makeShortToast(PendingRequestDetailsActivity.this,mRequestList.get(position).get(RESOURCE_NAME));
+    }
+
+
+    private void initViews() {
+        mHardwareType = (TextView) findViewById(R.id.hardware_type_name);
+        mListView = (ListView) findViewById(R.id.hardware_type_listview);
+        mListView.setOnItemClickListener(this);
+        mSearchKey = (EditText) findViewById(R.id.hw_summary_type_search_key);
+        //filter(mSearchKey.getText().toString());
+        mSearchKey.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable arg0) {
+                String text = mSearchKey.getText().toString().toLowerCase(Locale.getDefault());
+                filter(text);
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence arg0, int arg1,
+                                          int arg2, int arg3) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence arg0, int arg1, int arg2,
+                                      int arg3) {
+            }
+        });
+    }
+}

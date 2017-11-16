@@ -1,0 +1,10 @@
+package com.mindfiresolutions.resourcemanager.utility;
+
+/**
+ * Created by Shivangi Singh on 3/30/2017.
+ */
+
+public interface APIurls {
+    String LOGIN_REQUEST_HEADER_VALUE = "application/json";
+    String BASE_URL = "http://192.168.11.71:5001/Api/Accounts/";
+}

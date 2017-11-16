@@ -1,0 +1,54 @@
+package com.mindfiresolutions.resourcemanager.utility;
+
+import android.content.Context;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+/**
+ * This interface handles negative callbacks and sends back positive callbacks
+ * Created by Shivangi Singh on 5/24/2017.
+ */
+
+public class ApiCallHandler {
+    private static final String TAG = ApiCallHandler.class.getSimpleName();
+    private static ApiCallHandler sInstance;
+
+    private ApiCallHandler() {/*Ignored*/}
+
+    public static ApiCallHandler getInstance() {
+        if (sInstance == null) sInstance = new ApiCallHandler();
+        return sInstance;
+    }
+
+    public interface Listener {
+        void onSuccessResult(Object result,String KEY);
+    }
+
+    public CallAPIInterface getInterface() {
+        return ServiceGenerator.createService(CallAPIInterface.class);
+    }
+
+    public void getResponse(Call call,final String key ,final Context context, final Listener listener) {
+        ProgressDialogUtility.startProgressDialog(context);
+        call.enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+                if (response.body() != null && listener != null)
+                    listener.onSuccessResult(response.body(),key);
+                ProgressDialogUtility.dismissProgressDialog();
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+                //        LoggerUtility.makeLongToast(getApplicationContext(), getString(R.string.server_error));
+                ProgressDialogUtility.dismissProgressDialog();
+                LoggerUtility.LogGenerator(TAG, "Error requesting API");
+                t.printStackTrace();
+            }
+        });
+    }
+}
+
+

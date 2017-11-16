@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/blue"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/textfields_padding">
+
+                <TextView
+                    style="@style/UserFields"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:text="@string/requested_by"
+                    android:textStyle="bold" />
+
+                <TextView
+                    style="@style/UserFields"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:text="@string/req_date"
+                    android:textAlignment="textEnd"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/textfields_padding">
+
+                <TextView
+                    android:id="@+id/pending_details_txt_requested_by"
+                    style="@style/UserFields"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:text="@string/username" />
+
+                <TextView
+                    android:id="@+id/pending_details_txt_request_date"
+                    style="@style/UserFields"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:text="@string/date_format"
+                    android:textAlignment="textEnd" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/pending_request_detail_txt_request_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:gravity="center"
+            android:hint="@string/request_title"
+            android:textColor="@color/black"
+            android:textSize="@dimen/heading" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            android:padding="@dimen/activity_vertical_margin">
+
+            <LinearLayout
+                android:layout_width="@dimen/zero"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_margin="@dimen/activity_vertical_margin"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
+                    android:gravity="end"
+                    android:text="@string/resource_type"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
+                    android:gravity="end"
+                    android:text="@string/device_info_category"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="end"
+                    android:text="@string/request_to"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:gravity="end"
+                    android:text="@string/issue_by"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="@dimen/zero"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/pending_details_txt_resource_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:hint="@string/resource_type" />
+
+                <TextView
+                    android:id="@+id/pending_details_txt_res_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:hint="@string/device_info_category" />
+
+                <TextView
+                    android:id="@+id/pending_details_txt_requested_to"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:hint="@string/request_to" />
+
+                <TextView
+                    android:id="@+id/pending_details_txt_issue_by"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:hint="@string/issue_by"
+                    android:textAlignment="textEnd" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin_center"
+            android:layout_marginTop="@dimen/activity_horizontal_margin_subheading"
+            android:text="@string/description"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/pending_request_detail_txt_request_description"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/custom_tab_layout_height"
+            android:layout_margin="@dimen/activity_vertical_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:background="@drawable/border"
+            android:gravity="center"
+            android:text="@string/request_title" />
+
+        <Button
+            android:id="@+id/pending_request_btn_approve"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_margin="@dimen/activity_vertical_margin"
+            android:background="@drawable/styled_green_button_layout"
+            android:text="@string/approve"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,430 @@
+package com.mindfiresolutions.resourcemanager.admin;
+
+import android.animation.Animator;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.graphics.Color;
+import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewAnimationUtils;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ExpandableListView;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.mindfiresolutions.resourcemanager.R;
+import com.mindfiresolutions.resourcemanager.model.AdminHomePageSummaryCountResponse;
+import com.mindfiresolutions.resourcemanager.model.AllResourceSummaryGetter;
+import com.mindfiresolutions.resourcemanager.model.HardwareCount;
+import com.mindfiresolutions.resourcemanager.model.PendingRequestsCount;
+import com.mindfiresolutions.resourcemanager.model.SharedResourcesCount;
+import com.mindfiresolutions.resourcemanager.model.SoftwareCount;
+import com.mindfiresolutions.resourcemanager.model.ViewHardwareSummary;
+import com.mindfiresolutions.resourcemanager.model.ViewSharedResource;
+import com.mindfiresolutions.resourcemanager.model.ViewSoftwareSummary;
+import com.mindfiresolutions.resourcemanager.utility.CallAPIInterface;
+import com.mindfiresolutions.resourcemanager.utility.Drawer;
+import com.mindfiresolutions.resourcemanager.utility.InternetConnections;
+import com.mindfiresolutions.resourcemanager.utility.LoggerUtility;
+import com.mindfiresolutions.resourcemanager.utility.ServiceGenerator;
+import com.mindfiresolutions.resourcemanager.utility.SharedPref;
+
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.mindfiresolutions.resourcemanager.utility.APIurls.LOGIN_REQUEST_HEADER_VALUE;
+import static com.mindfiresolutions.resourcemanager.utility.HttpCodes.OK;
+import static com.mindfiresolutions.resourcemanager.utility.UserPreferences.NAMEKEY;
+import static com.mindfiresolutions.resourcemanager.utility.UserPreferences.TOKEN;
+
+public class AdminHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+
+    private final static String TAG = AdminHomeMainActivity.class.getSimpleName();
+    private Drawer mDrawer = new Drawer();
+    private HardwareCount mHardwareCount;
+    private PendingRequestsCount mPendingRequestCount;
+    SharedResourcesCount mSharedResourcesCount;
+    private SoftwareCount mSoftwareCount;
+    private ImageView mHardwareMenuIcon,mSoftwareMenuIcon,mSharedResourceIcon,mPendingRequestIcon,mUserProfileIcon;
+    private Boolean mIsOpen = false;
+    private View mShadowView;
+    private TextView mHardwareTitle,mSoftwareTitle,mPendingRequestTitle,mSharedResourceTitle,mUserProfileTitle;
+    private PieChart mHardwarePieChart,mSoftwarePieChart,mSharedResPieChart,mPendingReqPieChart;
+    private Animation mFabOpen, mFabClose, mFabClockwise, mFabAntiClockwise;
+    private FloatingActionButton mFabMain, mFabHardware, mFabSoftware;
+    private TextView mFabNewSoftwareTv;
+    private TextView mTotalHW,mAvailableHW,mAssignedHW,mTotalSW,mAvailableSW,mAssignedSW,mTotalSR,mAvailableSR,mAssignedSR,mTotalPR,mApprovedPR,mLableTotalPR,mLableApprovedPR;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_admin_home);
+        makeDrawer();
+        //override current layout
+        initView();
+        mFabAntiClockwise = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_anticlockwise);
+        mFabClockwise = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_clockwise);
+        mFabClose = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
+        mFabOpen = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
+        mFabMain.setVisibility(View.VISIBLE);
+        mFabMain.setOnClickListener(this);
+        mFabHardware.setOnClickListener(this);
+        mFabSoftware.setOnClickListener(this);
+        if (InternetConnections.checkInternetConnection(getApplicationContext())) {
+            LoggerUtility.makeLog(TAG, "INTERNET connection available");
+            prepareMenuListWithData();
+
+
+        } else {
+            LoggerUtility.makeShortToast(getApplicationContext(), getString(R.string.no_internet));
+        }
+    }
+
+
+    private void makeDrawer() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
+        FrameLayout frameLayout = (FrameLayout) findViewById(R.id.content_frame_activity_layout);
+        //set the layout inside coordinator layout's frameLayout
+        //getLayoutInflater().inflate(R.layout.admin_home_content, frameLayout);
+        LoggerUtility.makeLog(TAG, "Toolbar created");
+        mDrawer.setDrawerToggle(findViewById(R.id.drawer_layout), toolbar, this, findViewById(R.id.nav_view));
+        LoggerUtility.makeLog(TAG, "after setDrawerToggle");
+        changeNavigationView(findViewById(R.id.nav_view));
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawer.onBackPressed(drawerLayout);
+        } else
+            super.onBackPressed();
+    }
+
+    void changeNavigationView(View view) {
+        NavigationView navigationView = (NavigationView) view;
+        navigationView.getMenu().clear();
+        navigationView.inflateMenu(R.menu.admin_home_drawer_menu);
+        //change header text to admin
+        View admin_view = navigationView.getHeaderView(0);
+        TextView admin_txt = (TextView) admin_view.findViewById(R.id.name_user);
+        //TODO complete admin name here
+        admin_txt.setText(SharedPref.getSharedPreferences(this, NAMEKEY)); //Done
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        return mDrawer.onNavigationItemSelectedAdmin(item, this, findViewById(R.id.drawer_layout));
+    }
+
+    void prepareMenuListWithData() {
+        final String token = SharedPref.getSharedPreferences(this, TOKEN);
+        //created by Shivangi
+        final ProgressDialog progressDialog = new ProgressDialog(AdminHomeActivity.this);
+        progressDialog.setMessage(getString(R.string.loading));
+        progressDialog.show();
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        CallAPIInterface callAPIInterface = ServiceGenerator.createService(CallAPIInterface.class);
+        LoggerUtility.makeLog(TAG, "Retrofit object created");
+        Call<AdminHomePageSummaryCountResponse> call = callAPIInterface.getAdminHomePageSummary(LOGIN_REQUEST_HEADER_VALUE, token);
+        LoggerUtility.makeLog(TAG, token);
+        LoggerUtility.makeLog(TAG, "response in call object");
+        call.enqueue(new Callback<AdminHomePageSummaryCountResponse>() {
+                         @Override
+                         public void onResponse(Call<AdminHomePageSummaryCountResponse> call, Response<AdminHomePageSummaryCountResponse> response) {
+                             //response's body
+                             LoggerUtility.makeLog(TAG, "Response body");
+                             try {
+                                 progressDialog.dismiss();
+                                 if (response.body().getResponse().getCode() == OK) {
+                                     LoggerUtility.makeLog(TAG, response.body().getResponse().getMessage());
+                                     mHardwareCount = response.body().getHardwareCount();
+                                     mSoftwareCount = response.body().getSoftwareCount();
+                                     mSharedResourcesCount = response.body().getSharedResourcesCount();
+                                     mPendingRequestCount = response.body().getPendingRequestsCount();
+                                     LoggerUtility.makeLog(TAG,"Hardware Count Received: " + response.body().getHardwareCount().getTotalHardware().toString());
+                                     fillMenuList();
+                                     makePieCharts();
+                                 } else {
+                                     LoggerUtility.makeShortToast(getApplicationContext(), response.body().getResponse().getMessage());
+                                 }
+                             } catch (Exception e) {
+                                 LoggerUtility.makeLongToast(getApplicationContext(), getString(R.string.error_requesting_api));
+                             }
+                         }
+
+                         @Override
+                         public void onFailure(Call<AdminHomePageSummaryCountResponse> call, Throwable t) {
+                             progressDialog.dismiss();
+                             LoggerUtility.makeLog(TAG, "Error requesting API");
+                         }
+                     }
+        );
+    }
+
+    public void onClickListenerMainFab() {
+        if (mIsOpen) {
+            mShadowView.setVisibility(View.GONE);
+            mFabNewSoftwareTv.setVisibility(View.GONE);
+            mFabHardware.startAnimation(mFabClose);
+            mFabSoftware.startAnimation(mFabClose);
+            mFabNewSoftwareTv.startAnimation(mFabClose);
+            mFabMain.startAnimation(mFabAntiClockwise);
+            mFabHardware.setClickable(false);
+            mFabSoftware.setClickable(false);
+            mIsOpen = false;
+        } else {
+            int cx = mShadowView.getWidth() - 40;
+            int cy = mShadowView.getHeight() - 30;
+            float finalRadius = (float) Math.hypot(cx, cy);
+            Animator anim = ViewAnimationUtils.createCircularReveal(mShadowView, cx, cy, 0, finalRadius);
+            mShadowView.setVisibility(View.VISIBLE);
+            anim.start();
+            mFabHardware.startAnimation(mFabOpen);
+            mFabSoftware.startAnimation(mFabOpen);
+            mFabNewSoftwareTv.startAnimation(mFabOpen);
+            mFabMain.startAnimation(mFabClockwise);
+            LoggerUtility.makeLog(TAG, "set mFabHardware/software clickable true");
+            mFabHardware.setClickable(true);
+            mFabSoftware.setClickable(true);
+            mFabNewSoftwareTv.setClickable(true);
+            mFabHardware.setOnClickListener(this);
+            mFabSoftware.setOnClickListener(this);
+            LoggerUtility.makeLog(TAG, "isOpen is set");
+            mIsOpen = true;
+
+        }
+    }
+
+    private void fillMenuList() {
+
+        mHardwareTitle.setText(R.string.hardware_resource);
+        mHardwareMenuIcon.setImageDrawable(getResources().getDrawable(R.drawable.hardware_resource_icon));
+        mTotalHW.setText(String.valueOf(mHardwareCount.getTotalHardware()));
+        mAssignedHW.setText(String.valueOf(mHardwareCount.getAssignedHardware()));
+        mAvailableHW.setText(String.valueOf(mHardwareCount.getAvailableHardware()));
+
+        mSoftwareTitle.setText(R.string.software_resource);
+        mSoftwareMenuIcon.setImageDrawable(getResources().getDrawable(R.drawable.software_resource_icon));
+        mTotalSW.setText(String.valueOf(mSoftwareCount.getTotalSoftware()));
+        mAssignedSW.setText(String.valueOf(mSoftwareCount.getAsssignedSoftware()));
+        mAvailableSW.setText(String.valueOf(mSoftwareCount.getAvailableSoftware()));
+
+        mSharedResourceTitle.setText(R.string.shared_resources);
+        mSharedResourceIcon.setImageDrawable(getResources().getDrawable(R.drawable.shared_resource_icon));
+        mTotalSR.setText(String.valueOf(mSharedResourcesCount.getTotalSharedResources()));
+        mAssignedSR.setText(String.valueOf(mSharedResourcesCount.getAssignedSharedResources()));
+        mAvailableSR.setText(String.valueOf(mSharedResourcesCount.getAvailableSharedResources()));
+
+        mPendingRequestTitle.setText(R.string.pending_requests);
+        mPendingRequestIcon.setImageDrawable(getResources().getDrawable(R.drawable.pending_resource_icon));
+        mTotalPR.setText(String.valueOf(mPendingRequestCount.getTotalPendingRequests()-mPendingRequestCount.getApprovedRequests()));
+        mApprovedPR.setText(String.valueOf(mPendingRequestCount.getApprovedRequests()));
+
+    }
+
+
+    @Override
+    public void onClick(View view) {
+        LoggerUtility.makeLog(TAG, "inside onclick listener");
+        switch (view.getId()) {
+            case (R.id.fab_new_software):
+                LoggerUtility.makeLog(TAG, "inside on click listener, add new software");
+                Intent intentSoftware = new Intent(AdminHomeActivity.this, AddNewSoftwareResourceActivity.class);
+                startActivity(intentSoftware);
+                break;
+
+            case (R.id.fab_new_hardware):
+                Intent intentHardware = new Intent(AdminHomeActivity.this, HardwareDetailsActivity.class);
+                startActivity(intentHardware);
+                break;
+            case (R.id.fab):
+                onClickListenerMainFab();
+                break;
+            case (R.id.admin_hardware):
+                Intent intentHardwareList = new Intent(AdminHomeActivity.this, AdminHomeMainActivity.class);
+                startActivity(intentHardwareList);
+                break;
+            case (R.id.admin_software):
+                Intent intentSoftwareList = new Intent(AdminHomeActivity.this, AdminHomeMainActivity.class);
+                startActivity(intentSoftwareList);
+                break;
+            case (R.id.admin_shared_resource):
+                Intent intentSharedResList = new Intent(AdminHomeActivity.this, AdminHomeMainActivity.class);
+                startActivity(intentSharedResList);
+                break;
+            case (R.id.admin_pending_requests):
+                Intent intentPendingReqList = new Intent(AdminHomeActivity.this, PendingRequestDetailsActivity.class);
+                startActivity(intentPendingReqList);
+                break;
+
+        }
+    }
+
+    void initView() {
+        FrameLayout frameLayout = (FrameLayout) findViewById(R.id.content_frame_activity_layout);
+        getLayoutInflater().inflate(R.layout.activity_admin_home, frameLayout);
+        mShadowView = findViewById(R.id.shadowView);
+        mFabMain = (FloatingActionButton) findViewById(R.id.fab);
+        mFabHardware = (FloatingActionButton) findViewById(R.id.fab_new_hardware);
+        mFabSoftware = (FloatingActionButton) findViewById(R.id.fab_new_software);
+        mFabNewSoftwareTv = (TextView) findViewById(R.id.fab_add_sftwr_tv);
+        FrameLayout frameLayoutMenu = (FrameLayout) findViewById(R.id.admin_home_menu_frame_layout);
+        getLayoutInflater().inflate(R.layout.admin_home_content, frameLayout);
+        View hardwareView = findViewById(R.id.admin_hardware);
+        View softwareView = findViewById(R.id.admin_software);
+        View sharedResView = findViewById(R.id.admin_shared_resource);
+        View pendingReqView = findViewById(R.id.admin_pending_requests);
+        hardwareView.setOnClickListener(this);
+        softwareView.setOnClickListener(this);
+        sharedResView.setOnClickListener(this);
+        pendingReqView.setOnClickListener(this);
+        hardwareView.setBackgroundColor(getResources().getColor(R.color.white));
+        softwareView.setBackgroundColor(getResources().getColor(R.color.listview_blue));
+        sharedResView.setBackgroundColor(getResources().getColor(R.color.white));
+        pendingReqView.setBackgroundColor(getResources().getColor(R.color.listview_blue));
+        mHardwareTitle =(TextView)hardwareView.findViewById(R.id.admin_home_menu_title);
+        mHardwareMenuIcon = (ImageView)hardwareView.findViewById(R.id.admin_home_menu_icon);
+        mHardwarePieChart = (PieChart) hardwareView.findViewById(R.id.admin_home_menu_piechart);
+        mTotalHW = (TextView) hardwareView.findViewById(R.id.admin_home_total_count);
+        mAssignedHW=(TextView) hardwareView.findViewById(R.id.admin_home_assigned_count);
+        mAvailableHW=(TextView) hardwareView.findViewById(R.id.admin_home_available_count);
+
+        mSoftwareTitle =(TextView)softwareView.findViewById(R.id.admin_home_menu_title);
+        mSoftwareMenuIcon = (ImageView)softwareView.findViewById(R.id.admin_home_menu_icon);
+        mSoftwarePieChart = (PieChart) softwareView.findViewById(R.id.admin_home_menu_piechart);
+        mTotalSW = (TextView) softwareView.findViewById(R.id.admin_home_total_count);
+        mAssignedSW=(TextView) softwareView.findViewById(R.id.admin_home_assigned_count);
+        mAvailableSW=(TextView) softwareView.findViewById(R.id.admin_home_available_count);
+
+        mSharedResourceTitle =(TextView)sharedResView.findViewById(R.id.admin_home_menu_title);
+        mSharedResourceIcon = (ImageView)sharedResView.findViewById(R.id.admin_home_menu_icon);
+        mSharedResPieChart = (PieChart) sharedResView.findViewById(R.id.admin_home_menu_piechart);
+        mTotalSR = (TextView) sharedResView.findViewById(R.id.admin_home_total_count);
+        mAssignedSR=(TextView) sharedResView.findViewById(R.id.admin_home_assigned_count);
+        mAvailableSR=(TextView) sharedResView.findViewById(R.id.admin_home_available_count);
+
+        mPendingRequestTitle =(TextView)pendingReqView.findViewById(R.id.admin_home_menu_title);
+        mPendingRequestIcon = (ImageView)pendingReqView.findViewById(R.id.admin_home_menu_icon);
+        mPendingReqPieChart = (PieChart) pendingReqView.findViewById(R.id.admin_home_menu_piechart);
+        mTotalPR = (TextView) pendingReqView.findViewById(R.id.admin_home_assigned_count);
+        mApprovedPR=(TextView) pendingReqView.findViewById(R.id.admin_home_available_count);
+        mLableApprovedPR = (TextView)pendingReqView.findViewById(R.id.admin_home_available_count_textview);
+        mLableTotalPR = (TextView)pendingReqView.findViewById(R.id.admin_home_assigned_count_textview);
+        mLableApprovedPR.setText(R.string.approved_pending_requests);
+        mLableTotalPR.setText(R.string.pending);
+        pendingReqView.findViewById(R.id.admin_home_total_count).setVisibility(View.GONE);
+        pendingReqView.findViewById(R.id.admin_home_total_count_textview).setVisibility(View.GONE);
+
+    }
+
+    private void makePieCharts()
+    {
+        int[] yValues = {mHardwareCount.getAssignedHardware(), mHardwareCount.getAvailableHardware()};
+        String[] xValues = {getString(R.string.assigned), getString(R.string.available)};
+        setDataForPieChart(mHardwarePieChart,yValues,xValues);
+
+        yValues = null; xValues = null;
+        yValues = new int[]{mSoftwareCount.getAsssignedSoftware(), mSoftwareCount.getAvailableSoftware()};
+        xValues = new String[]{getString(R.string.assigned), getString(R.string.available)};
+        setDataForPieChart(mSoftwarePieChart,yValues,xValues);
+
+        yValues = null; xValues = null;
+        yValues = new int[]{mSharedResourcesCount.getAssignedSharedResources(), mSharedResourcesCount.getAvailableSharedResources()};
+        xValues = new String[]{getString(R.string.assigned), getString(R.string.available)};
+        setDataForPieChart(mSharedResPieChart,yValues,xValues);
+
+        yValues = null; xValues = null;
+        yValues = new int[]{mPendingRequestCount.getTotalPendingRequests()-mPendingRequestCount.getApprovedRequests(), mPendingRequestCount.getApprovedRequests()};
+        xValues = new String[]{getString(R.string.assigned), getString(R.string.available)};
+        setDataForPieChart(mPendingReqPieChart,yValues,xValues);
+
+    }
+    private void setDataForPieChart(PieChart view,int yValues[], String[] xValues) {
+        view.setRotationEnabled(true);
+        List<PieEntry> yVals1 = new ArrayList<PieEntry>();
+        final int[] MY_COLORS = {
+                Color.rgb(255,18,3), Color.rgb(80,180,100), Color.rgb(53,112,235),
+                Color.rgb(38,40,53), Color.rgb(215,60,55)
+        };
+        for (int i = 0; i < yValues.length; i++)
+            yVals1.add(new PieEntry(yValues[i], i));
+
+        ArrayList<String> xVals = new ArrayList<String>();
+
+        for (int i = 0; i < xValues.length; i++)
+            xVals.add(xValues[i]);
+
+        // create pieDataSet
+        PieDataSet dataSet = new PieDataSet(yVals1, "");
+        dataSet.setSliceSpace(3);
+        dataSet.setSelectionShift(5);
+
+        // adding colors
+        ArrayList<Integer> colors = new ArrayList<Integer>();
+
+        // Added My Own colors
+        for (int c : MY_COLORS)
+            colors.add(c);
+
+
+        dataSet.setColors(colors);
+
+        //  create pie data object and set xValues and yValues and set it to the pieChart
+        PieData data = new PieData ( dataSet);
+        //   data.setValueFormatter(new DefaultValueFormatter());
+        //   data.setValueFormatter(new PercentFormatter());
+
+        //data.setValueFormatter(new MyValueFormatter());
+        data.setValueTextSize(11f);
+        data.setValueTextColor(Color.WHITE);
+
+        view.setData(data);
+
+        // undo all highlights
+        view.highlightValues(null);
+
+        // refresh/update pie chart
+        view.invalidate();
+
+        // animate piechart
+        view.animateXY(1400, 1400);
+
+
+        // Legends to show on bottom of the graph
+        Legend l = view.getLegend();
+        l.setPosition(Legend.LegendPosition.BELOW_CHART_CENTER);
+        l.setXEntrySpace(7);
+        l.setYEntrySpace(5);
+    }
+
+
+
+
+}

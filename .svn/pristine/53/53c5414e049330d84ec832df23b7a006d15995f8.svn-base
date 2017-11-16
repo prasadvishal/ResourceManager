@@ -1,0 +1,9 @@
+package com.mindfiresolutions.resourcemanager.utility;
+
+/**
+ * Created by Shivangi Singh on 4/5/2017.
+ */
+
+public interface KeyValueConstants {
+    String HARDWARE_NAME = "hardwareName";
+}

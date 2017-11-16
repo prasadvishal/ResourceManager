@@ -1,0 +1,221 @@
+package com.mindfiresolutions.resourcemanager.model;
+
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.google.gson.annotations.SerializedName;
+
+/**
+ * Created by Shivangi Singh on 4/17/2017
+ */
+
+public class HardwareDetailsByIdGetter implements Parcelable {
+
+    @SerializedName("ID")
+    private int iD;
+    @SerializedName("MACID")
+    private String mACID;
+    @SerializedName("ServiceTag")
+    private String serviceTag;
+    @SerializedName("TypeID")
+    private int typeID;
+    @SerializedName("Type")
+    private String type;
+    @SerializedName("BrandID")
+    private int brandID;
+    @SerializedName("Brand")
+    private String brand;
+    @SerializedName("Model")
+    private String model;
+    @SerializedName("OrderDate")
+    private String orderDate;
+    @SerializedName("ReceivedDate")
+    private String receivedDate;
+    @SerializedName("Status")
+    private int status;
+    @SerializedName("Description")
+    private String description;
+    @SerializedName("CreationDate")
+    private String creationDate;
+    @SerializedName("CreatedBy")
+    private String createdBy;
+    @SerializedName("ModifiedDate")
+    private String modifiedDate;
+    @SerializedName("ModifiedBy")
+    private String modifiedBy;
+    @SerializedName("IsSharable")
+    private Boolean isSharable;
+
+    public int getID() {
+        return iD;
+    }
+
+    public void setID(int iD) {
+        this.iD = iD;
+    }
+
+    public String getMACID() {
+        return mACID;
+    }
+
+    public void setMACID(String mACID) {
+        this.mACID = mACID;
+    }
+
+    public String getServiceTag() {
+        return serviceTag;
+    }
+
+    public void setServiceTag(String serviceTag) {
+        this.serviceTag = serviceTag;
+    }
+
+    public int getTypeID() {
+        return typeID;
+    }
+
+    public void setTypeID(int typeID) {
+        this.typeID = typeID;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public int getBrandID() {
+        return brandID;
+    }
+
+    public void setBrandID(int brandID) {
+        this.brandID = brandID;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public String getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(String orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    public String getReceivedDate() {
+        return receivedDate;
+    }
+
+    public void setReceivedDate(String receivedDate) {
+        this.receivedDate = receivedDate;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(String creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public String getModifiedDate() {
+        return modifiedDate;
+    }
+
+    public void setModifiedDate(String modifiedDate) {
+        this.modifiedDate = modifiedDate;
+    }
+
+    public String getModifiedBy() {
+        return modifiedBy;
+    }
+
+    public void setModifiedBy(String modifiedBy) {
+        this.modifiedBy = modifiedBy;
+    }
+
+    public Boolean getIsSharable() {
+        return isSharable;
+    }
+
+    public void setIsSharable(Boolean isSharable) {
+        this.isSharable = isSharable;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mACID);
+        dest.writeString(serviceTag);
+        dest.writeString(orderDate);
+        dest.writeString(receivedDate);
+        dest.writeString(type);
+        dest.writeString(brand);
+    }
+
+    public static final Parcelable.Creator CREATOR
+            = new Parcelable.Creator() {
+
+        public HardwareDetailsByIdGetter createFromParcel(Parcel in) {
+            return new HardwareDetailsByIdGetter(in);
+        }
+
+        public HardwareDetailsByIdGetter[] newArray(int size) {
+            return new HardwareDetailsByIdGetter[size];
+        }
+    };
+    // "De-parcel object
+    public HardwareDetailsByIdGetter(Parcel in) {
+        mACID = in.readString();
+        serviceTag = in.readString();
+        orderDate = in.readString();
+        receivedDate = in.readString();
+        type = in.readString();
+        brand = in.readString();
+
+    }
+}

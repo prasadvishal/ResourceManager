@@ -1,0 +1,180 @@
+package com.mindfiresolutions.resourcemanager;
+
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+
+/**
+ *
+ *              Created By: Vishal on: 7/9/2017
+ *
+ *                Last modified on: 3/17/2017
+ *
+ */
+public class SignUpActivity extends AppCompatActivity {
+
+
+    private EditText mEdtEmployeeID, mEdtName, mEdtMobile, mEdtPassword, mEdtConfPassword, mEdtEmail, mEdtUsername;
+    private LoggerUtility mLoggerUtility = LoggerUtility.getLoggerUtility();
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+//        this.requestWindowFeature(Window.FEATURE_NO_TITLE); //tittleStrip usage
+
+        setContentView(R.layout.sign_up_activity);
+
+        //Initialization of EditText fields
+        mEdtEmployeeID = (EditText) findViewById(R.id.employeeId);
+        mEdtName = (EditText) findViewById(R.id.name);
+        mEdtMobile = (EditText) findViewById(R.id.mobileNumber);
+        mEdtPassword = (EditText) findViewById(R.id.password);
+        mEdtConfPassword = (EditText) findViewById(R.id.cnfrmPassword);
+        mEdtEmail = (EditText) findViewById(R.id.email);
+        mEdtUsername = (EditText) findViewById(R.id.username);
+
+
+        //Initialization of Register Button
+
+        Button mRegisterButton = (Button) findViewById(R.id.register);
+        setTitle("Sign Up");
+
+
+        mEdtPassword.setLongClickable(false);           // Deactivating Long clickable feature for password fields
+        mEdtConfPassword.setLongClickable(false);       // Deactivating Long clickable feature for password fields
+
+        mLoggerUtility.makeLog(getApplicationContext(), " Ready for Validation");
+
+        //Registration button functionality
+        mRegisterButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                // TODO Auto-generated method stub
+
+
+                if (mEdtName.getText().toString().trim().length() == 0) { //Validating for No value
+                    mEdtName.setError(getString(R.string.error_field_required));
+                    mEdtName.requestFocus();
+
+                    mEdtName.setText(mEdtName.getText().toString().trim());
+                    mLoggerUtility.makeLog(getApplicationContext(), "Validation Error: No value for Name");
+                    return;
+
+                }
+
+
+                if (mEdtEmail.getText().toString().length() == 0) {      //Validating for No Email
+                    mEdtEmail.setError(getString(R.string.error_field_required));
+
+
+                    mLoggerUtility.makeLog(getApplicationContext(), "Validation Error: No value for Email ID");
+                    return;
+
+                }
+                if (!(mEdtEmail.getText().toString().trim().contains("@")) || (!(mEdtEmail.getText().toString().contains(".")))) {    //VAlidating for valid Email
+                    mEdtEmail.setError(getString(R.string.error_invalid_email));
+                    mEdtEmail.requestFocus();
+
+
+                    mLoggerUtility.makeLog(getApplicationContext(), "Validation Error: Invalid Email ID");
+                    return;
+
+                }
+
+                if (mEdtUsername.getText().toString().trim().length() == 0) { //Validating for No value
+                    mEdtUsername.setError(getString(R.string.error_field_required));
+                    mEdtUsername.requestFocus();
+
+                    mEdtUsername.setText(mEdtUsername.getText().toString().trim());
+                    mLoggerUtility.makeLog(getApplicationContext(), "Validation Error: No value for Employee ID");
+                    return;
+
+                }
+
+                if (mEdtEmployeeID.getText().toString().trim().length() == 0) { //Validating for No value
+                    mEdtEmployeeID.setError(getString(R.string.error_field_required));
+                    mEdtEmployeeID.requestFocus();
+
+
+                    mLoggerUtility.makeLog(getApplicationContext(), "Validation Error: No value for Employee ID");
+                    return;
+
+                }
+
+                if (((mEdtMobile.getText().toString().trim().length()) != 10)) { //Validating 10 digits in mobile number field
+                    mEdtMobile.setError(getString(R.string.error_invalid_mobile));
+                    mEdtMobile.requestFocus();
+
+
+                    mLoggerUtility.makeLog(getApplicationContext(), "Validation Error: Invalid Mobile Number");
+                    return;
+
+                }
+
+
+                if (mEdtPassword.getText().toString().length() == 0) {           //Validating password for No Value
+                    mEdtPassword.setError(getString(R.string.error_field_required));
+                    mEdtPassword.requestFocus();
+
+
+                    mLoggerUtility.makeLog(getApplicationContext(), "Validation Error: No value for Password");
+                    return;
+
+                }
+
+                if (mEdtPassword.getText().toString().length() < 4) {            //Validating password for length less than 4 characters
+                    mEdtPassword.setError(getString(R.string.error_invalid_password));
+                    mEdtPassword.requestFocus();
+
+
+                    mLoggerUtility.makeLog(getApplicationContext(), "Validation Error: Password too short");
+                    return;
+
+                }
+
+                if (mEdtConfPassword.getText().toString().length() == 0) {       //Validating for no value in mEdtConfPassword
+                    mEdtConfPassword.setError(getString(R.string.error_cnfrm_password));
+                    mEdtConfPassword.requestFocus();
+
+
+                    mLoggerUtility.makeLog(getApplicationContext(), "Validation Error: No value for Confirm Password");
+                    return;
+
+                }
+
+                if (!mEdtPassword.getText().toString().equals(mEdtConfPassword.getText().toString())) {   // Checking for value match
+                    mEdtConfPassword.setError(getString(R.string.error_cnfrm_password_mismatch));
+                    mEdtConfPassword.requestFocus();
+
+
+                    mLoggerUtility.makeLog(getApplicationContext(), "Validation Error: Conflicting values in Password and Confirm passowrd");
+                    return;
+
+                }
+
+                    //Toast.makeText(getApplicationContext(), "Successfully Registered", Toast.LENGTH_LONG).show();
+
+                    mLoggerUtility.makeShortToast(getApplicationContext(), getString(R.string.successful_registeration));
+                    Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                    startActivity(i);
+
+                    mLoggerUtility.makeLog(getApplicationContext(), "Validated and Sucessfully Registered.");
+
+
+            }
+
+        });
+    }
+
+
+}
+

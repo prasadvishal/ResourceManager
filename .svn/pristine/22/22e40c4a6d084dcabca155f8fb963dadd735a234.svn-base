@@ -1,0 +1,25 @@
+package com.mindfiresolutions.resourcemanager.launcherPackage;
+
+
+
+import com.mindfiresolutions.resourcemanager.model.LoginRegistration;
+import com.mindfiresolutions.resourcemanager.user.userHome.User;
+
+import okhttp3.Response;
+import retrofit2.Call;
+import retrofit2.http.Body;
+import retrofit2.http.POST;
+
+/**
+ * Created by Shivangi Singh on 3/28/2017.
+ */
+
+public interface LoginRequestInterface {
+    String LOGIN_REQUEST_DETAIL_URL = "/Login/UserLogIn";
+
+    @POST(LOGIN_REQUEST_DETAIL_URL)
+    //
+    Call<LoginRegistration> getResponse(@Body User body);
+
+
+}

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg2_blur">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="38dp"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="156dp"
+        android:id="@+id/tittleImage"
+        android:paddingLeft="20dp"
+        android:paddingStart="20dp"
+        android:paddingRight="7dp"
+        android:paddingEnd="7dp"
+        android:src="@drawable/resource_manager_icon"
+        />
+    <LinearLayout
+        android:id="@+id/login_form"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+
+        android:orientation="vertical"
+        android:layout_weight="0.42">
+
+        <TextView
+            android:id="@+id/tv_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="@string/username"
+            android:textColor="@color/white" />
+
+        <EditText
+            android:id="@+id/ed_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:cursorVisible="true"
+            android:padding="8dp"
+            android:drawableLeft="@drawable/username"
+            android:drawableStart="@drawable/username"
+            android:drawablePadding="20dp"
+            android:inputType="text"
+            android:maxLines="1"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/tv_password"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="25dp"
+            android:layout_weight="1"
+            android:text="@string/password"
+            android:textColor="@color/white" />
+
+        <EditText
+
+            android:id="@+id/ed_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:padding="8dp"
+            android:cursorVisible="true"
+            android:drawableLeft="@drawable/password"
+            android:drawableStart="@drawable/password"
+            android:drawablePadding="20dp"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:textColor="@color/white" />
+
+        <CheckBox
+            android:id="@+id/show_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/white"
+            android:text="@string/show_password"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/login"
+            style="?android:textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/button_layout"
+            android:text="@string/action_login"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+            android:textStyle="bold" />
+
+
+    </LinearLayout>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    <Button
+        android:id="@+id/signup"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@null"
+        android:text="@string/sign_up"
+        android:textAllCaps="false"
+        android:textColor="@color/white" />
+    <Button
+        android:id="@+id/forgotPassword"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:layout_weight="1"
+        android:text="@string/forgotpassword"
+        android:textAllCaps="false"
+        android:textColor="@color/white" />
+</LinearLayout>
+
+</LinearLayout>
+</ScrollView>

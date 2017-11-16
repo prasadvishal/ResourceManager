@@ -1,0 +1,27 @@
+package com.mindfiresolutions.resourcemanager.launcherPackage;
+
+/**
+ * Created by Shivangi Singh on 3/29/2017
+ */
+
+public class LoginSetter {
+
+    private String UserName;
+    private String Password;
+
+    public String getPassword() {
+        return Password;
+    }
+
+    void setPassword(String password) {
+        this.Password = password;
+    }
+
+    public String getUserName() {
+        return UserName;
+    }
+
+    void setUserName(String userName) {
+        UserName = userName;
+    }
+}

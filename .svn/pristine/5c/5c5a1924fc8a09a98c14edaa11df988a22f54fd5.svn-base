@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="@string/drawer_menu_profile">
+        <menu>
+            <item
+                android:id="@+id/nav_home"
+                android:title="@string/drawer_menu_home"
+                android:icon="@drawable/home"/>
+
+            <item
+                android:id="@+id/nav_editProfile"
+                android:icon="@drawable/edit_profile"
+                android:title="@string/drawer_menu_profile" />
+            <item
+                android:id="@+id/nav_chngPassword"
+                android:icon="@drawable/padlock2"
+                android:title="@string/drawer_menu_chngPswrd" />
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/logout"
+                android:title="@string/drawer_menu_logout" />
+
+            <!--<item-->
+            <!--android:id="@+id/nav_notification"-->
+            <!--android:title="Notification"-->
+            <!--android:icon="@drawable/notifications"/>-->
+
+
+        </menu>
+    </item>
+
+
+
+    <item android:title="@string/drawer_menu_resources">
+        <menu>
+            <item
+                android:id="@+id/nav_addResource_hardware"
+                android:icon="@drawable/add_resource"
+                android:title="@string/drawer_menu_new_request" />
+
+        </menu>
+    </item>
+
+</menu>

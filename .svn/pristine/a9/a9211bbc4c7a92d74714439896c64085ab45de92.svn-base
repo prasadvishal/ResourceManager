@@ -1,0 +1,83 @@
+package com.mindfiresolutions.resourcemanager.launcherPackage;
+
+/**
+ * Created by Vishal Prasad on 3/30/2017.
+ */
+
+public class SignUpSetter {
+
+    private String UserName;
+    private String FirstName;
+    private String LastName;
+    private String EmployeeID;
+    private String Email;
+    private int Role;
+    private String Contact;
+    private String Password;
+
+
+    public String getPassword() {
+        return Password;
+    }
+
+    void setPassword(String password) {
+        this.Password = password;
+    }
+
+    public String getUserName() {
+        return UserName;
+    }
+
+    void setUserName(String userName) {
+        UserName = userName;
+    }
+
+    public String getFirstName() {
+        return FirstName;
+    }
+
+    void setFirstName(String firstName) {
+        FirstName = firstName;
+    }
+
+    public String getLastName() {
+        return LastName;
+    }
+
+    void setLastName(String lastName) {
+        LastName = lastName;
+    }
+
+    public String getEmail() {
+        return Email;
+    }
+
+    void setEmail(String email) {
+        Email = email;
+    }
+
+    public int getRole() {
+        return Role;
+    }
+
+    void setRole(int role) {
+        Role = role;
+    }
+
+    public String getEmployeeID() {
+        return EmployeeID;
+    }
+
+    void setEmployeeID(String employeeID) {
+        EmployeeID = employeeID;
+    }
+
+    public String getContact() {
+        return Contact;
+    }
+
+    void setContact(String contact) {
+        Contact = contact;
+    }
+}
+

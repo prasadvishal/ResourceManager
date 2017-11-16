@@ -1,0 +1,105 @@
+package com.mindfiresolutions.resourcemanager.admin;
+
+/**
+ * Created by: Shivangi on 27th March
+ * Last Modified on: 03/27/2017
+ */
+
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.TextView;
+
+import com.mindfiresolutions.resourcemanager.R;
+import com.mindfiresolutions.resourcemanager.model.HardwareSummaryList;
+import com.mindfiresolutions.resourcemanager.model.HardwareSummaryWithResponse;
+import com.mindfiresolutions.resourcemanager.utility.CallAPIInterface;
+import com.mindfiresolutions.resourcemanager.utility.InternetConnections;
+import com.mindfiresolutions.resourcemanager.utility.LoggerUtility;
+import com.mindfiresolutions.resourcemanager.utility.ServiceGenerator;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.mindfiresolutions.resourcemanager.utility.APIurls.LOGIN_REQUEST_HEADER_VALUE;
+import static com.mindfiresolutions.resourcemanager.utility.HttpCodes.OK;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.HARDWARE_NAME;
+import static com.mindfiresolutions.resourcemanager.utility.UserPreferences.TOKEN;
+import static com.mindfiresolutions.resourcemanager.utility.UserPreferences.USERPREFERENCES;
+
+public class HardwareDetailsActivity extends AppCompatActivity {
+
+    private static final String TAG = HardwareDetailsActivity.class.getSimpleName();
+    SharedPreferences mSharedPreferences;
+
+    @Override
+    protected void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
+        setContentView(R.layout.activity_hardware_details);
+        Bundle extras = getIntent().getExtras();
+        String hardwareType = extras.getString(HARDWARE_NAME);
+        mSharedPreferences = getSharedPreferences(USERPREFERENCES, Context.MODE_PRIVATE);
+        if (InternetConnections.checkInternetConnection(getApplicationContext())) {
+            LoggerUtility.makeLog(TAG, "INTERNET connection available");
+            getHardwareSummary(hardwareType);
+        } else {
+            LoggerUtility.makeShortToast(getApplicationContext(), getString(R.string.no_internet));
+        }
+    }
+
+    void getHardwareSummary(final String hardwareType) {
+        final TextView countResource = (TextView) findViewById(R.id.count_resource);
+        final TextView assignedCount = (TextView) findViewById(R.id.assigned_count);
+        final TextView hardwareBrand = (TextView) findViewById(R.id.brand_name);
+        final String token = mSharedPreferences.getString(TOKEN, "");
+        final ProgressDialog progressDialog = new ProgressDialog(HardwareDetailsActivity.this);
+        progressDialog.setMessage(getString(R.string.loading));
+        CallAPIInterface callAPIInterface = ServiceGenerator.createService(CallAPIInterface.class);
+        LoggerUtility.makeLog(TAG, "Retrofit object created in updateUserProfile");
+        Call<HardwareSummaryWithResponse> call = callAPIInterface.getHardwareSummary(LOGIN_REQUEST_HEADER_VALUE, token);
+        LoggerUtility.makeLog(TAG, "response in call object in UpdateUserProfile");
+
+        call.enqueue(new Callback<HardwareSummaryWithResponse>() {
+                         @Override
+                         public void onResponse(Call<HardwareSummaryWithResponse> call, Response<HardwareSummaryWithResponse> response) {
+                             //response's body
+                             LoggerUtility.makeLog(TAG, "Response body");
+                             try {
+                                 progressDialog.dismiss();
+                                 if (response.body().getResponse().getCode() == OK) {
+                                     int countAvailable = 0, countNotavailable = 0, totalCount;
+                                     List<HardwareSummaryList> hardwareSummaryList = response.body().getHardwareSummaryList();
+                                     for (int i = 0; i < hardwareSummaryList.size(); i++) {
+                                         if (hardwareSummaryList.get(i).getStatus() == 2) {
+                                             countAvailable++;
+                                         } else if (hardwareSummaryList.get(i).getStatus() == 1) {
+                                             countNotavailable++;
+                                         }
+                                     }
+                                     totalCount = countAvailable + countNotavailable;
+                                     countResource.setText(totalCount);
+                                     assignedCount.setText(countNotavailable);
+                                     hardwareBrand.setText(hardwareType);
+                                 } else {
+                                     LoggerUtility.makeShortToast(getApplicationContext(), response.body().getResponse().getMessage());
+                                 }
+                             } catch (Exception e) {
+                                 LoggerUtility.makeLongToast(getApplicationContext(), getString(R.string.error_requesting_api));
+                             }
+                         }
+
+                         @Override
+                         public void onFailure(Call<HardwareSummaryWithResponse> call, Throwable t) {
+                             progressDialog.dismiss();
+                             LoggerUtility.makeLog(TAG, "Error requesting API");
+                         }
+                     }
+        );
+    }
+}
+

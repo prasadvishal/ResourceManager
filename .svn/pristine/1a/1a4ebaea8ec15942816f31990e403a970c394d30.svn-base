@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/heading"
+    android:layout_marginStart="@dimen/heading"
+    android:layout_marginEnd="@dimen/heading"
+    android:layout_marginRight="@dimen/heading"
+
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/subheading"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+            android:text="@string/device_info_category"
+            android:layout_weight="1"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <Spinner
+            android:layout_width="0dp"
+            android:id="@+id/add_resource_category_spinner"
+            android:layout_height="20dp"
+            android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+            android:layout_marginLeft="@dimen/subheading"
+            android:layout_marginStart="@dimen/subheading"
+            android:layout_weight="1"
+            android:textColor="@color/black" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/subheading"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+            android:text="@string/type"
+            android:layout_weight="1"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <Spinner
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/add_resource_type_spinner"
+            android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+            android:layout_marginLeft="@dimen/subheading"
+            android:layout_marginStart="@dimen/subheading"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/subheading"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+            android:text="@string/count"
+            android:layout_weight="1"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+            android:hint="01"
+            android:layout_marginLeft="@dimen/subheading"
+            android:layout_marginStart="@dimen/subheading"
+            android:background="@drawable/border"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/subheading"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+            android:text="@string/assigned"
+            android:layout_weight="1"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:gravity="center"
+            android:hint="00"
+            android:background="@drawable/border"
+            android:layout_marginLeft="@dimen/subheading"
+            android:layout_marginStart="@dimen/subheading"
+            android:layout_weight="1"
+            android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/subheading"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+            android:text="@string/brand"
+            android:layout_weight="1"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="text"
+            android:hint="@string/brand"
+            android:gravity="center"
+            android:background="@drawable/border"
+            android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+            android:layout_marginLeft="@dimen/subheading"
+            android:layout_marginStart="@dimen/subheading"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <Button
+        style="@style/UserFields"
+        android:layout_marginTop="@dimen/imageview_height"
+        android:id="@+id/add_resource_button"
+        android:text="@string/add"
+        android:textColor="@color/white"
+        android:background="@drawable/button_layout"/>
+
+</LinearLayout>

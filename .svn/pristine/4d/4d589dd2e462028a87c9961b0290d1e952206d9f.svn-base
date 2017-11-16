@@ -1,0 +1,214 @@
+package com.mindfiresolutions.resourcemanager.user.userResource;
+
+import android.app.ProgressDialog;
+import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.ListView;
+
+import com.mindfiresolutions.resourcemanager.R;
+import com.mindfiresolutions.resourcemanager.model.UserHardwareRequest;
+import com.mindfiresolutions.resourcemanager.model.SharedResourceRequest;
+import com.mindfiresolutions.resourcemanager.model.UserSoftwareRequest;
+import com.mindfiresolutions.resourcemanager.model.UserIdSetter;
+import com.mindfiresolutions.resourcemanager.model.UserMyRequestsResponse;
+import com.mindfiresolutions.resourcemanager.resource.TabsPagerAdapter;
+import com.mindfiresolutions.resourcemanager.utility.CallAPIInterface;
+import com.mindfiresolutions.resourcemanager.utility.Drawer;
+import com.mindfiresolutions.resourcemanager.utility.LoggerUtility;
+import com.mindfiresolutions.resourcemanager.utility.ServiceGenerator;
+import com.mindfiresolutions.resourcemanager.utility.SharedPref;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.mindfiresolutions.resourcemanager.utility.APIurls.LOGIN_REQUEST_HEADER_VALUE;
+import static com.mindfiresolutions.resourcemanager.utility.HttpCodes.OK;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.ASSIGNED_FROM_DATE;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.ASSIGNED_TO;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.ASSIGNED_TO_DATE;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.REQUESTED_RESOURCE;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.RESOURCE_CATEGORY;
+import static com.mindfiresolutions.resourcemanager.utility.UserPreferences.TOKEN;
+import static com.mindfiresolutions.resourcemanager.utility.UserPreferences.USERID;
+
+public class UserRequests extends AppCompatActivity implements ActionBar.TabListener {
+    private Drawer mDrawer = new Drawer();
+    private static final String TAG = UserRequestsActivity.class.getSimpleName();
+    private ListView mListView;
+    private List<UserHardwareRequest> viewUserHardwareRequests;
+    private List<UserSoftwareRequest> viewUserSoftwareRequests;
+    private List<SharedResourceRequest> viewSharedResourceRequests;
+    private ArrayList<HashMap<String, String>> mMyRequestsList;
+    private FloatingActionButton mFabMain;
+    private ViewPager viewPager;
+    private TabsPagerAdapter mAdapter;
+    private ActionBar actionBar;
+    private listner obj;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_user_my_request);
+        initViews();
+
+        makeMyAllRequestsApiCAll();
+        String[] tabs = new String[]{getString(R.string.hardware_resource), getString(R.string.software_resource), getString(R.string.shared_resource)};
+        // Initilization
+        viewPager = (ViewPager) findViewById(R.id.pager);
+        actionBar = getSupportActionBar(); //getActionBar();
+        mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
+
+        viewPager.setAdapter(mAdapter);
+        if (actionBar != null && actionBar.isShowing()) {
+            actionBar.setHomeButtonEnabled(false);
+            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        }
+        // Adding Tabs
+        for (String tab_name : tabs) {
+            actionBar.addTab(actionBar.newTab().setText(tab_name).setTabListener(this));
+        }
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+            @Override
+            public void onPageSelected(int position) {
+                // on changing the page
+                // make respected tab selected
+                actionBar.setSelectedNavigationItem(position);
+            }
+
+            @Override
+            public void onPageScrolled(int arg0, float arg1, int arg2) {
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int arg0) {
+            }
+        });
+    }
+
+    @Override
+    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+    }
+
+    @Override
+    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+        // on tab selected
+        // show respected fragment view
+        viewPager.setCurrentItem(tab.getPosition());
+    }
+
+    @Override
+    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
+    }
+
+    public void makeMyAllRequestsApiCAll() {
+
+        final String token = SharedPref.getSharedPreferences(this, TOKEN);
+//created by Shivangi
+        final ProgressDialog progressDialog = new ProgressDialog(UserRequests.this);
+        progressDialog.setMessage(getString(R.string.loading));
+        progressDialog.show();
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        UserIdSetter userIdSetter = new UserIdSetter();
+        userIdSetter.setUserID(Integer.parseInt(SharedPref.getSharedPreferences(this, USERID)));
+        CallAPIInterface callAPIInterface = ServiceGenerator.createService(CallAPIInterface.class);
+        LoggerUtility.makeLog(TAG, "Retrofit object created");
+        Call<UserMyRequestsResponse> call = callAPIInterface.getUserRequestsById(LOGIN_REQUEST_HEADER_VALUE, token, userIdSetter);
+        LoggerUtility.makeLog(TAG, token);
+        LoggerUtility.makeLog(TAG, "response in call object");
+        call.enqueue(new Callback<UserMyRequestsResponse>() {
+                         @Override
+                         public void onResponse(Call<UserMyRequestsResponse> call, Response<UserMyRequestsResponse> response) {
+                             //response's body
+                             LoggerUtility.makeLog(TAG, "Response body");
+//                             try {
+                             progressDialog.dismiss();
+                             if (response.body().getResponse().getCode() == OK) {
+                                 LoggerUtility.makeLog(TAG, " "+response.body().getResponse().getMessage());
+                                 viewUserHardwareRequests = response.body().getUserHardwareRequests();
+                                 LoggerUtility.makeLog(TAG,response.body().getUserHardwareRequests().get(0).toString());
+                                 obj.setViewHardwareList(viewUserHardwareRequests);
+                                 viewUserSoftwareRequests = response.body().getUserSoftwareRequests();
+                                 viewSharedResourceRequests = response.body().getSharedResourceRequests();
+                                 //TODO make custom array adapter
+                                 //fill the list with the data recieved from server
+                                 //extract just the getHardwareType from the whole object
+                                 for (int i = 0; i < viewUserHardwareRequests.size(); i++) {
+                                     HashMap<String, String> requestListHashMap = new HashMap<String, String>();
+                                     requestListHashMap.put(RESOURCE_CATEGORY, viewUserHardwareRequests.get(i).getCategory());
+                                     requestListHashMap.put(REQUESTED_RESOURCE, viewUserHardwareRequests.get(i).getRequestedDevice());
+                                     requestListHashMap.put(ASSIGNED_TO, viewUserHardwareRequests.get(i).getAssignedTo());
+                                     requestListHashMap.put(ASSIGNED_FROM_DATE, viewUserHardwareRequests.get(i).getFromDate().substring(0, 10));
+                                     requestListHashMap.put(ASSIGNED_TO_DATE, viewUserHardwareRequests.get(i).getToDate().substring(0, 10));
+                                     mMyRequestsList.add(requestListHashMap);
+                                     LoggerUtility.makeLog(TAG," "+response.body().getUserHardwareRequests().get(i).getRequestedDevice());
+                                 }
+                                 for (int i = 0; i < viewUserSoftwareRequests.size(); i++) {
+                                     HashMap<String, String> requestListHashMap = new HashMap<String, String>();
+                                     requestListHashMap.put(RESOURCE_CATEGORY, viewUserSoftwareRequests.get(i).getCategory());
+                                     requestListHashMap.put(REQUESTED_RESOURCE, viewUserSoftwareRequests.get(i).getRequestedDevice());
+                                     requestListHashMap.put(ASSIGNED_TO, viewUserSoftwareRequests.get(i).getAssignedTo());
+                                     requestListHashMap.put(ASSIGNED_FROM_DATE, viewUserSoftwareRequests.get(i).getFromDate().substring(0, 10));
+                                     requestListHashMap.put(ASSIGNED_TO_DATE, viewUserSoftwareRequests.get(i).getToDate().substring(0, 10));
+                                     mMyRequestsList.add(requestListHashMap);
+                                 }
+                                 for (int i = 0; i < viewSharedResourceRequests.size(); i++) {
+                                     HashMap<String, String> requestListHashMap = new HashMap<String, String>();
+                                     requestListHashMap.put(RESOURCE_CATEGORY, viewSharedResourceRequests.get(i).getCategory());
+                                     requestListHashMap.put(REQUESTED_RESOURCE, viewSharedResourceRequests.get(i).getRequestedDevice());
+                                     requestListHashMap.put(ASSIGNED_TO, viewSharedResourceRequests.get(i).getAssignedTo());
+                                     requestListHashMap.put(ASSIGNED_FROM_DATE, viewSharedResourceRequests.get(i).getFromDate().substring(0, 10));
+                                     requestListHashMap.put(ASSIGNED_TO_DATE, viewSharedResourceRequests.get(i).getToDate().substring(0, 10));
+                                     mMyRequestsList.add(requestListHashMap);
+                                 }
+
+//                                 ListAdapter adapter = new MultiColorListViewAdapter(UserRequests.this, mMyRequestsList, R.layout.list_item_user_my_requests,
+//                                         new String[]{REQUESTED_RESOURCE, RESOURCE_CATEGORY, ASSIGNED_TO, ASSIGNED_FROM_DATE, ASSIGNED_TO_DATE}, new int[]{R.id.user_my_req_tittle,
+//                                         R.id.user_my_req_res_type_lable, R.id.user_my_req_assigned_to, R.id.user_my_req_from_date, R.id.user_my_req_to_date});
+//                                 mListView.setAdapter(adapter);
+                                 //TODO string
+                             } else {
+                                 LoggerUtility.ToastGeneratorShort(getApplicationContext(), response.body().getResponse().getMessage());
+                             }
+//                             } catch (Exception e) {
+//                                 LoggerUtility.makeLongToast(getApplicationContext(), getString(R.string.error_requesting_api));
+//                             }
+                         }
+
+                         @Override
+                         public void onFailure(Call<UserMyRequestsResponse> call, Throwable t) {
+                             progressDialog.dismiss();
+                             LoggerUtility.makeLog(TAG, "Error requesting API");
+                         }
+                     }
+        );
+
+    }
+
+    public interface listner{
+        void setViewHardwareList(List<UserHardwareRequest> obj);
+    }
+
+    public void setListner(listner obj)
+    {
+        this.obj = obj;
+    }
+
+    private void initViews() {
+        mListView = (ListView) findViewById(R.id.user_my_request_list_view);
+        mFabMain = (FloatingActionButton) findViewById(R.id.fab);
+//        mFabMain.setVisibility(View.VISIBLE);
+//        mFabMain.setOnClickListener(this);
+        mMyRequestsList = new ArrayList<>();
+    }
+}

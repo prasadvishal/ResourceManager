@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:hint="Resource_name"
+        style="@style/UserFields"
+        android:textColor="@color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_weight="1"
+        android:id="@+id/resource_name" />
+
+    <TextView
+        android:hint="Resource Count"
+        style="@style/UserFields"
+        android:textColor="@color/textGreen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/resource_count"
+        android:layout_weight="1"
+        android:layout_margin="5dp"/>
+</LinearLayout>

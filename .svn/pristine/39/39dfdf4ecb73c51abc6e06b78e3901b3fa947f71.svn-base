@@ -1,0 +1,82 @@
+package com.mindfiresolutions.resourcemanager;
+
+
+import android.content.Intent;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import java.util.List;
+
+/**
+ * Created by Shivangi Singh on 3/10/2017.
+ * modified on 15th march
+ */
+
+class ResourceAdapter extends RecyclerView.Adapter<ResourceAdapter.HomeViewHolder> {
+
+    private final String mTAG = ResourceAdapter.class.getSimpleName();
+    private List<Resources> mResourceList;
+    private LoggerUtility mLoggerUtility = LoggerUtility.getLoggerUtility();
+
+
+    class HomeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        TextView mResourceName, mResourceLabel, mResourceDate;
+
+
+        HomeViewHolder(View view) {
+            super(view);
+            //initialize all layout variables
+            view.setOnClickListener(this);
+            //set on clickListener to the view
+            mResourceName = (TextView) view.findViewById(R.id.resource_name);
+            mResourceLabel = (TextView) view.findViewById(R.id.resource_label);
+            mResourceDate = (TextView) view.findViewById(R.id.resource_date);
+            mLoggerUtility.makeLog(mTAG, "inside home view holder class' constructor");
+
+        }
+
+        @Override
+        public void onClick(View view) {
+            //when clicked go to device page
+            Intent i = new Intent(view.getContext(), DeviceInfoActivity.class);
+            view.getContext().startActivity(i);
+        }
+    }
+
+    ResourceAdapter(List<Resources> resourceList) {
+        this.mResourceList = resourceList;
+        mLoggerUtility.makeLog(mTAG, "Adding to Resource adapter list");
+    }
+
+    @Override
+    public HomeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.resource_list_row, parent, false);
+        //layout inflater for each element of the view
+        mLoggerUtility.makeLog(mTAG, "inside on Create view holder");
+        return new HomeViewHolder(itemView);
+    }
+
+    @Override
+    public void onBindViewHolder(HomeViewHolder holder, int position) {
+        //bind the view with the data
+        Resources resources = mResourceList.get(position);
+        mLoggerUtility.makeLog(mTAG, resources.getResourceName());
+        //bind data to textview
+        holder.mResourceName.setText(resources.getResourceName());
+        holder.mResourceLabel.setText(resources.getResourceLabel());
+        holder.mResourceDate.setText(resources.getResourceDate());
+        mLoggerUtility.makeLog(mTAG, "INSIDE ON BIND VIEW HOLDER");
+
+    }
+
+    @Override
+    public int getItemCount() {
+        //   loggerUtility.makeLog(TAG, "get item count");
+        return mResourceList.size();
+
+    }
+}

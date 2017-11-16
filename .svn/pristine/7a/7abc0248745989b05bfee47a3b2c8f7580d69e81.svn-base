@@ -1,0 +1,27 @@
+package com.mindfiresolutions.resourcemanager.utility;
+
+import android.app.ProgressDialog;
+import android.content.Context;
+
+import com.mindfiresolutions.resourcemanager.R;
+
+/**
+ * Created by Shivangi Singh on 5/16/2017.
+ * class created to start progressbar and dismiss it
+ */
+
+public class ProgressDialogUtility {
+    private static ProgressDialog progressDialog;
+
+    public static void startProgressDialog(Context context) {
+        progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage(context.getString(R.string.loading));
+        progressDialog.show();
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+    }
+    public static void dismissProgressDialog(){
+        progressDialog.dismiss();
+    }
+
+}

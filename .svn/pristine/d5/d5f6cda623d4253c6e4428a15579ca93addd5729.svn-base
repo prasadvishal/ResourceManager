@@ -1,0 +1,28 @@
+package com.mindfiresolutions.resourcemanager.resource;
+
+import android.widget.TextView;
+
+/**
+ * Created by Vishal Prasad on 4/17/2017.
+ */
+
+public class HardwareTypeSummaryAdapter //extends RecyclerView.Adapter<ResourceAdapter.HomeViewHolder> {
+{
+    private final String TAG = HardwareTypeSummaryAdapter.class.getSimpleName();
+    TextView mHardwareName,mHardwareAddedBy,mHardwareMacId,mHardwareBrand;
+
+//    @Override
+//    public ResourceAdapter.HomeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+//        return null;
+//    }
+//
+//    @Override
+//    public void onBindViewHolder(ResourceAdapter.HomeViewHolder holder, int position) {
+//
+//    }
+//
+//    @Override
+//    public int getItemCount() {
+//        return 0;
+//    }
+}

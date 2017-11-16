@@ -1,0 +1,57 @@
+package com.mindfiresolutions.resourcemanager.model;
+
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
+
+/**
+ * Created by Vishal Prasad on 5/14/2017.
+ */
+
+public class UserMyRequestsResponse {
+    @SerializedName("Response")
+
+    private ResponseGetterBase response;
+    @SerializedName("HardwareRequests")
+
+    private List<HardwareRequest> hardwareRequests = null;
+    @SerializedName("SoftwareRequests")
+
+    private List<SoftwareRequest> softwareRequests = null;
+    @SerializedName("SharedResourceRequests")
+
+    private List<SharedResourceRequest> sharedResourceRequests = null;
+
+    public ResponseGetterBase getResponse() {
+        return response;
+    }
+
+    public void setResponse(ResponseGetterBase response) {
+        this.response = response;
+    }
+
+    public List<HardwareRequest> getHardwareRequests() {
+        return hardwareRequests;
+    }
+
+    public void setHardwareRequests(List<HardwareRequest> hardwareRequests) {
+        this.hardwareRequests = hardwareRequests;
+    }
+
+    public List<SoftwareRequest> getSoftwareRequests() {
+        return softwareRequests;
+    }
+
+    public void setSoftwareRequests(List<SoftwareRequest> softwareRequests) {
+        this.softwareRequests = softwareRequests;
+    }
+
+    public List<SharedResourceRequest> getSharedResourceRequests() {
+        return sharedResourceRequests;
+    }
+
+    public void setSharedResourceRequests(List<SharedResourceRequest> sharedResourceRequests) {
+        this.sharedResourceRequests = sharedResourceRequests;
+    }
+
+}

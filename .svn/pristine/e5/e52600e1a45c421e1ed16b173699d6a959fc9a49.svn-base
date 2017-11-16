@@ -1,0 +1,35 @@
+package com.mindfiresolutions.resourcemanager.model;
+
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
+
+/**
+ * Created by Shivangi Singh on 5/10/2017.
+ */
+
+public class ViewAllUsersResponse {
+
+        @SerializedName("Response")
+        private ResponseGetterBase response;
+        @SerializedName("UserList")
+        private List<ViewAllUsers> userList = null;
+
+        public ResponseGetterBase getResponse() {
+            return response;
+        }
+
+        public void setResponse(ResponseGetterBase response) {
+            this.response = response;
+        }
+
+        public List<ViewAllUsers> getViewAllUsers() {
+            return userList;
+        }
+
+        public void setViewAllUsers(List<ViewAllUsers> userList) {
+            this.userList = userList;
+        }
+
+    }
+

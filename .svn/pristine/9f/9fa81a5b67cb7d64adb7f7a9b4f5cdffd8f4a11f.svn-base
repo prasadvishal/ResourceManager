@@ -1,0 +1,64 @@
+package com.mindfiresolutions.resourcemanager.utility;
+
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.widget.TextView;
+
+import com.mindfiresolutions.resourcemanager.R;
+import com.mindfiresolutions.resourcemanager.model.UserBaseResponse;
+import com.mindfiresolutions.resourcemanager.user.userHome.EditUserProfile;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.mindfiresolutions.resourcemanager.utility.APIurls.LOGIN_REQUEST_HEADER_VALUE;
+import static com.mindfiresolutions.resourcemanager.utility.HttpCodes.OK;
+
+/**
+ * Created by Shivangi Singh on 4/4/2017
+ */
+
+public class ViewUserProfile extends UserBaseResponse {
+
+    private static ViewUserProfile sViewUserProfileObj;
+    // = new ViewUserProfile();
+    private static final String TAG = ViewUserProfile.class.getSimpleName();
+
+    private ViewUserProfile() {
+    }
+
+    public static ViewUserProfile getViewUserProfileObj() {
+        return sViewUserProfileObj;
+    }
+
+    public void getUserProfile(final String userNameInSharedPreference,Context context) {
+
+        final ProgressDialog progressDialog = new ProgressDialog(context);
+        //TODO string
+        progressDialog.setMessage("loading");
+        progressDialog.show();
+
+        CallAPIInterface callAPIInterface = ServiceGenerator.createService(CallAPIInterface.class);
+        LoggerUtility.makeLog(TAG, "Retrofit object created");
+        Call<UserBaseResponse> call = callAPIInterface.getProfile(LOGIN_REQUEST_HEADER_VALUE, userNameInSharedPreference);
+        LoggerUtility.makeLog(TAG, "response in call object");
+        call.enqueue(new Callback<UserBaseResponse>() {
+            @Override
+            public void onResponse(Call<UserBaseResponse> call, Response<UserBaseResponse> response) {
+                //response's body
+                progressDialog.dismiss();
+                LoggerUtility.makeLog(TAG, "Response body");
+                UserBaseResponse userBaseResponse =response.body();
+                userBaseResponse = new ViewUserProfile();
+            }
+
+            @Override
+            public void onFailure(Call<UserBaseResponse> call, Throwable t) {
+                progressDialog.dismiss();
+                LoggerUtility.makeLog(TAG, "Error requesting API");
+            }
+        });
+    }
+
+}

@@ -1,0 +1,50 @@
+package com.mindfiresolutions.resourcemanager.resource;
+
+import android.content.Intent;
+import android.view.View;
+import android.widget.TextView;
+
+import com.mindfiresolutions.resourcemanager.R;
+import com.mindfiresolutions.resourcemanager.user.userResource.ResourceInfoActivity;
+import com.mindfiresolutions.resourcemanager.utility.LoggerUtility;
+
+/**
+ * Created by Shivangi Singh on 4/24/2017.
+ */
+
+public class HomeViewHolder extends ResourceAdapter implements View.OnClickListener {
+    private TextView mResourceName, mResourceLabel, mResourceDate;
+    private final String TAG = HomeViewHolder.class.getSimpleName();
+
+    HomeViewHolder(View view) {
+        //initialize all layout variables
+        view.setOnClickListener(this);
+        //set on clickListener to the view
+        initViews(view);
+    }
+
+    void initViews(View view) {
+        mResourceName = (TextView) view.findViewById(R.id.item_available_hw_txt_resource_name);
+        mResourceLabel = (TextView) view.findViewById(R.id.resource_label);
+        mResourceDate = (TextView) view.findViewById(R.id.resource_date);
+        LoggerUtility.log(TAG, "inside home view holder class' constructor");
+    }
+
+    void setData() {
+            /*ignored*/
+    }
+
+    @Override
+    public void onClick(View view) {
+        //when clicked go to device page
+        Intent i = new Intent(view.getContext(), ResourceInfoActivity.class);
+        view.getContext().startActivity(i);
+    }
+
+    @Override
+    public int getItemCount() {
+        //TODO return size
+        return 0;
+    }
+}
+

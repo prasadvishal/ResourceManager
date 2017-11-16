@@ -1,0 +1,71 @@
+package com.mindfiresolutions.resourcemanager.model;
+
+import com.google.gson.annotations.SerializedName;
+
+/**
+ * method to set pending request software assginment
+ * Created by Shivangi Singh on 6/6/2017.
+ */
+
+public class AssignSoftwareSetter {
+        @SerializedName("RequestID")
+        private int requestID;
+        @SerializedName("SoftwareKey")
+        private int softwareKey;
+        @SerializedName("HardwareID")
+        private int hardwareID;
+        @SerializedName("SoftwareID")
+        private int softwareID;
+        @SerializedName("Description")
+        private String description;
+        @SerializedName("UserID")
+        private int userID;
+
+        public int getRequestID() {
+            return requestID;
+        }
+
+        public void setRequestID(int requestID) {
+            this.requestID = requestID;
+        }
+
+        public int getSoftwareKey() {
+            return softwareKey;
+        }
+
+        public void setSoftwareKey(int softwareKey) {
+            this.softwareKey = softwareKey;
+        }
+
+        public int getHardwareID() {
+            return hardwareID;
+        }
+
+        public void setHardwareID(int hardwareID) {
+            this.hardwareID = hardwareID;
+        }
+
+        public int getSoftwareID() {
+            return softwareID;
+        }
+
+        public void setSoftwareID(int softwareID) {
+            this.softwareID = softwareID;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public int getUserID() {
+            return userID;
+        }
+
+        public void setUserID(int userID) {
+            this.userID = userID;
+        }
+    }

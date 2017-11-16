@@ -1,0 +1,218 @@
+package com.mindfiresolutions.resourcemanager.admin;
+
+/**
+ * Created by: Vishal on 27th March
+ * Last Modified on: 03/27/2017
+ */
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ExpandableListView;
+import android.widget.FrameLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.mindfiresolutions.resourcemanager.R;
+import com.mindfiresolutions.resourcemanager.model.AllResourceSummaryGetter;
+import com.mindfiresolutions.resourcemanager.model.ViewHardwareSummary;
+import com.mindfiresolutions.resourcemanager.model.ViewSharedResource;
+import com.mindfiresolutions.resourcemanager.model.ViewSoftwareSummary;
+import com.mindfiresolutions.resourcemanager.utility.CallAPIInterface;
+import com.mindfiresolutions.resourcemanager.utility.Drawer;
+import com.mindfiresolutions.resourcemanager.utility.LoggerUtility;
+import com.mindfiresolutions.resourcemanager.utility.ServiceGenerator;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.mindfiresolutions.resourcemanager.utility.APIurls.LOGIN_REQUEST_HEADER_VALUE;
+import static com.mindfiresolutions.resourcemanager.utility.HttpCodes.OK;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.SOFTWARE_COUNT;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.SOFTWARE_ID;
+
+public class AdminHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+    ExpandableListAdapter listAdapter;
+    ExpandableListView expListView;
+    List<String> listDataHeader;
+    HashMap<String, List<String>> listDataChild;
+    private final static String TAG = AdminHomeActivity.class.getSimpleName();
+    private Drawer mDrawer = new Drawer();
+    List<ViewHardwareSummary> viewHardwareSummary;
+    List<ViewSoftwareSummary> viewSoftwareSummary;
+    List<ViewSharedResource> viewSharedResource;
+    List<String> hardwareResources = new ArrayList<>();
+    List<String> softwareResources = new ArrayList<>();
+    List<String> sharedResources = new ArrayList<>();
+    List<String> pendingRequests = new ArrayList<>();
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_admin_main);
+        android.support.v7.app.ActionBar ab = getSupportActionBar();
+        // check for Actionbar if present then set tittle
+        if (ab != null && ab.isShowing()) {
+            ab.setTitle("Resource Manager");
+            ab.setSubtitle("Summary");
+        }
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_app_home);
+        LoggerUtility.makeLog(TAG, "outside Coordinator");
+        FrameLayout frameLayout = (FrameLayout) coordinatorLayout.findViewById(R.id.content_frame_activity_layout);
+        getLayoutInflater().inflate(R.layout.admin_home_activity, frameLayout);
+        LoggerUtility.makeLog(TAG, "Toolbar created");
+        mDrawer.setDrawerToggle(findViewById(R.id.drawer_layout), toolbar, this, findViewById(R.id.nav_view));
+        LoggerUtility.makeLog(TAG, "after setDrawerToggle");
+        changeNavigationView(findViewById(R.id.nav_view));
+        // get the listview
+        LoggerUtility.makeLog(TAG, "outside expListView");
+        expListView = (ExpandableListView) findViewById(R.id.lvExp);
+        LoggerUtility.makeLog(TAG, "after expListView");
+        // preparing list data
+        listDataHeader = new ArrayList<>();
+        listDataChild = new HashMap<>();
+
+        listDataHeader.add("Hardware Resources");
+        listDataHeader.add("Software Resources");
+        listDataHeader.add("Shared Resources");
+        listDataHeader.add("Pending Requests");
+        prepareListWithData();
+
+        listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
+        // setting list adapter
+        expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                // TODO Auto-generated method stub
+                int cPosition = (int) listAdapter.getChildId(groupPosition, childPosition);
+                LoggerUtility.makeLog(TAG,"You Clicked: "+cPosition);
+                LoggerUtility.makeLog(TAG,"its Parent is: "+groupPosition);
+                Intent i;
+                switch(groupPosition)
+                {
+                    case 0:
+                        LoggerUtility.makeShortToast(getApplicationContext(),viewHardwareSummary.get(cPosition).getHardwareType());
+                        break;
+                    case 1:
+                        LoggerUtility.makeShortToast(getApplicationContext(),viewSoftwareSummary.get(cPosition).getSoftwareName());
+                        i=new Intent(getApplicationContext(),SoftwareDetailsActivity.class);
+                        i.putExtra(SOFTWARE_ID,viewSoftwareSummary.get(cPosition).getSoftwareID());
+                        i.putExtra(SOFTWARE_COUNT,viewSoftwareSummary.get(cPosition).getValidCount());
+                        break;
+                    case 2:
+                        LoggerUtility.makeShortToast(getApplicationContext(),viewSharedResource.get(cPosition).getHardwareType());
+                        break;
+                }
+
+                return false;
+            }
+        });
+
+        expListView.setAdapter(listAdapter);
+
+    }
+
+    /*
+     * Preparing the list data
+     */
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawer.onBackPressed(drawerLayout);
+        } else
+            super.onBackPressed();
+
+    }
+
+    void changeNavigationView(View view) {
+        NavigationView navigationView = (NavigationView) view;
+        navigationView.getMenu().clear();
+        navigationView.inflateMenu(R.menu.admin_home_drawer_menu);
+        //change header text to admin
+        View admin_view = navigationView.getHeaderView(0);
+        TextView admin_txt = (TextView) admin_view.findViewById(R.id.name_user);
+        //TODO complete admin name here
+        admin_txt.setText(getString(R.string.admin));
+        navigationView.setNavigationItemSelectedListener(this);
+
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        return mDrawer.onNavigationItemSelectedAdmin(item, this, findViewById(R.id.drawer_layout));
+
+    }
+
+    void prepareListWithData() {
+        //TODO add progressbar
+        CallAPIInterface callAPIInterface = ServiceGenerator.createService(CallAPIInterface.class);
+        LoggerUtility.makeLog(TAG, "Retrofit object created in updateUserProfile");
+        Call<AllResourceSummaryGetter> call = callAPIInterface.getResourceSummary(LOGIN_REQUEST_HEADER_VALUE);
+        LoggerUtility.makeLog(TAG, "response in call object in UpdateUserProfile");
+
+        call.enqueue(new Callback<AllResourceSummaryGetter>() {
+                         @Override
+                         public void onResponse(Call<AllResourceSummaryGetter> call, Response<AllResourceSummaryGetter> response) {
+                             //response's body
+                             LoggerUtility.makeLog(TAG, "Response body");
+                             if (response.body().getResponse().getCode() == OK) {
+                                 LoggerUtility.makeLog(TAG, response.body().getResponse().getMessage());
+                                 viewHardwareSummary = response.body().getViewHardwareSummary();
+                                 viewSoftwareSummary = response.body().getViewSoftwareSummary();
+                                 viewSharedResource = response.body().getViewSharedResource();
+
+                                 for (int i = 0; i < viewHardwareSummary.size(); i++) {
+                                     hardwareResources.add(i, viewHardwareSummary.get(i).getHardwareType() + "\t\t\t\t" + viewHardwareSummary.get(i).getCount());
+                                     LoggerUtility.makeLog(TAG, viewHardwareSummary.get(i).getHardwareType());
+                                 }
+                                 for (int i = 0; i < viewSoftwareSummary.size(); i++) {
+                                     softwareResources.add(i, viewSoftwareSummary.get(i).getSoftwareName() + "\t\t\t\t" + viewSoftwareSummary.get(i).getValidCount());
+                                     LoggerUtility.makeLog(TAG, viewSoftwareSummary.get(i).getSoftwareName());
+                                 }
+                                 for (int i = 0; i < viewSharedResource.size(); i++) {
+                                     sharedResources.add(i, viewSharedResource.get(i).getHardwareType() + "\t\t\t\t" + viewSharedResource.get(i).getCount());
+                                     LoggerUtility.makeLog(TAG, viewSharedResource.get(i).getHardwareType() + "\t\t\t\t" + viewSharedResource.get(i).getCount());
+                                 }
+                                 //listDataChild.put(listDataHeader.get(0), hardwareResources);
+                                 listDataChild.put(listDataHeader.get(0), hardwareResources); // Header, Child data
+                                 listDataChild.put(listDataHeader.get(1), softwareResources);
+                                 listDataChild.put(listDataHeader.get(2), sharedResources);
+                                 listDataChild.put(listDataHeader.get(3), pendingRequests);
+                                 //TODO string
+                                 //  send viewHardwareSummary.get(i).getHardwareType() in intent
+
+                             }
+
+                         }
+
+
+                         @Override
+                         public void onFailure (Call < AllResourceSummaryGetter > call, Throwable t){
+                             LoggerUtility.makeLog(TAG, "Error requesting API");
+                         }
+                     }
+
+        );
+    }
+}
+

@@ -1,0 +1,27 @@
+package com.mindfiresolutions.resourcemanager.utility;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import static com.mindfiresolutions.resourcemanager.utility.UserPreferences.USERPREFERENCES;
+
+/**
+ * Created by Shivangi Singh on 4/16/2017.
+ */
+
+public class SharedPref {
+
+    private static final String TAG = SharedPref.class.getSimpleName();
+
+    public static String getSharedPreferences(Context context, String key) {
+        LoggerUtility.makeLog(TAG,"inside shared preferences");
+        SharedPreferences sharedPreferences = context.getSharedPreferences(USERPREFERENCES, Context.MODE_PRIVATE);
+        if (sharedPreferences.contains(key)) {
+            return sharedPreferences.getString(key, "");
+        } else {
+            LoggerUtility.makeLog(TAG, "NO data in shared Preferences");
+            return null;
+        }
+    }
+
+}

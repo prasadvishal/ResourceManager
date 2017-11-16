@@ -1,0 +1,75 @@
+package com.mindfiresolutions.resourcemanager.admin;
+
+import com.mindfiresolutions.resourcemanager.utility.LoggerUtility;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+/**
+ * Created by Vishal Prasad on 3/24/2017.
+ */
+
+public class ResourceCount {
+    ResourceCount()
+    {}
+//        setmResourceListCount();
+
+//make a arraylist hashmap say abc
+    private HashMap<String,String> mHardwareResourceListCount ;
+    private HashMap<String,String> mSoftwareResourceListCount = new HashMap<String, String>();
+    private HashMap<String,String> mSharedResourceListCount = new HashMap<String, String>();
+
+    //adding dummy data to the mResourcceListCount
+        ArrayList resourceData;
+    protected ArrayList<HashMap<String, String>> setmResourceListCount() {
+
+        LoggerUtility.makeLog(getClass().toString()," Ready to Fillup the mHardware List ");
+        mHardwareResourceListCount = new HashMap<>();
+        mHardwareResourceListCount.put("Hardware Resources","Count");
+        mHardwareResourceListCount.put("Laptop","12");
+        mHardwareResourceListCount.put("Mouse","21");
+        mHardwareResourceListCount.put("Keyboard","9");
+        mHardwareResourceListCount.put("Headphones","6");
+        mHardwareResourceListCount.put("Webcams","4");
+        LoggerUtility.makeLog(getClass().toString()," mHardware List filled ");
+
+
+        mSoftwareResourceListCount.put("Software Resources","Count");
+        mSoftwareResourceListCount.put("Windows 7","8");
+        mSoftwareResourceListCount.put("Windows 8.1","6");
+        mSoftwareResourceListCount.put("Ubuntu","3");
+        mSoftwareResourceListCount.put("Red Hat","2");
+        mSoftwareResourceListCount.put("MS Office","7");
+        mSoftwareResourceListCount.put("Photoshop","4");
+        mSoftwareResourceListCount.put("Adobe","1");
+        mSoftwareResourceListCount.put("Avast antivirus","8");
+        mSoftwareResourceListCount.put("Quickheal","5");
+
+        mSharedResourceListCount.put("Shared Resources","Count");
+        mSharedResourceListCount.put("iPhone 5","2");
+        mSharedResourceListCount.put("iPhone 5s","1");
+        mSharedResourceListCount.put("iPhone 6","2");
+        mSharedResourceListCount.put("iPhone 6s","1");
+        mSharedResourceListCount.put("Moto G1","1");
+        mSharedResourceListCount.put("Lenovo k4 note","1");
+        mSharedResourceListCount.put("iPhone connector","6");
+        mSharedResourceListCount.put("Android connector","10");
+//    }
+//    public ArrayList<String>getmHardwareResourceListCount()
+//    {
+        LoggerUtility.makeLog(getClass().toString()," Ready to Fill ArrayList with the mHardware List ");
+        resourceData=new ArrayList();
+        resourceData.add(mHardwareResourceListCount);
+        LoggerUtility.makeLog(getClass().toString()," mHardwarelist added to Arraylist ");
+        return resourceData;
+//    }
+
+//    public HashMap<String, String>getmSoftwareResourceListCount()
+//    {
+//        return mSoftwareResourceListCount;
+//    }
+//    public HashMap<String, String>getmSharedResourceListCount()
+//    {
+//        return mSharedResourceListCount;
+//    }
+}}

@@ -1,0 +1,32 @@
+package com.mindfiresolutions.resourcemanager.model;
+
+import com.google.gson.annotations.SerializedName;
+
+/**
+ * Created by Shivangi Singh on 3/30/2017
+ */
+
+public class UserBaseResponse {
+    @SerializedName("Response")
+    public ResponseGetterBase ResponseGetterBase;
+    @SerializedName("userProfile")
+    public User user;
+
+    public ResponseGetterBase getResponseGetterBase() {
+        return ResponseGetterBase;
+    }
+
+    public void setResponseGetterBase(ResponseGetterBase ResponseGetterBase) {
+        this.ResponseGetterBase = ResponseGetterBase;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+}
+

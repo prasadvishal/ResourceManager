@@ -1,0 +1,50 @@
+package com.mindfiresolutions.resourcemanager;
+
+import android.content.Context;
+import android.util.Log;
+import android.widget.EditText;
+import android.widget.EditText;
+import android.widget.Toast;
+
+/**
+ * Created by Shivangi Singh on 3/9/2017.
+ * modified on 21st march by shivangi
+ */
+
+class LoggerUtility {
+
+
+    static void makeShortToast(Context context, String msg) {
+        Toast toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+    static void makeLongToast(Context context, String msg) {
+
+        Toast toast = Toast.makeText(context, msg, Toast.LENGTH_LONG);
+        toast.show();
+    }
+
+    static void makeLog(Context context, String msg) {
+
+        Log.e(context.getClass().toString(), msg);
+    }
+
+    static void makeLog(String tag, String msg) {
+        Log.e(tag, msg);
+    }
+
+    static String getTextFromView(EditText view) {
+        return (view.getText().toString().trim());
+    }
+
+    static void requestFocusIfError(EditText view, String errorMsg){
+        view.setError(errorMsg);
+        view.requestFocus();
+    }
+    static void requestFocusIfError(EditText view, String errorMsg, String tag, String errorLogmsg){
+        view.setError(errorMsg);
+        view.requestFocus();
+        makeLog(tag, errorLogmsg);
+    }
+}

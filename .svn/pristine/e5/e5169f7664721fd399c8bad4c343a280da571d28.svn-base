@@ -1,0 +1,34 @@
+package com.mindfiresolutions.resourcemanager.model;
+
+import com.google.gson.annotations.SerializedName;
+
+/**
+ * Created by Shivangi Singh on 4/17/2017
+ */
+
+
+public class HardwareDetailsByIdResponse {
+
+    @SerializedName("Response")
+    private ResponseGetterBase response;
+    @SerializedName("HardwareDetails")
+    private HardwareDetailsByIdGetter[] hardwareDetails;
+
+    public ResponseGetterBase getResponse() {
+        return response;
+    }
+
+    public void setResponse(ResponseGetterBase response) {
+        this.response = response;
+    }
+
+    public HardwareDetailsByIdGetter[] getHardwareDetails() {
+        return hardwareDetails;
+    }
+
+    public void setHardwareDetails(HardwareDetailsByIdGetter[] hardwareDetails) {
+        this.hardwareDetails = hardwareDetails;
+    }
+
+}
+

@@ -1,0 +1,20 @@
+package com.mindfiresolutions.resourcemanager.admin;
+
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+
+import com.mindfiresolutions.resourcemanager.R;
+/*
+*This class deals with assigning pending software request which comes to admin
+*Created on 25th May
+*/
+
+public class AssignPendingSoftwareResourceActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_assign_pending_resource);
+
+    }
+}

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#28AADC</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="black">@android:color/black</color>
+    <color name="white">@android:color/white</color>
+    <color name="yellow">#e1bc12</color>
+    <color name="onFocusTextUnderline">#7DDCFF</color>
+    <color name="colorSecondBackground">#C2DCFF</color>
+    <color name="textGreen">#03ff08</color>
+    <color name="themeBlue">#28AADC</color>
+    <color name="hint_gray">#909090</color>
+    <color name="label_gray">#d3d3d3</color>
+    <color name="textRed">#FF1203</color>
+    <color name="blue">#3570eb</color>
+    <color name="green">#51b06c</color>
+    <color name="listview_blue">#C2DCFF</color>
+    <color name="purple">#9C27B0</color>
+
+
+    <!--<color name="colorPrimary">#9C27B0</color>-->
+    <!--<color name="colorPrimaryDark">#7B1FA2</color>-->
+    <!--<color name="primary_light">#E1BEE7</color>-->
+    <!--<color name="colorAccent">#00BCD4</color>-->
+    <!--<color name="primary_text">#212121</color>-->
+    <!--<color name="secondary_text">#757575</color>-->
+    <!--<color name="icons">#FFFFFF</color>-->
+    <!--<color name="divider">#BDBDBD</color>-->
+</resources>

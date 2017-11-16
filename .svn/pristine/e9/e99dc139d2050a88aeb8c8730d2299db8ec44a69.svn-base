@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="@string/drawer_menu_profile">
+        <menu>
+            <item
+                android:id="@+id/nav_resource_summary"
+                android:title="@string/drawer_menu_home"
+                android:icon="@drawable/home"/>
+            <item
+                android:id="@+id/nav_inventories"
+                android:title="@string/drawer_menu_inventories"
+                android:icon="@drawable/inventory_icon"/>
+
+            <item
+                android:id="@+id/nav_editProfile"
+                android:icon="@drawable/edit_profile"
+                android:title="@string/drawer_menu_profile" />
+
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/logout"
+                android:title="@string/drawer_menu_logout" />
+        </menu>
+    </item>
+    <item android:title="@string/drawer_menu_resources">
+        <menu>
+            <item
+                android:id="@+id/nav_addResource_hardware"
+                android:icon="@drawable/hardware"
+                android:title="@string/new_hardware_request" />
+            <item
+                android:id="@+id/nav_addResource_software"
+                android:icon="@drawable/software"
+                android:title="@string/new_software_request" />
+        </menu>
+    </item>
+
+</menu>

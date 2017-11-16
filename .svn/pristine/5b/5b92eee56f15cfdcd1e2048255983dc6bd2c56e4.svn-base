@@ -1,0 +1,73 @@
+package com.mindfiresolutions.resourcemanager.model;
+
+import com.google.gson.annotations.SerializedName;
+
+/**
+ * Created by Shivangi Singh on 3/28/2017.
+ */
+
+public class User extends LoginSetter {
+
+    @SerializedName("Firstname")
+    private String mFirstname;
+    @SerializedName("Lastname")
+    private String mLastName;
+    @SerializedName("EmployeeID")
+    private String mEmployeeID;
+    @SerializedName("Email")
+    private String mEmail;
+    @SerializedName("Role")
+    private int mRoll;
+    @SerializedName("Contact")
+    private String mContact;
+
+    String getFirstname() {
+        return mFirstname;
+    }
+
+    void setFirstName(String firstName) {
+        mFirstname = firstName;
+    }
+
+    String getLastName() {
+        return mLastName;
+    }
+
+    void setLastName(String lastName) {
+        mLastName = lastName;
+    }
+
+    String getEmployeeID() {
+        return mEmployeeID;
+    }
+
+    void setEmployeeID(String employeeID) {
+        mEmployeeID = employeeID;
+    }
+
+    String getEmail() {
+        return mEmail;
+    }
+
+    void setEmail(String email) {
+        mEmail = email;
+    }
+
+    int getRole() {
+        return mRoll;
+    }
+
+    void setRoll(int roll) {
+        mRoll = roll;
+    }
+
+    String getContact() {
+        return mContact;
+    }
+
+    void setContact(String contact) {
+        mContact = contact;
+    }
+
+
+}

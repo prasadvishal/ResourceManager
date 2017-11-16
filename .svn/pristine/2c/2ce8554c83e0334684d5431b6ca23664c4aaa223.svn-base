@@ -1,0 +1,84 @@
+package com.mindfiresolutions.resourcemanager.admin;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.TextView;
+
+import com.mindfiresolutions.resourcemanager.R;
+import com.mindfiresolutions.resourcemanager.model.PendingRequestResponseSetter;
+import com.mindfiresolutions.resourcemanager.utility.LoggerUtility;
+import com.mindfiresolutions.resourcemanager.utility.SharedPref;
+
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.ADMIN_NAME;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.DESCRIPTION;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.HARDWARE_PENDING_REQUEST_OBJECT;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.HARDWARE_TYPE_ID;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.REQUESTED_BY;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.REQUESTED_ON;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.REQUESTED_TILL;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.REQUEST_ID;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.RESOURCE_NAME;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.USER_ID;
+import static com.mindfiresolutions.resourcemanager.utility.UserPreferences.USERID;
+
+public class PendingRequestDetailId extends AppCompatActivity implements View.OnClickListener{
+    private TextView mRequestedBy, mRequestedDate, mTitle, mDescriptionResponse, mRequestedTo, mIssueBy;
+    private Intent i;
+    private static String TAG = PendingRequestDetailId.class.getSimpleName();
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_pending_request_detail_id);
+        initViews();
+        i = getIntent();
+        setViews();
+        findViewById(R.id.pending_request_approve_button).setOnClickListener(this);
+    }
+
+    public void onClick(View view){
+        switch(view.getId()){
+            case (R.id.pending_request_approve_button):
+                assignResource();
+        }
+    }
+    private void assignResource() {
+        PendingRequestResponseSetter pendingRequestResponseSetter = new PendingRequestResponseSetter();
+        pendingRequestResponseSetter.setRequestID(Integer.parseInt(i.getExtras().getString(REQUEST_ID)));
+        pendingRequestResponseSetter.setUserID(Integer.parseInt(i.getExtras().getString(USER_ID)));
+        LoggerUtility.LogGenerator(TAG,SharedPref.getSharedPreferences(this,USERID));
+        String adminId = SharedPref.getSharedPreferences(this,USERID);
+        pendingRequestResponseSetter.setAssignedBy(Integer.parseInt(adminId));
+        pendingRequestResponseSetter.setHardwareID(0);
+        pendingRequestResponseSetter.setDescription("");
+        Intent i = new Intent(this, AssignPendingHardwareResourceActivity.class);
+        i.putExtra(HARDWARE_PENDING_REQUEST_OBJECT,pendingRequestResponseSetter);
+        i.putExtra(HARDWARE_TYPE_ID,6);
+        //TODO add resource id
+        startActivity(i);
+        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+      //  pendingRequestResponseSetter.setRequestID();
+       // pendingRequestResponseSetter.setDescription();
+      //  pendingRequestResponseSetter.setHardwareID(i.getExtras().);
+    }
+
+    private void setViews() {
+        mRequestedDate.setText(i.getExtras().getString(REQUESTED_ON));
+        mRequestedTo.setText(i.getExtras().getString(ADMIN_NAME));
+        mTitle.setText(i.getExtras().getString(RESOURCE_NAME));
+        mDescriptionResponse.setText(i.getExtras().getString(DESCRIPTION));
+        mIssueBy.setText(i.getExtras().getString(REQUESTED_TILL));
+        mRequestedBy.setText(i.getExtras().getString(REQUESTED_BY));
+    }
+
+    private void initViews() {
+        mRequestedBy = (TextView) findViewById(R.id.pending_details_requested_by);
+        mRequestedDate = (TextView) findViewById(R.id.pending_details_request_date);
+        mTitle = (TextView) findViewById(R.id.pending_request_detail_request_title);
+        mDescriptionResponse = (TextView) findViewById(R.id.pending_request_detail_request_description);
+        mRequestedTo = (TextView) findViewById(R.id.pending_details_requested_to);
+        mIssueBy = (TextView) findViewById(R.id.pending_details_issue_by);
+    }
+}

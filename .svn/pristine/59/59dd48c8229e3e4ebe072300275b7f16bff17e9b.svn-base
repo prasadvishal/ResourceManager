@@ -1,0 +1,34 @@
+package com.mindfiresolutions.resourcemanager.utility;
+
+
+import com.mindfiresolutions.resourcemanager.model.LoginSetter;
+import com.mindfiresolutions.resourcemanager.launcherPackage.SignUpSetter;
+import com.mindfiresolutions.resourcemanager.model.ResponseGetterBase;
+import com.mindfiresolutions.resourcemanager.model.ResponseGetterWithToken;
+import com.mindfiresolutions.resourcemanager.model.User;
+
+import retrofit2.Call;
+import retrofit2.http.Body;
+import retrofit2.http.Header;
+import retrofit2.http.POST;
+
+import static com.mindfiresolutions.resourcemanager.utility.APIurls.LOGIN_REQUEST_DETAIL_URL;
+import static com.mindfiresolutions.resourcemanager.utility.APIurls.LOGIN_REQUEST_HEADER_KEY;
+import static com.mindfiresolutions.resourcemanager.utility.APIurls.SIGNUP_REQUEST_DETAIL_URL;
+
+/**
+ * Created by Shivangi Singh on 3/28/2017.
+ */
+
+public interface CallAPIInterface {
+
+    @POST(LOGIN_REQUEST_DETAIL_URL)
+    Call<ResponseGetterWithToken> getResponse(@Header(LOGIN_REQUEST_HEADER_KEY) String header,
+                                              @Body LoginSetter body);
+
+    @POST(SIGNUP_REQUEST_DETAIL_URL)
+    Call<ResponseGetterBase> getResponse(@Header(LOGIN_REQUEST_HEADER_KEY) String header,
+                                         @Body SignUpSetter body);
+
+
+}

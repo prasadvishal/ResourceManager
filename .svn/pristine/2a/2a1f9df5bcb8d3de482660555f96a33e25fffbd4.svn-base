@@ -1,0 +1,62 @@
+package com.mindfiresolutions.resourcemanager.utility;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.support.annotation.Nullable;
+
+import static com.mindfiresolutions.resourcemanager.utility.UserPreferences.USERPREFERENCES;
+
+/**
+ * Created by Shivangi Singh on 4/16/2017.
+ * This utility class sets and gets shared preferences
+ */
+
+public class SharedPref {
+
+    private static final String TAG = SharedPref.class.getSimpleName();
+    private static Context mContext;
+    private static SharedPref sInstance;
+
+    private SharedPref() {
+    }
+
+    public static SharedPref getInstance(Context context) {
+        if (sInstance == null) {
+            sInstance = new SharedPref();
+            mContext = context.getApplicationContext();
+        }
+        return sInstance;
+    }
+
+    @Nullable
+    public static String getSharedPreferences(Context context, String key) {
+        LoggerUtility.LogGenerator(TAG, "inside shared preferences");
+        SharedPreferences sharedPreferences = context.getSharedPreferences(USERPREFERENCES, Context.MODE_PRIVATE);
+        if (sharedPreferences.contains(key)) {
+            return sharedPreferences.getString(key, "");
+        } else {
+            LoggerUtility.LogGenerator(TAG, "NO data in shared Preferences");
+            return null;
+        }
+    }
+
+    public static void setSharePreferences(Context context, String key, String value) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(USERPREFERENCES, Context.MODE_PRIVATE);
+        final SharedPreferences.Editor EDITOR = sharedPreferences.edit();
+        EDITOR.putString(key, value);
+        EDITOR.apply();
+    }
+
+    static void removeToken(Context context, String key) {
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences(USERPREFERENCES, Context.MODE_PRIVATE);
+        final SharedPreferences.Editor EDITOR = sharedPreferences.edit();
+        if (key == null) {
+            EDITOR.clear();
+        } else {
+            EDITOR.remove(key);
+        }
+        EDITOR.apply();
+    }
+
+}

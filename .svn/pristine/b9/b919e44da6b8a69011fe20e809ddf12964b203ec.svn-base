@@ -1,0 +1,11 @@
+package com.mindfiresolutions.resourcemanager.utility;
+
+/**
+ * Created by Shivangi Singh on 3/30/2017.
+ */
+
+public interface HttpCodes {
+    public static final int OK = 200;
+    public static final int BAD_REQUEST = 400;
+    public static final int NOT_FOUND = 404;
+}

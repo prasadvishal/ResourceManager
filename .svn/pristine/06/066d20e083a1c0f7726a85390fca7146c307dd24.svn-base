@@ -1,0 +1,142 @@
+package com.mindfiresolutions.resourcemanager.model;
+
+import com.google.gson.annotations.SerializedName;
+
+/**
+ * Created by Shivangi Singh on 5/3/2017
+ */
+
+public class UserRequest {
+
+    @SerializedName("RequestID")
+    private Integer iD;
+    @SerializedName("UserID")
+    private Integer userID;
+    @SerializedName("RequestedBy")
+    private String requestedBy;
+    @SerializedName("Title")
+    private String title;
+    @SerializedName("FromDate")
+    private String fromDate;
+    @SerializedName("ToDate")
+    private String toDate;
+    @SerializedName("RequestStatus")
+    private String requestStatus;
+    @SerializedName("Description")
+    private String description;
+    @SerializedName("AssignedTo")
+    private String assignedTo;
+    @SerializedName("RequestedDevice")
+    private String requestedDevice;
+    @SerializedName("AssignedBy")
+    private String assignedBy;
+    @SerializedName("AssignedOn")
+    private String assignedOn;
+    @SerializedName("Category")
+    private String category;
+
+    public Integer getID() {
+        return iD;
+    }
+
+    public void setID(Integer iD) {
+        this.iD = iD;
+    }
+
+    public Integer getUserID() {
+        return userID;
+    }
+
+    public void setUserID(Integer userID) {
+        this.userID = userID;
+    }
+
+    public String getRequestedBy() {
+        return requestedBy;
+    }
+
+    public void setRequestedBy(String requestedBy) {
+        this.requestedBy = requestedBy;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getFromDate() {
+        return fromDate;
+    }
+
+    public void setFromDate(String fromDate) {
+        this.fromDate = fromDate;
+    }
+
+    public String getToDate() {
+        return toDate;
+    }
+
+    public void setToDate(String toDate) {
+        this.toDate = toDate;
+    }
+
+    public String getRequestStatus() {
+        return requestStatus;
+    }
+
+    public void setRequestStatus(String requestStatus) {
+        this.requestStatus = requestStatus;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getAssignedTo() {
+        return assignedTo;
+    }
+
+    public void setAssignedTo(String assignedTo) {
+        this.assignedTo = assignedTo;
+    }
+
+    public String getRequestedDevice() {
+        return requestedDevice;
+    }
+
+    public void setRequestedDevice(String requestedDevice) {
+        this.requestedDevice = requestedDevice;
+    }
+
+    public String getAssignedBy() {
+        return assignedBy;
+    }
+
+    public void setAssignedBy(String assignedBy) {
+        this.assignedBy = assignedBy;
+    }
+
+    public String getAssignedOn() {
+        return assignedOn;
+    }
+
+    public void setAssignedOn(String assignedOn) {
+        this.assignedOn = assignedOn;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+}

@@ -1,0 +1,19 @@
+package com.mindfiresolutions.resourcemanager.model;
+
+/**
+ * pojo to set username
+ * Created by Shivangi Singh on 5/16/2017.
+ */
+
+public class UserNameSetter {
+    private String mUserName;
+    public String getUserName() {
+        return mUserName;
+    }
+
+    public void setUserName(String userName) {
+        mUserName = userName;
+    }
+
+
+}

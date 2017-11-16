@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            style="@style/BorderedTextFields"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                style="@style/BorderedTextFields"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/themeBlue"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:padding="@dimen/textfields_padding"
+                    android:text="@string/prompt_name"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:text="@string/prompt_username"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/assign_resource_lv_listView"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/listview_dimen_half_screen" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:background="@color/blue"
+            android:padding="@dimen/small_padding">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/assigning_to"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/assign_resource_txt_assigning_to"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/username"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_vertical_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:background="@drawable/border"
+            android:padding="@dimen/textfields_padding">
+
+            <EditText
+                android:id="@+id/assign_resource_edt_description"
+                style="@style/BorderedTextFields"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.06"
+                android:hint="@string/description"
+                android:padding="@dimen/small_padding" />
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/assign_resource_btn_assign"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_vertical_margin"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:background="@drawable/styled_green_button_layout"
+            android:text="@string/assign"
+            android:textColor="@color/white" />
+    </LinearLayout>
+</ScrollView>

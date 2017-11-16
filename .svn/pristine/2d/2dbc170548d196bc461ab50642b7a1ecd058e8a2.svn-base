@@ -1,0 +1,55 @@
+package com.mindfiresolutions.resourcemanager.model;
+
+import com.google.gson.annotations.SerializedName;
+
+/**
+ * Created by Vishal Prasad on 3/29/2017.
+ */
+
+public class LoginRegistrationResponse {
+
+        @SerializedName("Code")
+        private Integer Code;
+
+        @SerializedName("Message")
+        private String Message;
+
+        @SerializedName("Token")
+        private String Token;
+
+        @SerializedName("Role")
+        private String Role;
+
+        public Integer getCode() {
+            return Code;
+        }
+
+        public void setCode(Integer Code) {
+            this.Code = Code;
+        }
+
+        public String getMessage() {
+            return Message;
+        }
+
+        public void setMessage(String Message) {
+            this.Message = Message;
+        }
+
+        public String getToken() {
+            return Token;
+        }
+
+        public void setToken(String Token) {
+            this.Token = Token;
+        }
+
+        public String Role() {
+            return Role;
+        }
+
+        public void setRole(String Role) {
+            this.Role = Role;
+        }
+}
+

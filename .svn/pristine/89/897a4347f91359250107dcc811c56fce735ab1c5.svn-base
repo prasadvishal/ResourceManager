@@ -1,0 +1,64 @@
+package com.mindfiresolutions.resourcemanager.model;
+
+/**
+ * Created by Shivangi Singh on 4/4/2017
+ */
+
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
+
+public class AllResourceSummaryGetter {
+
+    @SerializedName("Response")
+    private ResponseGetterBase response;
+    @SerializedName("ViewHardwareSummary")
+    private List<ViewHardwareSummary> viewHardwareSummary = null;
+    @SerializedName("ViewSoftwareSummary")
+    private List<ViewSoftwareSummary> viewSoftwareSummary = null;
+    @SerializedName("ViewSharedResource")
+    private List<ViewSharedResource> viewSharedResource = null;
+    @SerializedName("ViewRequestsSummary")
+    private List<Object> viewRequestsSummary = null;
+
+    public ResponseGetterBase getResponse() {
+        return response;
+    }
+
+    public void setResponse(ResponseGetterBase response) {
+        this.response = response;
+    }
+
+    public List<ViewHardwareSummary> getViewHardwareSummary() {
+        return viewHardwareSummary;
+    }
+
+    public void setViewHardwareSummary(List<ViewHardwareSummary> viewHardwareSummary) {
+        this.viewHardwareSummary = viewHardwareSummary;
+    }
+
+    public List<ViewSoftwareSummary> getViewSoftwareSummary() {
+        return viewSoftwareSummary;
+    }
+
+    public void setViewSoftwareSummary(List<ViewSoftwareSummary> viewSoftwareSummary) {
+        this.viewSoftwareSummary = viewSoftwareSummary;
+    }
+
+    public List<ViewSharedResource> getViewSharedResource() {
+        return viewSharedResource;
+    }
+
+    public void setViewSharedResource(List<ViewSharedResource> viewSharedResource) {
+        this.viewSharedResource = viewSharedResource;
+    }
+
+    public List<Object> getViewRequestsSummary() {
+        return viewRequestsSummary;
+    }
+
+    public void setViewRequestsSummary(List<Object> viewRequestsSummary) {
+        this.viewRequestsSummary = viewRequestsSummary;
+    }
+
+}

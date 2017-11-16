@@ -1,0 +1,45 @@
+package com.mindfiresolutions.resourcemanager.model;
+
+import com.mindfiresolutions.resourcemanager.utility.LoggerUtility;
+
+/**
+ * Created by Shivangi Singh on 3/10/2017.
+ * <p>
+ * modified on 23rd march
+ */
+
+class Resources {
+    private String mResourceName, mResourceDate, mResourceLabel;
+    private final String TAG = "RESOURCES CLASS";
+
+    Resources(String resourceName, String resourceDate, String resourceLabel) {
+        mResourceName = resourceName;
+        mResourceLabel = resourceLabel;
+        mResourceDate = resourceDate;
+        LoggerUtility.makeLog(TAG, "inside Resources constructor");
+    }
+    String getResourceName() {
+        return mResourceName;
+    }
+
+    public void setResourceName(String resourceName) {
+        mResourceName = resourceName;
+    }
+
+    String getResourceLabel() {
+        LoggerUtility.makeLog(TAG, mResourceLabel);
+        return mResourceLabel;
+    }
+
+    protected void setResourceLabel(String resourceLabel) {
+        mResourceLabel = resourceLabel;
+    }
+
+    String getResourceDate() {
+        return mResourceDate;
+    }
+
+    public void setResourceDate(String resourceDate) {
+        mResourceDate = resourceDate;
+    }
+}

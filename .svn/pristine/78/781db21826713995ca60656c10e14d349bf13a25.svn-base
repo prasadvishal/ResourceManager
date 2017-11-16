@@ -1,0 +1,64 @@
+package com.mindfiresolutions.resourcemanager.utility;
+
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.mindfiresolutions.resourcemanager.launcherPackage.SignUpActivity;
+
+import static android.support.v4.content.ContextCompat.startActivity;
+
+
+public class LoggerUtility {
+
+    public static void ToastGeneratorShort(Context context, String msg) {
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    public static void makeLongToast(Context context, String msg) {
+
+        Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+    }
+
+    public static void LogGenerator(String tag, String msg) {
+        Log.e(tag, String.valueOf(msg));
+    }
+
+    public static String getTextFromView(EditText view) {
+        return (view.getText().toString().trim());
+    }
+    public static String getTextFromView(TextView view) {
+        return (view.getText().toString().trim());
+    }
+
+    public static void requestFocusIfError(EditText view, String errorMsg) {
+        view.setError(errorMsg);
+        view.requestFocus();
+    }
+
+    public static void requestFocusIfError(TextView view, String errorMsg, String tag, String errorLogmsg) {
+        view.setError(errorMsg);
+        view.requestFocus();
+        LogGenerator(tag, errorLogmsg);
+    }
+    public static void requestFocusIfError(TextView view, String errorMsg) {
+        view.setError(errorMsg);
+        view.requestFocus();
+    }
+
+    public static void requestFocusIfError(EditText view, String errorMsg, String tag, String errorLogmsg) {
+        view.setError(errorMsg);
+        view.requestFocus();
+        LogGenerator(tag, errorLogmsg);
+    }
+
+
+}
+
+
+

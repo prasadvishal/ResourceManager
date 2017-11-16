@@ -1,0 +1,33 @@
+package com.mindfiresolutions.resourcemanager.user.userHome;
+
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+
+import com.mindfiresolutions.resourcemanager.R;
+
+public class ChangePasswordActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_change_password);
+        EditText mOldPassword = (EditText) findViewById(R.id.ChgPwd_oldpswd);
+        EditText mNewPassword = (EditText) findViewById(R.id.ChgPwd_newpswd);
+        EditText mCnfrmNewPassword = (EditText) findViewById(R.id.ChgPwd_cnfrmpswd);
+        Button mChngPswd = (Button) findViewById(R.id.ChgPwd_Button);
+        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.ChgPwd_progressBar);
+
+        mChngPswd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                progressBar.setVisibility(View.VISIBLE);
+
+
+            }
+        });
+    }
+}

@@ -1,0 +1,78 @@
+package com.mindfiresolutions.resourcemanager.utility;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.support.annotation.Nullable;
+
+/**
+ * This utility class sets and gets shared preferences
+ * Created by Shivangi Singh on 4/16/2017.
+ */
+
+public class SharedPref {
+    public static final String USERPREFERENCES = "UserPrefs";
+    public static final String NAMEKEY = "nameKey";
+    public static final String PASSWORDKEY = "passwordKey";
+    public static final String TOKEN = "token";
+    public static final String USERID = "userIdKey";
+    public static final String ROLE = "Role";
+    public static final String IMG_URL = "ImgUrl";
+    public static final String EMAIL = "Email";
+    private static final String TAG = SharedPref.class.getSimpleName();
+    private static SharedPreferences mSharedPreferences;
+    private static SharedPref sInstance;
+
+    //private constructor to make singleton class
+    private SharedPref(Context context) {
+        mSharedPreferences = context.getSharedPreferences(USERPREFERENCES, Context.MODE_PRIVATE);
+    }
+
+    //make single instance of the class and set application context to its context.
+    public static SharedPref getInstance(Context context) {
+        if (sInstance == null) {
+            sInstance = new SharedPref(context.getApplicationContext());
+        }
+        return sInstance;
+    }
+
+    @Nullable
+    public String getSharedPreferences(String key) {
+        LoggerUtility.log(TAG, "inside shared preferences");
+        if (mSharedPreferences.contains(key)) {
+            return mSharedPreferences.getString(key, "");
+        } else {
+            LoggerUtility.log(TAG, "NO data in shared Preferences");
+            return null;
+        }
+    }
+
+    //set new entry in shared preferences
+    public void setSharePreferences(String key, String value) {
+        final SharedPreferences.Editor EDITOR = mSharedPreferences.edit();
+        EDITOR.putString(key, value);
+        EDITOR.apply();
+    }
+
+    //check if token is null then clear all shared pref else remove that specified key
+    public void removeToken(String key) {
+        final SharedPreferences.Editor EDITOR = mSharedPreferences.edit();
+        if (key == null) {
+            EDITOR.clear();
+        } else {
+            EDITOR.remove(key);
+        }
+        EDITOR.apply();
+    }
+
+    public void clearShredPref() {
+        final SharedPreferences.Editor EDITOR = mSharedPreferences.edit();
+            EDITOR.clear();
+            EDITOR.apply();
+    }
+
+    //check if data present with the given key
+    public boolean containsData(String key) {
+        LoggerUtility.log(TAG, "inside shared preferences");
+        return mSharedPreferences.contains(key);
+    }
+}

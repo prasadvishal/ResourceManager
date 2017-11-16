@@ -1,0 +1,77 @@
+package com.mindfiresolutions.resourcemanager.admin;
+
+import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.mindfiresolutions.resourcemanager.R;
+import com.mindfiresolutions.resourcemanager.utility.Drawer;
+import com.mindfiresolutions.resourcemanager.utility.LoggerUtility;
+
+/**
+ * Created by Shivangi Singh on 4/2/2017
+ */
+
+public class AdminMain extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    private static final String TAG = AdminMain.class.getSimpleName();
+    private Drawer mDrawer = new Drawer();
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_admin_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        LoggerUtility.makeLog(TAG,"Toolbar created");
+       // mDrawer.setFloatingAction(findViewById(R.id.fab));
+        mDrawer.setDrawerToggle(findViewById(R.id.drawer_layout), toolbar, this, findViewById(R.id.nav_view));
+        CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_app_home);
+        LinearLayout relativeLayout = (LinearLayout)coordinatorLayout.findViewById(R.id.content_activity_layout);
+        getLayoutInflater().inflate(R.layout.admin_home_activity,relativeLayout);
+        changeNavigationView(findViewById(R.id.nav_view));
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if(drawerLayout.isDrawerOpen(GravityCompat.START))
+        {
+            mDrawer.onBackPressed(drawerLayout);
+        }
+        else
+            super.onBackPressed();
+
+    }
+
+    void changeNavigationView(View view) {
+        NavigationView navigationView = (NavigationView) view;
+        navigationView.getMenu().clear();
+        navigationView.inflateMenu(R.menu.admin_home_drawer_menu);
+        //change header text to admin
+        View admin_view = navigationView.getHeaderView(0);
+        TextView admin_txt = (TextView) admin_view.findViewById(R.id.name_user);
+        //TODO complete admin name here
+        admin_txt.setText("admin");
+        navigationView.setNavigationItemSelectedListener(this);
+
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        return mDrawer.onNavigationItemSelectedAdmin(item, this, findViewById(R.id.drawer_layout));
+
+    }
+}
+//TODO how to access view user profile
+//TODO should we make different menus or one can be reused

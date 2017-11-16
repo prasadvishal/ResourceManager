@@ -1,0 +1,193 @@
+package com.mindfiresolutions.resourcemanager.model;
+
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.google.gson.annotations.SerializedName;
+
+/**
+ * Created by Shivangi Singh on 5/25/2017.
+ */
+
+public class UserRequest implements Parcelable {
+
+    @SerializedName("RequestID")
+    private int mRequestID;
+    @SerializedName("UserID")
+    private int mUserID;
+    @SerializedName("RequestedBy")
+    private String mRequestedBy;
+    @SerializedName("Title")
+    private String mTitle;
+    @SerializedName("FromDate")
+    private String mFromDate;
+    @SerializedName("ToDate")
+    private String mToDate;
+    @SerializedName("RequestStatus")
+    private String mRequestStatus;
+    @SerializedName("Description")
+    private String mDescription;
+    @SerializedName("AssignedTo")
+    private String mAssignedTo;
+    @SerializedName("RequestedDeviceID")
+    private int mRequestedDeviceId;
+    @SerializedName("RequestedDevice")
+    private String mRequestedDevice;
+    @SerializedName("AssignedBy")
+    private String mAssignedBy;
+    @SerializedName("AssignedOn")
+    private String mAssignedOn;
+    @SerializedName("Category")
+    private String mCategory;
+    @SerializedName("CategoryID")
+    private int mCategoryID;
+    @SerializedName("HardwareID")
+    private int mHardwareID;
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+    dest.writeInt(mRequestID);
+        dest.writeInt(mUserID);
+        dest.writeInt(mCategoryID);
+        dest.writeInt(mHardwareID);
+        dest.writeString(mRequestedBy);
+        dest.writeString(mTitle);
+        dest.writeString(mFromDate);
+        dest.writeString(mToDate);
+        dest.writeString(mRequestStatus);
+        dest.writeString(mDescription);
+        dest.writeString(mAssignedTo);
+        dest.writeString(mRequestedDevice);
+        dest.writeString(mAssignedBy);
+        dest.writeString(mAssignedOn);
+        dest.writeString(mCategory);
+    }
+    public int getRequestID() {
+        return mRequestID;
+    }
+
+    public void setRequestID(int requestID) {
+        this.mRequestID = requestID;
+    }
+
+    public int getUserID() {
+        return mUserID;
+    }
+
+    public void setUserID(int userID) {
+        this.mUserID = userID;
+    }
+
+    public String getRequestedBy() {
+        return mRequestedBy;
+    }
+
+    public void setRequestedBy(String requestedBy) {
+        this.mRequestedBy = requestedBy;
+    }
+
+    public String getTitle() {
+        return mTitle;
+    }
+
+    public void setTitle(String title) {
+        this.mTitle = title;
+    }
+
+    public String getFromDate() {
+        return mFromDate;
+    }
+
+    public void setFromDate(String fromDate) {
+        this.mFromDate = fromDate;
+    }
+
+    public String getToDate() {
+        return mToDate;
+    }
+
+    public void setToDate(String toDate) {this.mToDate = toDate; }
+
+    public String getRequestStatus() {
+        return mRequestStatus;
+    }
+
+    public void setRequestStatus(String requestStatus) {
+        this.mRequestStatus = requestStatus;
+    }
+
+    public String getDescription() {
+        return mDescription;
+    }
+
+    public void setDescription(String description) {
+        this.mDescription = description;
+    }
+
+    public String getAssignedTo() {
+        return mAssignedTo;
+    }
+
+    public void setAssignedTo(String assignedTo) {
+        this.mAssignedTo = assignedTo;
+    }
+
+    public int getRequestedDeviceID() {
+        return mRequestedDeviceId;
+    }
+
+    public void setRequestedDeviceID(int requestedDeviceID) {
+        this.mRequestedDeviceId = requestedDeviceID;
+    }
+
+    public String getRequestedDevice() {
+        return mRequestedDevice;
+    }
+
+    public void setRequestedDevice(String requestedDevice) {
+        this.mRequestedDevice = requestedDevice;
+    }
+
+    public String getAssignedBy() {
+        return mAssignedBy;
+    }
+
+    public void setAssignedBy(String assignedBy) {
+        this.mAssignedBy = assignedBy;
+    }
+
+    public String getAssignedOn() {
+        return mAssignedOn;
+    }
+
+    public void setAssignedOn(String assignedOn) {
+        this.mAssignedOn = assignedOn;
+    }
+
+    public String getCategory() {
+        return mCategory;
+    }
+
+    public void setCategory(String category) { this.mCategory = category;  }
+
+    public int getCategoryID() {
+        return mCategoryID;
+    }
+
+    public void setCategoryID(int categoryID) {
+        this.mCategoryID = categoryID;
+    }
+
+    public int getHardwareID() {
+        return mHardwareID;
+    }
+
+    public void setHardwareID(int hardwareID) {
+        this.mHardwareID = hardwareID;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+}

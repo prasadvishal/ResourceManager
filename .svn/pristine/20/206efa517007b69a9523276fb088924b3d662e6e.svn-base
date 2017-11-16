@@ -1,0 +1,68 @@
+package com.mindfiresolutions.resourcemanager.resource;
+
+
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+
+import com.mindfiresolutions.resourcemanager.R;
+import com.mindfiresolutions.resourcemanager.model.HardwareRequest;
+import com.mindfiresolutions.resourcemanager.user.userResource.UserMyRequestsActivity;
+import com.mindfiresolutions.resourcemanager.user.userResource.UserRequests;
+import com.mindfiresolutions.resourcemanager.user.userResource.UserRequestsActivity;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.ASSIGNED_FROM_DATE;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.ASSIGNED_TO;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.ASSIGNED_TO_DATE;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.REQUESTED_RESOURCE;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.RESOURCE_CATEGORY;
+
+/**
+ * Created by Vishal Prasad on 5/15/2017.
+ */
+
+public class HardwareRequestFragment extends Fragment implements UserRequests.listner {
+    ListView mListView;
+    private List<HardwareRequest> viewHardwareRequests;
+    ArrayList<HashMap<String, String>> mMyRequestsList = new ArrayList<>();
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        UserRequests userRequests = new UserRequests();
+        userRequests.setListner(this);
+
+        View rootView = inflater.inflate(R.layout.hardware_request_fragment, container, false);
+        mListView = (ListView)rootView.findViewById(R.id.user_hardware_request_list_view);
+
+
+        return rootView;
+    }
+
+    @Override
+    public void setViewHardwareList(List<HardwareRequest> obj) {
+        viewHardwareRequests=obj;
+        for (int i = 0; i < viewHardwareRequests.size(); i++) {
+            HashMap<String, String> requestListHashMap = new HashMap<>();
+            requestListHashMap.put(RESOURCE_CATEGORY, viewHardwareRequests.get(i).getCategory());
+            requestListHashMap.put(REQUESTED_RESOURCE, viewHardwareRequests.get(i).getRequestedDevice());
+            requestListHashMap.put(ASSIGNED_TO, viewHardwareRequests.get(i).getAssignedTo());
+            requestListHashMap.put(ASSIGNED_FROM_DATE, viewHardwareRequests.get(i).getFromDate().substring(0, 10));
+            requestListHashMap.put(ASSIGNED_TO_DATE, viewHardwareRequests.get(i).getToDate().substring(0, 10));
+            mMyRequestsList.add(requestListHashMap);
+        }
+
+        ListAdapter adapter = new MultiColorListViewAdapter(getContext(), mMyRequestsList, R.layout.list_item_user_my_requests,
+                new String[]{REQUESTED_RESOURCE, RESOURCE_CATEGORY, ASSIGNED_TO, ASSIGNED_FROM_DATE, ASSIGNED_TO_DATE}, new int[]{R.id.user_my_req_tittle,
+                R.id.user_my_req_res_type_lable, R.id.user_my_req_assigned_to, R.id.user_my_req_from_date, R.id.user_my_req_to_date});
+        mListView.setAdapter(adapter);
+
+    }
+}

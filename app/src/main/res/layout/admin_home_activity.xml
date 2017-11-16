@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#f4f4f4"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swiperefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <ExpandableListView
+        android:id="@+id/lvExp"
+        style="@style/UserFields"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    </android.support.v4.widget.SwipeRefreshLayout>
+    <TextView
+        android:id="@+id/admin_add_software_fabTxtview"
+        android:layout_width="@dimen/frame_layout_padding"
+        android:layout_height="@dimen/frame_layout_padding"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="220dp"
+        android:text="@string/add_software"
+        android:textColor="@color/themeBlue" />
+
+
+</LinearLayout>

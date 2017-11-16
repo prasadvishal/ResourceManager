@@ -1,0 +1,41 @@
+package com.mindfiresolutions.resourcemanager.resource;
+
+/**
+ * Created by Vishal Prasad on 5/15/2017.
+ */
+
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+
+public class TabsPagerAdapter extends FragmentPagerAdapter {
+
+    public TabsPagerAdapter(FragmentManager fm) {
+        super(fm);
+    }
+
+    @Override
+    public Fragment getItem(int index) {
+
+        switch (index) {
+            case 0:
+                // Top Rated fragment activity
+                return new HardwareRequestFragment();
+            case 1:
+                // Games fragment activity
+                return new SoftwareRequestFragment();
+            case 2:
+                // Movies fragment activity
+                return new SharedRequestFragment();
+        }
+
+        return null;
+    }
+
+    @Override
+    public int getCount() {
+        // get item count - equal to number of tabs
+        return 3;
+    }
+
+}

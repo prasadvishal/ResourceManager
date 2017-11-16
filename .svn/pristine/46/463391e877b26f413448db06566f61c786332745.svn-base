@@ -1,0 +1,191 @@
+package com.mindfiresolutions.resourcemanager.admin;
+
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.TextView;
+
+import com.mindfiresolutions.resourcemanager.R;
+import com.mindfiresolutions.resourcemanager.model.IdSetter;
+import com.mindfiresolutions.resourcemanager.model.ResponseGetterBase;
+import com.mindfiresolutions.resourcemanager.model.SoftwareDetails;
+import com.mindfiresolutions.resourcemanager.model.SoftwareDetailsResponse;
+import com.mindfiresolutions.resourcemanager.utility.CallAPIInterface;
+import com.mindfiresolutions.resourcemanager.utility.InternetConnections;
+import com.mindfiresolutions.resourcemanager.utility.LoggerUtility;
+import com.mindfiresolutions.resourcemanager.utility.ServiceGenerator;
+import com.mindfiresolutions.resourcemanager.utility.SharedPref;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.mindfiresolutions.resourcemanager.utility.APIurls.LOGIN_REQUEST_HEADER_VALUE;
+import static com.mindfiresolutions.resourcemanager.utility.APIurls.SOFTWARE_DETAIL_BY_ID_URL;
+import static com.mindfiresolutions.resourcemanager.utility.HttpCodes.OK;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.SOFTWARE_COUNT;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.SOFTWARE_DETAILS;
+import static com.mindfiresolutions.resourcemanager.utility.KeyValueConstants.SOFTWARE_ID;
+import static com.mindfiresolutions.resourcemanager.utility.UserPreferences.TOKEN;
+import static com.mindfiresolutions.resourcemanager.utility.UserPreferences.USERPREFERENCES;
+
+/**
+ * created by Shivangi singh
+ * on
+ */
+
+public class SoftwareDetailsActivity extends AppCompatActivity implements View.OnClickListener {
+    private TextView mSoftwareDsc, mSoftwareCreatedBy, mSoftwareCreatedDate, mSoftwareName, mSoftwareVersion, mSoftwareLicenseStatus, mSoftwareModifiedBy, mSoftwareModifiedDate;
+    private static final String TAG = SoftwareDetailsActivity.class.getSimpleName();
+    private int mSoftwareId;
+    private SoftwareDetails softwareDetails;
+
+    @Override
+    protected void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
+        setContentView(R.layout.software_details);
+        //initialize variables
+        initViews();
+        LoggerUtility.makeLog(TAG, "Software Details Activity Created");
+        Bundle extras = getIntent().getExtras();//TODO no bundles
+        LoggerUtility.makeLog(TAG, "Intent executed Data received");
+        mSoftwareId = extras.getInt(SOFTWARE_ID);
+        int software_count = extras.getInt(SOFTWARE_COUNT);
+        LoggerUtility.makeLog(TAG, "Intent Data received: " + mSoftwareId);
+        String softwareCount = Integer.toString(software_count);
+        TextView softwareCountTextView = ((TextView) findViewById(R.id.software_details_no_license));
+        softwareCountTextView.setText(softwareCount);
+        if (InternetConnections.checkInternetConnection(getApplicationContext())) {
+            LoggerUtility.makeLog(TAG, "INTERNET connection available");
+            fillSoftwareDetails(mSoftwareId);
+            findViewById(R.id.software_detail_delete).setOnClickListener(this);
+            findViewById(R.id.software_detail_edit).setOnClickListener(this);
+
+        } else {
+            LoggerUtility.makeShortToast(getApplicationContext(), getString(R.string.no_internet));
+        }
+    }
+
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case (R.id.software_detail_delete):
+                deleteSoftware(mSoftwareId);
+                break;
+            case (R.id.software_detail_edit):
+                Intent i = new Intent(getApplicationContext(), AddNewSoftwareResourceActivity.class);
+                i.putExtra(SOFTWARE_DETAILS,getSoftwareDetails());
+                startActivity(i);
+                break;
+        }
+    }
+
+    private void initViews() {
+        mSoftwareDsc = (TextView) findViewById(R.id.software_details_software_desc);
+        mSoftwareCreatedBy = (TextView) findViewById(R.id.software_details_created_admin_name);
+        mSoftwareCreatedDate = (TextView) findViewById(R.id.software_details_created_date);
+        mSoftwareName = (TextView) findViewById(R.id.software_details_software_name);
+        mSoftwareVersion = (TextView) findViewById(R.id.software_details_product__version_image);
+        mSoftwareLicenseStatus = (TextView) findViewById(R.id.software_details_license_status);
+        mSoftwareModifiedBy = (TextView) findViewById(R.id.software_details_modified_by);
+        mSoftwareModifiedDate = (TextView) findViewById(R.id.software_details_modified_date);
+    }
+
+    private void deleteSoftware(int softwareID) {
+        final String token = SharedPref.getSharedPreferences(this,TOKEN);
+        final ProgressDialog progressDialog = new ProgressDialog(SoftwareDetailsActivity.this);
+        progressDialog.setMessage(getString(R.string.loading));
+        progressDialog.show();
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        CallAPIInterface callAPIInterface = ServiceGenerator.createService(CallAPIInterface.class);
+        LoggerUtility.makeLog(TAG, "Retrofit object created in updateUserProfile");
+        Call<ResponseGetterBase> call = callAPIInterface.deleteSoftware(LOGIN_REQUEST_HEADER_VALUE, token, softwareID); // TODO Handle SoftwareCount it after mapping is done
+        LoggerUtility.makeLog(TAG, "response in call object in UpdateUserProfile");
+
+        call.enqueue(new Callback<ResponseGetterBase>() {
+                         @Override
+                         public void onResponse(Call<ResponseGetterBase> call, Response<ResponseGetterBase> response) {
+                             //response's body
+                             progressDialog.dismiss();
+                             LoggerUtility.makeLog(TAG, "Response body");
+                             try {
+                                 LoggerUtility.makeShortToast(getApplicationContext(), response.body().getMessage());
+
+                             } catch (NullPointerException e) {
+                                 LoggerUtility.makeShortToast(getApplicationContext(), getString(R.string.error_requesting_api));
+                             }
+                         }
+
+                         @Override
+                         public void onFailure(Call<ResponseGetterBase> call, Throwable t) {
+                             progressDialog.dismiss();
+                             LoggerUtility.makeLog(TAG, "Error requesting API");
+                         }
+                     }
+        );
+    }
+
+    void fillSoftwareDetails(int softwareID) {
+        final String token = SharedPref.getSharedPreferences(this,TOKEN);
+        final ProgressDialog progressDialog = new ProgressDialog(SoftwareDetailsActivity.this);
+        progressDialog.setMessage(getString(R.string.loading));
+        progressDialog.show();
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        IdSetter softwareDetailIdSetter = new IdSetter();
+        softwareDetailIdSetter.setId(mSoftwareId);
+        CallAPIInterface callAPIInterface = ServiceGenerator.createService(CallAPIInterface.class);
+        LoggerUtility.makeLog(TAG, "Retrofit object created in updateUserProfile");
+        LoggerUtility.makeLog(TAG, "software id received: "+mSoftwareId);
+        Call<SoftwareDetailsResponse> call = callAPIInterface.getSoftwareDetailById(LOGIN_REQUEST_HEADER_VALUE, token,softwareDetailIdSetter ); // TODO Handle SoftwareCount it after mapping is done
+        LoggerUtility.makeLog(TAG, "response in call object in UpdateUserProfile");
+
+        call.enqueue(new Callback<SoftwareDetailsResponse>() {
+                         @Override
+                         public void onResponse(Call<SoftwareDetailsResponse> call, Response<SoftwareDetailsResponse> response) {
+                             //response's body
+                             progressDialog.dismiss();
+                             LoggerUtility.makeLog(TAG, "Response body");
+                             try {
+                                 if (response.body().getResponse().getCode() == OK) {
+                                     setFields(response.body().getSoftwareDetails());
+                                     setSoftwareDetails(response.body().getSoftwareDetails());
+                                 }
+                             } catch (NullPointerException e) {
+                                 LoggerUtility.makeShortToast(getApplicationContext(), getString(R.string.error_requesting_api));
+                             }
+                         }
+
+                         @Override
+                         public void onFailure(Call<SoftwareDetailsResponse> call, Throwable t) {
+                             progressDialog.dismiss();
+                             LoggerUtility.makeLog(TAG, "Error requesting API");
+                         }
+                     }
+        );
+    }
+
+    void setFields(SoftwareDetails softwareDetails) {
+        mSoftwareDsc.setText(softwareDetails.getDescription());
+        mSoftwareCreatedBy.setText(softwareDetails.getCreatedBy());
+        mSoftwareCreatedDate.setText(softwareDetails.getCreationDate());
+        mSoftwareName.setText(softwareDetails.getSoftwareName());
+        mSoftwareLicenseStatus.setText(softwareDetails.getLicenseType().toString());
+        mSoftwareModifiedDate.setText(softwareDetails.getModifiedDate());
+        mSoftwareModifiedBy.setText(softwareDetails.getModifiedBy());
+        mSoftwareVersion.setText(softwareDetails.getVersion());
+    }
+
+    void setSoftwareDetails(SoftwareDetails softwareDetails)
+    {
+        this.softwareDetails = softwareDetails;
+    }
+    SoftwareDetails getSoftwareDetails(){
+        return softwareDetails;
+    }
+}
+

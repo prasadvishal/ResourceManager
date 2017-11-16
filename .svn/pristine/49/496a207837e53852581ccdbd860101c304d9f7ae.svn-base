@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinator_app_home"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.mindfiresolutions.resourcemanager.user.userHome.HomeActivity">
+    <!--coordinator layout works as container for a specific interaction with one or more child views
+    here it has appBarLayout, floating action button and main layout i.e. content_home-->
+
+    <FrameLayout
+        android:id="@+id/content_frame_activity_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="@dimen/frame_layout_padding">
+
+        <include
+            android:id="@+id/content_activity_layout"
+            layout="@layout/content_home" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_new_software"
+            android:layout_width="@dimen/imageview_width"
+            android:layout_height="@dimen/imageview_height"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="150dp"
+            android:layout_marginRight="20dp"
+            android:visibility="invisible"
+            app:layout_anchor="@+id/content_frame_activity_layout"
+            app:layout_anchorGravity="center_vertical|right"
+            app:srcCompat="@drawable/software" />
+
+        <TextView
+            android:id="@+id/fab_add_sftwr_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:text="@string/add_software"
+            android:visibility="invisible"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_new_hardware"
+            android:layout_width="@dimen/imageview_width"
+            android:layout_height="@dimen/imageview_height"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="300dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="@dimen/heading"
+            android:visibility="invisible"
+            app:layout_anchor="@+id/content_frame_activity_layout"
+            app:layout_anchorGravity="center_vertical|right"
+            app:srcCompat="@drawable/hardware" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="@dimen/frame_layout_padding"
+            android:layout_height="@dimen/frame_layout_padding"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="30dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="@dimen/heading"
+            android:visibility="invisible"
+            app:pressedTranslationZ="12dp"
+            app:srcCompat="@drawable/add" />
+        <View
+            android:id="@+id/shadowView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#a2000000"
+            android:visibility="gone"
+            android:clickable="true"
+            android:focusable="true"/>
+
+    </FrameLayout>
+
+
+
+    <include layout="@layout/layout_toolbar" />
+
+</android.support.design.widget.CoordinatorLayout>

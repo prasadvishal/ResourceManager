@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/topLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/edit_profile_layout_height"
+        android:background="@color/themeBlue"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+
+        <TextView
+            android:text="@string/username"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/zero"
+            android:id="@+id/username"
+            android:layout_marginTop="@dimen/layout_padding"
+            android:layout_gravity="center"
+            android:textColor="@color/white"
+            android:layout_weight="0.32" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/bottomLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/topLayout"
+        android:background="@drawable/background_registration"
+        android:padding="@dimen/layout_padding"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+
+        <TextView
+            android:text="@string/prompt_employeeid"
+            style="@style/UserFields"
+            android:layout_marginTop="@dimen/software_version"
+            android:textColor="@color/hint_gray"
+            android:layout_height="@dimen/text_field_layout_height"
+            android:textAlignment="center"
+            android:id="@+id/employee_id"
+            android:gravity="center" />
+
+        <TextView
+            android:text="@string/prompt_email"
+            style="@style/UserFields"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:textColor="@color/hint_gray"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/textfields_padding"
+            android:id="@+id/email_id" />
+
+        <TextView
+            android:text="@string/prompt_fname"
+            style="@style/UserFields"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:textColor="@color/hint_gray"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/textfields_padding"
+            android:textAlignment="center"
+            android:id="@+id/edit_fname"
+            android:gravity="center" />
+
+
+        <TextView
+            android:text="@string/prompt_lname"
+            style="@style/UserFields"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:textColor="@color/hint_gray"
+            android:padding="@dimen/textfields_padding"
+            android:textAlignment="center"
+            android:id="@+id/edit_lname"
+            android:gravity="center" />
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="@color/white">
+        <EditText
+            android:hint="@string/prompt_mobile"
+            style="@style/UserFields"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:textColor="@color/white"
+            android:inputType="number"
+            android:id="@+id/edit_contact" />
+</android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="@color/white">
+        <EditText
+            android:hint="@string/prompt_enterPassword"
+            style="@style/UserFields"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:inputType="textPassword"
+            android:id="@+id/conf_edit_password"
+            />
+        </android.support.design.widget.TextInputLayout>
+        <Button
+            android:text="@string/save"
+            style="@style/UserFields"
+            android:background="@drawable/styled_blue_button_layout"
+            android:layout_marginTop="@dimen/launcher_image_padding"
+            android:id="@+id/edit_save"
+            />
+    </LinearLayout>
+    <ImageView
+        android:id="@+id/devInfo_device_image"
+        android:layout_width="@dimen/imageview_width"
+        android:layout_height="@dimen/imageview_height"
+        android:layout_below="@id/topLayout"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="-50dp"
+        android:contentDescription="@string/user_image"
+        android:textAllCaps="false"
+        android:adjustViewBounds="true"
+        android:src="@drawable/minions" />
+
+</RelativeLayout>

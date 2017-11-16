@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_hardware_details"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.mindfiresolutions.resourcemanager.admin.HardwareDetailsActivity"
+    android:layout_gravity="center">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/subheading"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+            android:text="@string/count"
+            android:layout_weight="1"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/count_resource"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+            android:layout_marginLeft="@dimen/subheading"
+            android:layout_marginStart="@dimen/subheading"
+            android:background="@drawable/border"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+            android:text="@string/assigned"
+            android:layout_weight="1"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/assigned_count"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:background="@drawable/border"
+            android:layout_marginLeft="@dimen/subheading"
+            android:layout_marginStart="@dimen/subheading"
+            android:layout_weight="1"
+            android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+            android:text="@string/brand"
+            android:layout_weight="1"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/brand_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/border"
+            android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+            android:layout_marginLeft="@dimen/subheading"
+            android:layout_marginStart="@dimen/subheading"
+            android:textColor="@color/black"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:textSize="15sp" />
+    </LinearLayout>
+    <TextView
+        style="@style/UserFields"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:padding="@dimen/activity_vertical_margin"
+        android:background="@color/themeBlue"
+        android:textSize="@dimen/subheading"
+        android:textStyle="bold"
+        android:gravity="start"
+        android:text="@string/brand"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:orientation="horizontal">
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </ListView>
+
+    </LinearLayout>
+
+    </LinearLayout>

@@ -1,0 +1,182 @@
+package com.mindfiresolutions.resourcemanager;
+
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.text.method.PasswordTransformationMethod;
+import android.view.View;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.TextView;
+
+/**
+ * Created By: Shivangi on: 3/8/2017
+ * Last modified on: 3/14/2017
+ */
+public class LoginActivity extends AppCompatActivity {
+
+    private EditText mUsernameEdit;
+    private EditText mPasswordEdit;
+    private TextView mUsernameText;
+    private TextView mPasswordText;
+    private CheckBox mShowPassword;
+    private View mFocusView;
+    private boolean mCancel;
+
+    private static final String USERPREFERENCES = "UserPrefs";
+    private static final String NAMEKEY = "nameKey";
+    private static final String PASSWORDKEY = "passwordKey";
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.login_activity);
+
+        SharedPreferences sharedPreferences = getSharedPreferences(USERPREFERENCES, Context.MODE_PRIVATE);
+        LoggerUtility.makeLog(this,"object of sharedPreferences initialized with private mode");
+        final SharedPreferences.Editor EDITOR = sharedPreferences.edit();
+
+        //initialize variables
+        mUsernameEdit = (EditText) findViewById(R.id.ed_username);
+        mPasswordEdit = (EditText) findViewById(R.id.ed_password);
+        mShowPassword = (CheckBox) findViewById(R.id.show_password);
+        mUsernameText = (TextView) findViewById(R.id.tv_username);
+        mPasswordText = (TextView) findViewById(R.id.tv_password);
+
+        LoggerUtility.makeLog(getApplicationContext(), "Variables initialized");
+
+        //check to see if there is any entry in shared preferences
+        if (sharedPreferences.contains(NAMEKEY)) {
+            LoggerUtility.makeLog(this, "SharedPreferences contains Data");
+            mUsernameEdit.setText(sharedPreferences.getString(NAMEKEY, ""));
+            mPasswordEdit.setText(sharedPreferences.getString(PASSWORDKEY, ""));
+            LoggerUtility.makeLog(getApplicationContext(), sharedPreferences.getString(NAMEKEY, ""));
+            LoggerUtility.makeLog(getApplicationContext(), "Shared Preference contains NameKey, writing username and password into fields from preference");
+
+
+        } else
+        //if no entry exists then go with normal flow
+        {
+
+            //change color on focus change
+            mUsernameEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (hasFocus) {
+                        mUsernameText.setTextColor(ContextCompat.getColor(LoginActivity.this, R.color.label_gray));
+                    } else {
+                        // Toast.makeText(getApplicationContext(), "lost the focus", Toast.LENGTH_LONG).show();
+                        mUsernameText.setTextColor(ContextCompat.getColor(LoginActivity.this, R.color.white));
+                    }
+                }
+            });
+
+            mPasswordEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (hasFocus) {
+                        mPasswordText.setTextColor(ContextCompat.getColor(LoginActivity.this, R.color.label_gray));
+                    } else {
+                        mPasswordText.setTextColor(ContextCompat.getColor(LoginActivity.this, R.color.white));
+                    }
+                }
+            });
+
+
+        }
+
+        //if checkbox is set then show password else show ****
+        mShowPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mShowPassword.isChecked()) {
+                    mPasswordEdit.setTransformationMethod(null);
+                } else {
+                    mPasswordEdit.setTransformationMethod(new PasswordTransformationMethod());
+                }
+            }
+        });
+
+        //set long click on password as false
+        mPasswordEdit.setLongClickable(false);
+
+        findViewById(R.id.signup).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), SignUpActivity.class);
+                startActivity(i);
+
+            }
+        });
+
+
+        findViewById(R.id.login).setOnClickListener(new View.OnClickListener() {
+
+
+            @Override
+            public void onClick(View view) {
+                //TextUtils is a container to group functions with a text-based semantic. Many of them could have been methods of a String inherited class or CharSequence inherited class
+                if (mPasswordEdit.getText().toString().isEmpty()) {
+                    mUsernameEdit.setError(getString(R.string.error_field_required));
+                    mFocusView = mUsernameEdit;
+                    mCancel = true;
+
+                }
+                if (mPasswordEdit.getText().toString().isEmpty()) {
+                    mPasswordEdit.setError(getString(R.string.error_field_required));
+                    mFocusView = mPasswordEdit;
+                    mCancel = true;
+                }
+
+                if (mCancel) {
+                    //there was an error
+                    mFocusView.requestFocus();
+                }
+
+                //do the else part
+
+                String userName, password;
+
+                userName = mUsernameEdit.getText().toString();
+                userName = userName.trim();
+                password = mPasswordEdit.getText().toString();
+                EDITOR.putString(NAMEKEY, userName);
+                EDITOR.putString(PASSWORDKEY, password);
+                EDITOR.apply();
+
+                if(userName.equals("user")&&(password.equals("password"))) {
+                    Intent i = new Intent(getApplicationContext(), HomeActivity.class);
+                    startActivity(i);
+                }
+                else
+                {
+                    LoggerUtility.makeLongToast(getApplicationContext(),getString(R.string.prompt_wrong_login_credentials));
+                }
+
+                if (userName.equals("user") && (password.equals("password"))) {
+                    Intent i = new Intent(getApplicationContext(), HomeActivity.class);
+                    startActivity(i);
+                } else {
+                    LoggerUtility.makeLongToast(getApplicationContext(), getString(R.string.prompt_wrong_login_credentials));
+                }
+
+                Intent i = new Intent(getApplicationContext(), HomeActivity.class);
+                startActivity(i);
+
+
+            }
+        });
+        LoggerUtility.makeLog(getApplicationContext(), "outside login button");
+
+
+    }
+}
+
+
+//TODO add autocomplete
+//add function which sends data
+//add function which compares data

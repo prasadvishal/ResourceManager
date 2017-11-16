@@ -1,0 +1,216 @@
+package com.mindfiresolutions.resourcemanager.CommonAdminUser;
+
+/**
+ * Created By: Shivangi on: 3/16/2017
+ * Last modified on: 4/4/2017
+ */
+
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.mindfiresolutions.resourcemanager.R;
+import com.mindfiresolutions.resourcemanager.model.ContactSetter;
+import com.mindfiresolutions.resourcemanager.model.ResponseGetterBase;
+import com.mindfiresolutions.resourcemanager.model.UserBaseResponse;
+import com.mindfiresolutions.resourcemanager.utility.CallAPIInterface;
+import com.mindfiresolutions.resourcemanager.utility.LoggerUtility;
+import com.mindfiresolutions.resourcemanager.utility.ServiceGenerator;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.mindfiresolutions.resourcemanager.utility.APIurls.LOGIN_REQUEST_HEADER_VALUE;
+import static com.mindfiresolutions.resourcemanager.utility.HttpCodes.BAD_REQUEST;
+import static com.mindfiresolutions.resourcemanager.utility.HttpCodes.OK;
+import static com.mindfiresolutions.resourcemanager.utility.UserPreferences.NAMEKEY;
+import static com.mindfiresolutions.resourcemanager.utility.UserPreferences.PASSWORDKEY;
+import static com.mindfiresolutions.resourcemanager.utility.UserPreferences.USERPREFERENCES;
+
+
+public class EditUserProfile extends AppCompatActivity {
+
+    private EditText mEditConfUserPassword, mEdtMobile;
+    private TextView mEmployeeId, mEmailId, mUserName, mFName, mLName;
+    private ImageView mUserImg;
+    private final int SELECT_PHOTO = 1;
+    private final String TAG = EditUserProfile.class.getSimpleName();
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_edit_profile);
+
+        SharedPreferences sharedPreferences = getSharedPreferences(USERPREFERENCES, Context.MODE_PRIVATE);
+        final String userNameInSharedPreference = sharedPreferences.getString(NAMEKEY, "");
+        final String passwordInSharedPreference = sharedPreferences.getString(PASSWORDKEY, "");
+        LoggerUtility.makeLog(TAG, userNameInSharedPreference);
+
+        getUserProfile(userNameInSharedPreference);
+//        ViewUserProfile viewUserProfile = ViewUserProfile.getViewUserProfileObj();
+//        viewUserProfile.getUserProfile(userNameInSharedPreference,this);
+
+        android.support.v7.app.ActionBar ab = getSupportActionBar();
+        //check for Actionbar if present then set tittle
+        if (ab != null && ab.isShowing()) {
+            ab.setTitle("Resource Manager");
+            ab.setSubtitle("Edit Profile");
+        }
+        //variables initialized
+        mEdtMobile = (EditText) findViewById(R.id.edit_contact);
+        mEditConfUserPassword = (EditText) findViewById(R.id.conf_edit_password);
+//        mEditFName = (EditText) findViewById(R.id.edit_fname);
+//        mEditLName = (EditText) findViewById(R.id.edit_lname);
+        mUserImg = (ImageView) findViewById(R.id.devInfo_device_image);
+        //so that paste option is disabled
+        findViewById(R.id.edit_save).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                //TODO validating mEditOldPassword field for stored password
+//                if (LoggerUtility.getTextFromView(mEditFName).isEmpty()) {
+//                    mEditFName.setError(getString(R.string.error_field_required));
+//                    mEditFName.requestFocus();
+//                    return;
+//                }
+//                if (LoggerUtility.getTextFromView(mEditLName).isEmpty()) {
+//                    mEditLName.setError(getString(R.string.error_field_required));
+//                    mEditLName.requestFocus();
+//                    return;
+//                }
+
+                if (!LoggerUtility.getTextFromView(mEdtMobile).isEmpty()) {
+                    if ((LoggerUtility.getTextFromView(mEdtMobile).length()) != 10) { //Validating 10 digits in mobile number field
+                        LoggerUtility.requestFocusIfError(mEdtMobile, getString(R.string.error_invalid_mobile));
+                        return;
+                    }
+                }
+                //check if password is empty then set error msg
+                if (mEditConfUserPassword.getText().toString().isEmpty()) {
+                    LoggerUtility.requestFocusIfError(mEditConfUserPassword, getString(R.string.error_field_required));
+                    return;
+                }
+                // LoggerUtility.makeShortToast(getApplicationContext(), getString(R.string.password_changed_successfully));
+                if (passwordInSharedPreference.equals(mEditConfUserPassword.getText().toString())) {
+                    ContactSetter contactSetter = new ContactSetter();
+                    contactSetter.setContact(mEdtMobile.getText().toString());
+                    updateUserProfile(userNameInSharedPreference, contactSetter);
+                } else {
+                    LoggerUtility.makeShortToast(getApplicationContext(), getString(R.string.error_incorrect_password));
+                }
+            }
+
+        });
+        mUserImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+        switch (requestCode) {
+            case SELECT_PHOTO:
+                if (resultCode == RESULT_OK) {
+                    try {
+                        final Uri imageUri = imageReturnedIntent.getData();
+                        final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                        final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                        mUserImg.setImageBitmap(selectedImage);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+        }
+    }
+
+    void getUserProfile(final String userNameInSharedPreference) {
+        mUserName = (TextView) findViewById(R.id.username);
+        mEmailId = (TextView) findViewById(R.id.email_id);
+        mEmployeeId = (TextView) findViewById(R.id.employee_id);
+        mFName = (TextView) findViewById(R.id.edit_fname);
+        mLName = (TextView) findViewById(R.id.edit_lname);
+
+        final ProgressDialog progressDialog = new ProgressDialog(EditUserProfile.this);
+        //TODO string
+        progressDialog.setMessage("loading");
+        progressDialog.show();
+
+        CallAPIInterface callAPIInterface = ServiceGenerator.createService(CallAPIInterface.class);
+        LoggerUtility.makeLog(TAG, "Retrofit object created");
+        Call<UserBaseResponse> call = callAPIInterface.getProfile(LOGIN_REQUEST_HEADER_VALUE, userNameInSharedPreference);
+        LoggerUtility.makeLog(TAG, "response in call object");
+        call.enqueue(new Callback<UserBaseResponse>() {
+            @Override
+            public void onResponse(Call<UserBaseResponse> call, Response<UserBaseResponse> response) {
+                //response's body
+                progressDialog.dismiss();
+                LoggerUtility.makeLog(TAG, "Response body");
+                if (response.body().getResponseGetterBase().getCode() == OK) {
+                    mUserName.setText(userNameInSharedPreference);
+                    mEmployeeId.setText(response.body().getUser().getEmployeeID());
+                    mEmailId.setText(response.body().getUser().getEmail());
+                    mFName.setText(response.body().getUser().getFirstname());
+                    mLName.setText(response.body().getUser().getLastName());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserBaseResponse> call, Throwable t) {
+                progressDialog.dismiss();
+                LoggerUtility.makeLog(TAG, "Error requesting API");
+            }
+        });
+    }
+
+    void updateUserProfile(String userNameInSharedPreference, ContactSetter contactSetter) {
+//        ForgotPasswordSetter forgotPasswordSetter = new ForgotPasswordSetter();
+//        forgotPasswordSetter.setUserName(userNameInSharedPreference);
+        CallAPIInterface callAPIInterface = ServiceGenerator.createService(CallAPIInterface.class);
+        LoggerUtility.makeLog(TAG, "Retrofit object created in updateUserProfile");
+        Call<ResponseGetterBase> call = callAPIInterface.upateProfile(LOGIN_REQUEST_HEADER_VALUE, userNameInSharedPreference, contactSetter);
+        LoggerUtility.makeLog(TAG, "response in call object in UpdateUserProfile");
+
+        call.enqueue(new Callback<ResponseGetterBase>() {
+            @Override
+            public void onResponse(Call<ResponseGetterBase> call, Response<ResponseGetterBase> response) {
+                //response's body
+                LoggerUtility.makeLog(TAG, "Response body");
+                if (response.body().getCode() == OK) {
+                    LoggerUtility.makeLog(TAG, "User records Updated sucessfully");
+                    //TODO string
+                    LoggerUtility.makeShortToast(getApplicationContext(), "User records Updated sucessfully");
+                }
+                if (response.body().getCode() == BAD_REQUEST) {
+                    LoggerUtility.makeLog(TAG, "User not Updated sucessfully");
+                    LoggerUtility.makeShortToast(getApplicationContext(), "User not Updated sucessfully");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseGetterBase> call, Throwable t) {
+                LoggerUtility.makeLog(TAG, "Error requesting API");
+            }
+        });
+    }
+
+}

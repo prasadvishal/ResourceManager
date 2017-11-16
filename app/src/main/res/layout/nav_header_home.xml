@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/side_nav_bar"
+    android:gravity="bottom"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_horizontal_margin"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/nav_drwr_user_img"
+        android:layout_width="@dimen/nav_drwr_user_dp_width"
+        android:layout_height="@dimen/nav_drwr_user_dp_height"
+        android:src="@color/black"
+        android:layout_marginTop="@dimen/activity_horizontal_margin_subheading"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin_subheading"
+        app:border_color="@color/white" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/nav_drwr_user_img"
+        android:layout_marginStart="@dimen/activity_horizontal_margin">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="@dimen/subheading"
+            android:text="@string/homescreen_welcome"
+            android:id="@+id/textView5" />
+
+        <TextView
+            android:id="@+id/name_user"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:gravity="center"
+            android:textStyle="bold"
+
+            android:textSize="@dimen/subheading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+
+</RelativeLayout>

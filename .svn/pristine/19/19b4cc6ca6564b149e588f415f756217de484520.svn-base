@@ -1,0 +1,42 @@
+package com.mindfiresolutions.resourcemanager.utility;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+import static com.mindfiresolutions.resourcemanager.utility.APIurls.BASE_URL;
+
+/**
+ * Created by Shivangi Singh on 3/28/2017
+ * modified on 30th March
+ */
+
+public class ServiceGenerator {
+
+
+    private static final Gson gson = new GsonBuilder()
+            .setLenient()
+            .create();
+
+    private static final Retrofit.Builder builder =
+            new Retrofit.Builder()
+                    .baseUrl(BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create(gson));
+
+    public static <S> S createService(Class<S> serviceClass) {
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(interceptor)
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS).writeTimeout(30, TimeUnit.SECONDS).build();
+        Retrofit retrofit = builder.client(client).build();
+        return retrofit.create(serviceClass);
+    }
+}

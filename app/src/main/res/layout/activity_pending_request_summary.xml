@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_pending_request_details"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.mindfiresolutions.resourcemanager.admin.RequestSummaryActivity">
+
+    <android.support.v7.widget.SearchView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/search_view_height"
+        android:id="@+id/pd_rqst_search_view"
+        android:padding="@dimen/textfields_padding"
+        android:visibility="gone"/>
+
+    <include
+        layout="@layout/cardview_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>
